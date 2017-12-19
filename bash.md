@@ -2,7 +2,9 @@
 
 When runing commands on another instance or computer, use these commands to make sure commands do not get executed after ending the terminal.
 
-### Using nohup - This creates a file called FILE that stores the output of running the command.
+### Using nohup
+
+This creates a file called FILE that stores the output of running the command.
 
 ```sh
 $ nohup COMMAND > FILE
