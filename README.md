@@ -7,8 +7,15 @@ All the code in this repository is expected to run on Python 3.6+
 
 Various libraries needed to execute code samples and jupyter notebooks are listed in requirements.txt
 
-To download the libraries efficiently, download this repository, and run
+If using conda, one can also use conda.txt to create the corresponding conda env. Then install the pip requirements.
 
+```sh
+conda create --name NAME --file conda.txt
 ```
+
+To then download the libraries efficiently using pip, download this repository, and run
+
+```sh
 pip3 install -r requirements.txt
 ```
+
