@@ -25,7 +25,7 @@ We assume basic Python 3.5/3.6+ proficiency because so many people know it as a 
    * __R__:
         * Literally I have no clue
 * Deep Learning
-   * _Python_:
+   * __Python__:
         * Tensorflow
         * Keras
         * And models: CNNs, LSTMs, etc
