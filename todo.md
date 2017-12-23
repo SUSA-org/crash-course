@@ -17,15 +17,17 @@ We assume basic Python 3.5/3.6+ proficiency because so many people know it as a 
    * Web Scraping (BeatifulSoup4)
    * OS Scripting (Managing packages, working with directories)
 * Data Science
-   * _Python_:
-	* Numpy
-	* Pandas
-	* Sci-Kit Learn
-	* Matplotlib (and related imaging libraries)
-   * _R_:
+   * __Python__:
+        * Numpy
+        * Pandas
+        * Sci-Kit Learn
+        * Matplotlib (and related imaging libraries)
+   * __R__:
         * Literally I have no clue
 * Deep Learning
    * _Python_:
-	* Tensorflow
-	* Keras
-	* And models: CNNs, LSTMs, etc
+        * Tensorflow
+        * Keras
+        * And models: CNNs, LSTMs, etc
+   * __R__:
+        * Again I have _no clue_
