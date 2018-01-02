@@ -19,7 +19,31 @@ First, you want to create an admin/root identity for your AWS account. You shoul
 
 Then you want to create identity groups with permissions to start instances. And like test them out. Honestly, not sure if you even want to give out this permission because they can charge directly to your account by running instances. Especially p2.xlarges. Well, actually, if you only have 1 p2.xlarge (or whatever instance type being used to perform deep learning, and your identity group can only start p2 instances, than it's not a big deal). 
 
+To create a security group from which to access your instance, you can run the following:
+```bash
+aws ec2 create-security-group --group-name [name of group] --description "[desc]"
+```
+
+Now, you must set the permissions for that security group. This can be done by authorizing the previous security group to access your instances on your default VPC (network of EC2 instances) to be accessed via SSH. This means setting the access protocol to tcp, and allowing access over port 22 (reserved for SSH).
+
+```bash
+aws ec2 authorize-security-group-ingress --group-id [id of group spit out by previous command] --protocol tcp --port 22 --cidr 0.0.0.0/0
+```
+
+A note on the command above. This will allow any instance accessible by your security group to be SSH'd into from ***ANY*** IP address. Which may not be the right policy for your team, especially if its only a few people that need access to your resources. This can be further addressed by adding more security layers in a VPC (partially covered later).
+
 Then create a key-pair for ec2, and distribute the key to your identity-group.
+```bash
+aws ec2 create-key-pair --key-name [name your key] --query 'KeyMaterial' --output text > [key name].pem
+# On linux, you must also change permissions so only you can view the key
+chmod 400 [key name].pem
+```
+
+And now you can spread your pem file around to those who you wish to have access to your EC2 instance. Once a instance is launched with a public IP address, it can be accessed with the created key like so:
+```bash
+ssh -i [key name].pem ubuntu@PUB.LIC.IP.ADDRESS
+```
+The -i flag is called the identity flag for SSH access to a given server. For more complicated SSH calls, such as port forwarding access to a Jupyter notebook, see the Bash crash-course file.
 
 ## 2. Instance Management - Planned Completion
 
@@ -29,6 +53,7 @@ Launching and starting an instance.
 
 ```bash
 aws ec2 run-instances --image-id [AMI id] --count 1 --security-groups-id "[security group id]" --key-name [name of your key pair (do not include .pem)] --instance-type p2.xlarge
+# for conda deep learning enviroment, use --image-id ami-3b6bce43
 ```
 
 Starting instances from instance ids.
