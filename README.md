@@ -60,7 +60,13 @@ Assistance is welcome. In order to modify this repo, you first need to know your
 2) In susa-org and a member of the crashcourse team w/i the org
 3) Not in susa-org
 
-If you are not in the susa-org organization, or you are just a general member, your steps for contributing are:
+If you are in the susa-org **and** in the crashcourse team **(2)**, you're steps for contributing are:
+1) Clone this repo
+2) Just directly pull/push to this repo
+
+If you are having trouble pulling, pushing to the repo, then it may be because the upstreams are set to be the actual repo. To confirm this, you can run ``` git remote -v ``` and look for (upstream) listed somewhere. Then you just run ```git pull upstream [working_branch]``` and ```git push upstream [working_branch]``` (from your master branch). 
+
+If you are not in the susa-org organization, or you are just a general member **(1 or 3)**, your steps for contributing are:
 1) Fork this repo
 2) Clone your fork (www.github.com/youracct/crash-course)
 3) Set your remotes
