@@ -3,7 +3,7 @@
 This tutorial is about using Amazon Web Services (AWS) Command Line Interface (awscli) for launching, starting, stopping instances and the related tasks to do so.
 
 Related tasks:
-* Managing Identities to your AWS account (not awscli) [Not Implemented]
+* Managing Identities to your AWS account (awscli) 
 * Creating and Authenticating AWS EC2 security groups (awscli)
 * Notes on VPCs (can be awscli)
 	* IP/CIDR notation and some open questions
@@ -13,11 +13,19 @@ Steps to this tutorial:
 2. Instance Management
 3. Notes on infrastructure for parallel computing / MPI
 
-## 1. Authentication Management - Planned Completion
+## 1. Authentication Management 
 
+This has 2 parts. The first is about using the AWS console to create identity groups. The second half is about setting up a security group and key pairs to actually create instances and determine who how someone can access AWS resources.
+
+#### 1A. Identity and Access Management (IAM) for EC2 Resources [WIP]
+
+This is pretty valuable general knowledge to have about AWS. It's pretty straightforward, it's just the process of setting up different logins to your account's resources, and setting up permissions for those users. For ease of management, you can assign different logins, or "identities", to different identity groups and manage their permissions all at once. Every identity will have a special username, as well as a corresponding "Special Access Key". Their login will be different than root access login because sub-users will need to have the Account ID of their superuser (the main account user).
+
+
+#### 1B. Security Groups and Key-Pair for Creation of EC2 Instances 
 First, you want to create an admin/root identity for your AWS account. You should be using this at all times to engage in AWS management console.
 
-Then you want to create identity groups with permissions to start instances. And like test them out. Honestly, not sure if you even want to give out this permission because they can charge directly to your account by running instances. Especially p2.xlarges. Well, actually, if you only have 1 p2.xlarge (or whatever instance type being used to perform deep learning, and your identity group can only start p2 instances, than it's not a big deal). 
+Then you want to create identity groups with permissions to start instances. And like test them out. Honestly, not sure if you even want to give out this permission because they can charge directly to your account by running instances. Especially p2.xlarges. Well, actually, if you only have 1 p2.xlarge (or whatever instance type being used to perform deep learning, and your identity group can only start p2 instances, then it's not a big deal). 
 
 To create a security group from which to access your instance, you can run the following:
 ```bash
