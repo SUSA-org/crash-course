@@ -64,7 +64,24 @@ Assistance is welcome. In order to modify this repo, you first need to know your
 
 Your steps for contributing are:
 1) Clone this repo
-2) Just directly pull/push to this repo
+```bash
+# Navigate to your directory to store SUSA repositories.
+git clone https://github.com/SUSA-org/crash-course.git
+```
+
+2) Create a new branch for your work
+```bash
+git checkout -b yourbranchnamehere
+```
+
+3) Upon making your edits, push onto working branch
+```bash
+git add changedfile1 [changedfile2 ...]
+git commt -am "Description of change here"
+git merge  
+```
+
+2)  directly pull/push to this repo
 
 If you are having trouble pulling, pushing to the repo, then it may be because the upstreams are set to be the actual repo. To confirm this, you can run ``` git remote -v ``` and look for (upstream) listed somewhere. Then you just run ```git pull upstream [working_branch]``` and ```git push upstream [working_branch]``` (from your master branch). 
 
