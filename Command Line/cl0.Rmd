@@ -113,7 +113,7 @@ The root contains some of the inner workings of your computer, so do not fret if
 Alternatively, you can write a path starting from the **home directory**, which is probably a much more convenient location for you to start with, by starting the path with `~/`. How would you view the path from the root to your home directory?
 ```{bash}
 cd cl0-ws
-pwd ~/
+pwd ~
 ```
 
 You can use `cd` to go directly to any relative or absolute path you give as an argument. Keep note of the differences between the default path, `.`, `..`, `/`, and `~`, and you will be a happy filesystem navigator!

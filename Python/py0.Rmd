@@ -33,7 +33,7 @@ Then, run the conda command in the `/bin/` folder by typing the following into y
 If a list of packages is displayed on your screen, Anaconda installed successfully!
 4. If Anaconda installed successfully, you'll want to add Anaconda commands to what's called your PATH. This allows you to run Anaconda commands, like `conda`, `pip`, and `ipython` without navigating to your Anaconda installation folder first. To refresh your path, and therefore add Anaconda to it, type the following into your Terminal:
 ```{bash}
-source ~/.{bash}_profile
+source ~/.bash_profile
 ```
 5. Next, we'll need to install iPython so that you can view iPython notebooks, such as those hosted in the SUSA Crash Courses repository.
 First, run the following conda commands in your Terminal:

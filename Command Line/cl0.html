@@ -276,7 +276,8 @@ div.tocify {
 <p>The second is <code>..</code>, which is the location of the parent directory of the current directory. For example, if you wanted to navigate up from your current directory and then list the files in your new location, you can try:</p>
 <pre class="bash"><code>cd ..
 ls</code></pre>
-<pre><code>## cl0.html
+<pre><code>## bash.md
+## cl0.html
 ## cl0.Rmd
 ## cl0-ws
 ## git-logo.png</code></pre>
@@ -312,7 +313,7 @@ ls</code></pre>
 ## vmlinuz.old</code></pre>
 <p>The root contains some of the inner workings of your computer, so do not fret if you don’t recognize the folders inside of it.</p>
 <p>Alternatively, you can write a path starting from the <strong>home directory</strong>, which is probably a much more convenient location for you to start with, by starting the path with <code>~/</code>. How would you view the path from the root to your home directory?</p>
-<pre class="bash"><code>pwd ~/</code></pre>
+<pre class="bash"><code>pwd ~</code></pre>
 <pre><code>## /home/arun/Desktop/WORKSHOP/C/SUSA/susa-repos/crash-course/Command Line/cl0-ws</code></pre>
 <p>You can use <code>cd</code> to go directly to any relative or absolute path you give as an argument. Keep note of the differences between the default path, <code>.</code>, <code>..</code>, <code>/</code>, and <code>~</code>, and you will be a happy filesystem navigator!</p>
 </div>
@@ -625,7 +626,7 @@ git init</code></pre>
 <pre class="bash"><code>git add -A</code></pre>
 <p><code>git commit</code> is then used to make a named record of your work so far. All commits require a message to be attached, to describe what’s changed since the last version. If you simply run <code>git commit</code>, Git will automatically open up your default command-line text editor to force you to enter a message, which can be a pain to work with. For quick messages, you can use the <code>-m</code> option command to give a message as a string. Let’s commit our newly <code>add</code>ed files:</p>
 <pre class="bash"><code>git commit -m &quot;My first commit!&quot;</code></pre>
-<pre><code>## [master (root-commit) 45d19b2] My first commit!
+<pre><code>## [master (root-commit) c7ac782] My first commit!
 ##  4 files changed, 4 insertions(+)
 ##  create mode 100644 cx-is-awesome.txt
 ##  create mode 100644 susa-colors.txt
@@ -654,7 +655,7 @@ git branch</code></pre>
 <pre class="bash"><code>echo &quot;Career Exploration makes OP statisticians, data scientists, and machine learners :D&quot; &gt; cx-is-awesome.txt </code></pre>
 <p>Let’s <code>add</code> and <code>commit</code> our changes. A quick shortcut to do this is the <code>-a</code> option argument of <code>git commit</code>, which automatically <code>add</code>s all changed files, and then commits them.</p>
 <pre class="bash"><code>git commit -am &quot;Made a few changes for this demo&quot;</code></pre>
-<pre><code>## [demo_branch 7f5f1af] Made a few changes for this demo
+<pre><code>## [demo_branch 1886d09] Made a few changes for this demo
 ##  1 file changed, 1 insertion(+), 1 deletion(-)</code></pre>
 <p>If we <code>cat</code> the <code>cx-is-awesome.txt</code> file in our <code>demo_branch</code>, we see that it has in fact be overwritten:</p>
 <pre class="bash"><code>cat cx-is-awesome.txt</code></pre>
@@ -664,9 +665,9 @@ git branch</code></pre>
 cat cx-is-awesome.txt</code></pre>
 <pre><code>## Switched to branch 'master'
 ## geom_love is the future. We don't even need file suffixes where we're going!</code></pre>
-<p>Suppose we’re satisfied with our work in the <code>demo_branch</code>, and now want to officiate it by merging it back with the <code>master</code> branch. To do this, we use the <code>git merge</code> command. The syntax <code>git merege &lt;branch&gt;</code> will merge the <code>&lt;branch&gt;</code> branch with the branch you are currently on. Right now, we’re on the master branch (<em>Quiz: how do we know that we are currently on <code>master</code>? How can we double-check which branch we are on?</em>), so we run the following command to merge our <code>demo_branch</code> with the <code>master</code> branch:</p>
+<p>Suppose we’re satisfied with our work in the <code>demo_branch</code>, and now want to officiate it by merging it back with the <code>master</code> branch. To do this, we use the <code>git merge</code> command. The syntax <code>git merge &lt;branch&gt;</code> will merge the <code>&lt;branch&gt;</code> branch with the branch you are currently on. Right now, we’re on the master branch (<em>Quiz: how do we know that we are currently on <code>master</code>? How can we double-check which branch we are on?</em>), so we run the following command to merge our <code>demo_branch</code> with the <code>master</code> branch:</p>
 <pre class="bash"><code>git merge demo_branch</code></pre>
-<pre><code>## Updating 45d19b2..7f5f1af
+<pre><code>## Updating c7ac782..1886d09
 ## Fast-forward
 ##  cx-is-awesome.txt | 2 +-
 ##  1 file changed, 1 insertion(+), 1 deletion(-)</code></pre>
