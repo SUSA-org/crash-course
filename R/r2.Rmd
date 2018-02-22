@@ -1,0 +1,50 @@
+---
+title: Introduction to R
+subtitle: "Part 2: Data Cleaning and Analysis" 
+author: "Hosted by and maintained by the [Statistics Undergraduate Students Association (SUSA)](https://susa.berkeley.edu). Originally authored by Arun Ramamurthy."
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+---
+
+# Introduction
+
+In this first tutorial on R, you will learn about how to actually use R to conduct data analysis, and more importantly, how to *clean* your data to prepare them for data analysis. You will learn the basics of R syntax, including how to install and use packages, as well as several functions in base R and tidyverse, a collection of packages meant to make data science in R rapid and painless. Finally, you will grow familiarity with **R Markdown**, especially as you work within the [r1-workbook](r1-workbook.Rmd) associated workbook. 
+
+## About this Document
+### Prerequisites
+The only prerequisite for this tutorial is [r0](r0.html). You will need to install both R and RStudio to use the [r1-workbook](r1-workbook.Rmd) associated workbook. Visit [r0](r0.html) for general information on the philosophy and functionality of R and RStudio, as well as installation guides for both.
+
+### r1
+This document contains textbook-style information on R programming. It will cover the essentials of both base R and `tidyverse` packages such as `dplyr`, `readr`, and `stringr`.
+
+### r1-workbook
+The [r1-workbook](r1-workbook.Rmd) contains associated exercises to work through as you learn about the concepts within this document. They are aimed to help you get practice and familiarity with R programming concepts and functions. At the end of each section of this document, solve the problems in the matching section of the workbook to help your understanding of the material.
+
+# `tidyverse`
+
+## Installing Packages
+
+## `readr`
+
+## `dplyr`
+
+## `stringr`
+
+# Conclusion
+
+## Sneakpeek at `rvis`
+Next week, we will be covering more advanced data cleaning and data visualization in R! You will learn how to **tidy** your data for effective piping into
+
+# Additional Reading
+- For more information on R Markdown, visit the [R Markdown quick reference guide](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf).  
+- For a quick intro on the `magrittr` package, visit the [magrittr vignette](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html).
+- The premier free online textbook for R, written by one of the leading developers of the R ecosystem, ["R for Data Science" can be found here](http://r4ds.had.co.nz/).
+- The follow-up textbook to ["R for Data Science"](http://r4ds.had.co.nz/), ["Advanced R", can be found here](http://adv-r.had.co.nz/).
+- For a detailed official guide on R, see the first three manuals on [this CRAN page](https://cran.cnr.berkeley.edu/manuals.html).
+- For more information on the `tidyverse` packages, visit the official [tidyverse package listing](https://www.tidyverse.org/packages/).  
+- For more information on RStudio's features, visit this [page on the RStudio website](https://www.rstudio.com/products/rstudio/features/).
+- For an interactive guide to learning R and Python, visit [DataCamp](https://www.datacamp.com/) a paid tutorial website for learning data computing.
