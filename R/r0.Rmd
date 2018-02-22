@@ -1,7 +1,7 @@
 ---
 title: Introduction to R
 subtitle: "Part 0: Installing R and RStudio" 
-author: "Hosted by and maintained by the [Statistics Undergraduate Students Association (SUSA)](https://susa.berkeley.edu)."
+author: "Hosted by and maintained by the [Statistics Undergraduate Students Association (SUSA)](https://susa.berkeley.edu). Originally authored by Arun Ramamurthy."
 output: 
   html_document:
     toc: true
@@ -138,7 +138,7 @@ Today, we learned about R, RStudio, and CRAN. To summarize, R is a statistical p
 Stay tuned for next week's workshop, **r1**, on basic R programming!
 
 # Additional Reading
-- The premier free online textbook for R, written by one of the lead developers of the R ecosystem, ["R for Data Science" can be found here](http://r4ds.had.co.nz/).
+- The premier free online textbook for R, written by one of the leading developers of the R ecosystem, ["R for Data Science" can be found here](http://r4ds.had.co.nz/).
 - The follow-up textbook to ["R for Data Science"](http://r4ds.had.co.nz/), ["Advanced R", can be found here](http://adv-r.had.co.nz/).
 - For a detailed official guide on R, see the first three manuals on [this CRAN page](https://cran.cnr.berkeley.edu/manuals.html).
 - For more information on RStudio's features, visit this [page on the RStudio website](https://www.rstudio.com/products/rstudio/features/).

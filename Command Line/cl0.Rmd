@@ -1,7 +1,7 @@
 ---
 title: Introduction to Command-line Shells
 subtitle: "Part 0: Basic Usage and Git" 
-author: "Hosted by and maintained by the [Statistics Undergraduate Students Association (SUSA)](https://susa.berkeley.edu)."
+author: "Hosted by and maintained by the [Statistics Undergraduate Students Association (SUSA)](https://susa.berkeley.edu). Originally authored by Arun Ramamurthy." 
 output: 
   html_document:
     toc: true
@@ -223,7 +223,7 @@ cd cl0-ws
 history | grep mv
 ```
 
-You've now learned a ton of different commands for your CLI, and you're ready to learn a bunch more! Feel free to visit the links in the [Additional Readings](#additional_readings) section to learn more. This concludes the Bash portion of the workshop, but let's move on to learning one of the most popular programs used in CLI - Git.
+You've now learned a ton of different commands for your CLI, and you're ready to learn a bunch more! Feel free to visit the links in the [Additional Readings](#additional-readings) section to learn more. This concludes the Bash portion of the workshop, but let's move on to learning one of the most popular programs used in CLI - Git.
 
 # Git
 
