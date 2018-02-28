@@ -353,11 +353,13 @@ library(stringr)
 
 ## `magrittr`
 
-`magrittr` is a package that allows you to use **piping** in R. Piping is a way to make your code more readable. Essentially, it allows you to compose functions as `x %>% f %>% g` rather than using `f(g(x))`. The symbol for pipe is `%>%`. Since piping reads left-to-right rather than the usual in-to-out, it is more readable and makes your code easier to manage. Observe the following syntax:
+`magrittr` is a package that allows you to use **piping** in R. Piping is a way to make your code more readable. Essentially, it allows you to compose functions as `x %>% g %>% f` rather than using `f(g(x))`. The symbol for pipe is `%>%`. Since piping reads left-to-right rather than the usual in-to-out, it is more readable and makes your code easier to manage. Furthermore, in `magrittr` notation, the `.` symbol is used indicate "what was just passed into the pipe". Therefore, the following are equivalent:
 ```{r}
-sqrt(power(123, 3))
+sqrt(power(123, n = 3))
 # is equiv. to...
 123 %>% power(n = 3) %>% sqrt
+# is equiv. to
+3 %>% power(123, n = .) %>% sqrt
 ```
 
 You can also use `magrittr` to use functions rather than the equivalent operator, again making your code easier to read. To view all the aliases, type `multiply_by` in your R console. Observe the following example:

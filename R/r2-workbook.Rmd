@@ -1,0 +1,125 @@
+---
+title: Introduction to R
+subtitle: "Part 2: Data Wrangling with the `tidyverse`"
+author: "Hosted by and maintained by the [Statistics Undergraduate Students Association (SUSA)](https://susa.berkeley.edu). Originally authored by Arun Ramamurthy."
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+---
+```{r, echo = F}
+knitr::opts_chunk$set(eval = F)
+```
+
+# About this Document
+This is the associated workbook for the [r2](r2.html) tutorial on R programming and tidyverse. Using RStudio, replace each ` > TODO ` with a code chunk that answers the associated problem. Then, run the chunk to verify your answers. Some problems require a non-code answer, so simply replace ` > TODO ` with the correct textual answer.
+
+# Data Wranging
+
+## `dplyr`
+
+### `head`, `View`, `arrange`
+
+A pop-quiz on `%>%` from the `magrittr` package! Write a command to view the `iris` dataset in two ways, one with piping and one without. What do you notice about the tab titles of each?
+
+> TODO
+
+Use `head` to read the first ten lines of the `iris` dataset.
+
+> TODO
+
+Read the documentation of `head`. How could we easily see the **last** ten lines of the `iris` dataset?
+
+> TODO
+
+Using `View`, see if you can find out how many entries are in the `iris` dataset.
+
+> TODO
+
+Using `desc` and `tail`, find an alternative command to find the shortest six petals in the `iris` dataset.
+
+> TODO
+
+### Dataframe Subsetting
+
+#### Row Selection (`sample_*`, `slice`, `filter`)
+
+Read the documentation for `sample_n` to determine how to sample **with replacement**. Using the following dataframe, simulate ten rolls of a die.
+```{r}
+dice <- data.frame(Dots = 1:6)
+## TODO
+```
+
+Use `sample_n` and `nrow` (outputs the number of rows in a dataframe) to write `scramble`, a function that takes in a dataframe and outputs the same dataframe in a scrambled order.
+
+> TODO
+
+Using `slice`, write `my_head`, a function that operates identically to the default behavior of the `head` function.
+
+> TODO
+
+Select only the setosa flowers in `iris` with Sepal.Length's over 5.
+
+> TODO
+
+#### Column Selection (`select`, `rename`, `pull`)
+
+Rename the columns of `iris` to have more natural grammar. (Read: spaces rather than periods). 
+
+> TODO
+
+In your own words, what is the difference betwee `select` and `pull`?
+
+> TODO
+
+##### `select`
+
+##### `rename`
+
+##### `pull`
+
+### Adding & Modifying Columns (`mutate`, `transmute`)
+
+#### `mutate`
+
+#### `transmute`
+
+### `summarize`, `summary`
+
+### Grouped Data
+
+> Summarize question
+
+> Use arrange on grouped iris
+
+### Combining Datasets
+
+#### Binds
+
+#### Joins
+
+## `tidyr`
+
+### `gather`
+
+### `spread`
+
+### NA Values
+
+#### Using `tidyr` (`drop_na`)
+
+#### Using `dplyr`
+
+# Data Import 
+
+## `readr` & `readxl`
+
+## Column Types
+
+# Functional Programming in R (`purrr`)
+
+## The `map` Family
+
+# An Exercise on Data Cleaning
