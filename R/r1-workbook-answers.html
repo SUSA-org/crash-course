@@ -215,482 +215,321 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Introduction to R</h1>
-<h3 class="subtitle"><em>Part 1: Base R &amp; Basic Packages</em></h3>
+<h3 class="subtitle"><em>Part 1: Base R &amp; tidyverse (Associated Workbook Answers)</em></h3>
 <h4 class="author"><em>Hosted by and maintained by the <a href="https://susa.berkeley.edu">Statistics Undergraduate Students Association (SUSA)</a>. Originally authored by Arun Ramamurthy.</em></h4>
 
 </div>
 
 
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
-<p>In this first tutorial on R, you will learn about how to actually use R to work with data, as well as the core concepts behind R programming. You will learn the basics of R syntax as well as several functions in base R. Finally, you will grow familiarity with <strong>R Markdown</strong>, especially as you work within the <a href="r1-workbook.html">r1-workbook</a> associated workbook.</p>
-<div id="about-this-document" class="section level2">
-<h2>About this Document</h2>
-<div id="prerequisites" class="section level3">
-<h3>Prerequisites</h3>
-<p>The only prerequisite for this tutorial is <a href="r0.html">r0</a>. You will need to install both R and RStudio to use the <a href="r1-workbook.Rmd">r1-workbook</a> associated workbook. Visit <a href="r0.html">r0</a> for general information on the philosophy and functionality of R and RStudio, as well as installation guides for both.</p>
-</div>
-<div id="r1" class="section level3">
-<h3>r1</h3>
-<p>This document contains textbook-style information on R programming. It will cover the essentials of both base R and a few packages such as <code>magrittr</code> and <code>stringr</code>.</p>
-</div>
-<div id="r1-workbook" class="section level3">
-<h3>r1-workbook</h3>
-<p>The <a href="r1-workbook.Rmd">r1-workbook</a> contains associated exercises to work through as you learn about the concepts within this document. They are aimed to help you get practice and familiarity with R programming concepts and functions. At the end of each section of this document, solve the problems in the matching section of the workbook to help your understanding of the material.</p>
-</div>
-</div>
+<div id="about-this-document" class="section level1">
+<h1>About this Document</h1>
+<p>This is the answer manual to the associated workbook for the <a href="r1.html">r1</a> tutorial on R programming, <a href="r1-workbook.Rmd">r1-workbook</a>.</p>
 </div>
 <div id="r-markdown" class="section level1">
 <h1>R Markdown</h1>
-<p>The associated workbook requires some knowledge of R Markdown to use.</p>
-<p><strong>R Markdown</strong> is a powerful way to combine text, code, code output, images, LaTeX, and web elements into a single document, report, slide deck, or website. R Markdown is a file format and markup language that allows you to <strong>knit</strong> together <code>Rmd</code> files, which can either be <em>interactive</em> (as <strong>notebooks</strong>), or <em>published</em> (like this <code>html</code> document). It allows you to break up your code into bite-sized <strong>code chunks</strong>, surrounded by (optionally marked up) text. See the <a href="r1.html#additional-reading">Additional Reading</a> section at the end of this document for more information on how to make your own beautiful reports and workbooks in R! As R Markdown documents are standalone and work regardless of the computer that opens them, they are the best way to edit and share statistical code.</p>
-<p>At the very core of the notebook philosophy is the <strong>code chunk</strong>. To make a chunk in RStudio, simply type three backticks, <code>{r}</code>, and then three more backticks when you are finished writing your code chunk. An example of the chunk syntax is below: <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABeoAAAC6CAIAAABeL+qsAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAgAElEQVR4nO3dZ3AcZ57n+X9WVmV5gwJQ8CBIEKD3pEiRlLetlroltVxrtD3T42307N7M3MRF3G3EzYuL3dk4M9szszM9O+pQq42klm25VstREimKFL33JAiQ8CgUymVVmntREgTRwRWIAvn9BIMEEk8++RCZeID64TFK68p1AgAAAAAAgNLjzOtl0ahjupsBAAAAAACAKyG+AQAAAAAAKGnENwAAAAAAACWN+AYAAAAAAKCkEd8AAAAAAACUNOIbAAAAAACAkkZ8AwAAAAAAUNKIbwAAAAAAAEoa8Q0AAAAAAEBJI74BAAAAAAAoacQ3AAAAAAAAJY34BgAAAAAAoKQR3wAAAAAAAJQ04hsAAAAAAICSRnwDAAAAAABQ0ohvAAAAAAAAShrxDQAAAAAAQEkjvgEAAAAAAChpxDcAAAAAAAAljfgGAAAAAACgpBHfAAAAAAAAlDTiGwAAAAAAgJJGfAMAAAAAAFDSiG8AAAAAAABKGvENAAAAAABASXMW/gmHQ9PbDgAAAAAAAFwg1dsjjL4BAAAAAAAoccQ3AAAAAAAAJY34BgAAAAAAoKQ5p7sBAAAAAACgJNi2bVuWbdu2bYuIUuBwKIoy3U273hHfAAAAAABwfbNtERFFcSiK4nS63Zrf61Ucjkw2m8vl84ZhW9YXJclxpsn44pumBStV1XVi/2fTUlJEnJq7sXVZtKpe8/gcisMyzS1v/XQsJ15g3T1POF2aZVu5bGagu6PtyO58LjuBegAAAAAAmLls25bCSBsRxbZVp9Pn9VRWVMxubHC5XOc6u3p6e/vj8WxW/6JM4W9CnKtuHPFNsKxy0dq7RCSZ6O9qO3aVS4qI0+XeeP9vB8LR4SOWaY69/SNFKmqcmrvwdnVjy6z5Kz751Y9z2czEagMAAAAAYMZRFMWpqk5V1TSXiGT1nMvpCodClRXl9XW1TpfLtKxcLpdMpQzD8LjdoiiGYRqGYX05u2oyNJfL7/e5NW2M5W3btixLz+cz6UzeMCZ59ZFMl+gBRRRxJ201V8SKi0lpXblORMLh0FhK189dvGzjN00jv+XNZxP93Ve55JzFNyxcc7ueSX3+/kuDvZ2WNcHsZpjicETKq1ff/rDbFzi665Ojuz+ZZIUAAAAAAMwItm27nE6/3xcJhcqjZaZpdXZ1K4pUV8VqqqvqampUVe3p7e0433ny9Jl8Ph+rrHQ61fhgIplMpjPZvGFMcgxOtCzSMmd2eVlkjOUN08zlcv3xwTPtHYODiclc+gLpqNLXotoiFcdMX/9kY6miS/X2lEWjanlNvYh4PO6xnJPo707Ge2tnL6hqbGk/ts8yLxt3TUXJ2QtXB8sq247sPnts7+RzPhER286mhzSPN1rVYJpGx8kDRagTAAAAAICZQHO5wsFgRXm0pro6EgqpTjUQCMRisWhZmd/vU51fztexJRQM1NXUhIJBRcQwTD2nG3lDkUktheP1eiqi0bJwOBIOl4XDoUDgcn8Cfr/f53Oqaj5vJFPpwcSQrutF+QwUZMOOgWY1G3GoOXGYtsMUx2SHixRTPp32er3jXrr4/OkjpvFiIFwx6mIxRS/pdLlFJJtOjrfNV5ZNDYmISxtTgAUAAAAAwIxn22Lbqurwer2hYLAsHPL7/dGyMltE01xuTXNpmiISDAY1TSuLhG1bPB53Lp93qKppWUPJZDqTlS+XwpmYZDJ17OSpZDLVMqfJHY1eoaRlWXouNzA4eKrtbHdvXzqdnsRlL0sPSN9chx4o0TE4E9l5qrv9ZHf7yatfsjAuy5YifxILFbLwEgAAAADg+mGLWJZtGIZpWU6XKxAIBAIBe/hjYouI5tI0lxYMBEREREkMDYmIaVqWbYttT3IXqlw+39c/YNt2IOBXFCXg91+8Do5l25ZlpTOZgfhgZ3dPd2/fYKKY06a+di23I+MWURR3UkTMUlsH51rbODwYqSivboxWNwbCZZrHp3l8YouRzyUTfXs+fiOVGJjuBgIAAAAAMP0UkVwu19vX7/F4GurqbMsWRSkMp7Ft27JtEXEohbEOX8Q0uq53dXd39fRk9VyxBkFceQzO1Rl3M1LJjsG51uKbmx/8vZGPkG3bikPRVG+Zu07PpKaxYQAAAAAAlATbdjgcqqq6NZemaS6n06E4Ch/I54x0JpPNZnO5nIhobrfH7fZ5vS7NKSK22LZlKSI+j1t1OPL5vGmaisMxmbZcbgzO1Rx3M1LJjsGZefHNFdY2Hnbq4Oftx/enEgNGXhcRzeMLRiqM/KU/5RPefRwAAAAAgBnHsm3N6QyHgpFQKBKJVJSXe32ewgibdCZ9tr2ju6cnPjikKBIJh6oqK+vqasNaSETcmharrHSoaiaTTQwN9fX3G4YxRWNwrv64m5FKcAzOTIpvPL6AiOiZ0e9Z3/m2wb7O4Xdz2XRfZ9vlChfWQnb7AsVoIwAAAAAAJc22LJfLWV5WFotVRssi4WDI7Xbbtm1ZViaT7eruPttxLjGUFJGhZNK2pbw8GgoGRURzuaLRMk3TdD3X19+fzWbzubxVjCaNHIMjIl6v1zTNqzzuZqTCGBynJVavqWQsO6eIOc0L5s6Y+CbW0Bwsq7Qss//yQczE9HedNfI5rz9U0zT//OnDxa0cAAAAAICSYtu2W9OqqmL1dbVej0fTNKeqWpZlmGYmk4kPDg4NJS3LEpH44JDfN5jN5izLUhTFpWll4XAwEDBM06U5e/v70+lMNle0yUWFMTjxwcSs+lpbZFrG3YykuC1nheE0LKNHtdPEN6NZvO6uslhdKFpl2/aBz97N6Zni1m8a+b2b31px8wMrb/12ov/Gwd7ze7e8XdxLAAAAAABQOmzbNkwzl8upqqo4HA6HQ1EUW8RSxLLFtCzbtkXEti3btm2x7MI+U7Zt2bZpmmY+bxmmbVlS1L2hC2NwDMPQXC4RmZZxNwWqaXlylj9rukxbsW2luP/PCZkB8U2ovCpcXi0ieiYV7zk/FZdIJQb0bMrjC4bLq0rgpgAAAAAAMFUURUml06dOnU4kEmWRSHk0WlFR7vN6nYricWl+n9fn9aYzGUVRAn5fIOjXNE1xOBRFyeRyvb19g4ODQ8lk/0A8nkjoudzwvlTFkk5nzrR3iMg0jrvx5KyqeC7UYzrPiRF32vo0D72RGRHfbHnjWadLa1m2vnnJutW3P/T+i/9iW0WZW/cFxeFYfcfDHl/w1MHPj+z62MjpRawcAAAAAICSojgc+bzRNzCQy+dzes6hKKFQ0O/zqYri9XpilZWWbaeSKUVRQsFgVUWFx+NRFMW2rGw229Pb29XVnUylkul0JpM1TcuhqhNrhqUp+bBquS/cuCojkpCsiEjIIaJd8FGHbrkGTUduqgZeFMbdhBJGqNv0dltG3GmlJ7W1VrHMgPhGRIx87vCOTXXNi7yBcHlVY+/500WsPBqr9/pD+Vz20PYPLItdqAAAAAAA1zJFUWzbzueNVDrjcDj8Pl8+/8UWzz6/v2lWY6yyIpPVRcTn9fp8Xp/X++XCxpmu7p5zXV2GYRiGaVnWZHYNz4ediUU+PeYa11nunnzoQNrdnZ/wda+sBMfdFMyM+EZEbNtOxvs8vqAvGJaizqDy+kMikkoMkN0AAAAAAK55iqKIbZumaVmm6nA4nKqiiGXbYtsup7MsEgkFg/l8XkQ0TVNVVUQsy7JFLNu2bMs0zHzeMC1LURRFmXi6YbkVPebKNLhFscY0AcsSMUQMy9KmJFIp2XE3BTMmvhGRwspJquvCoVOTpLpchdqLWy0AAAAAAKXJFrFtW9O0WKyyKhbzeDy2bRcSHEVRHKrqcjgU2y6M0ym8WnY4HD6Pp7K8XNdzvb19mWxWRGQS8c0XFFucpjjG8JI8Z4suoptiTsnr95Idd1Mwk+IbAAAAAABQNIqiKA7LttKZjJ7PZzIZRRSf1+txu12aZtuS0bO5XC6XyyuKuD2enGE6VNXpdCqOYkQbtkjekpwplinqGBKZvEhexLCKvuGQ07T9WVNJWKU57qaA+AYAAAAAgOuLIiKKks/levv6LMtKJdOWZXX39jgUR3V1VWVFRVk4bFpWb29PX//AQDyuqmosFhPbjg8m0um0ZVmiKJMdemNaohuSUkSxxzF5agq481bVgKEM2aU57qZgZsU3oydsb/z4v0xV1QAAAAAAXBsURUTyeWNwMJHP5dOptGEaPb19TqfqVB1ul8vv9Zqm2dcfP9/V3T8woChKLm+oqiMej2cyWcMowtKxDt129xjjnQnl7jccejF3oxYRNWe7+y3Ftktz3E3BTIpvcnpWRDTNU9xqNbdXRHLZadtPHgAAAACAq0xRFMu205mMnssNpVKWbeX0nMfjTqbTQ8lkNJc3TWMwkYgPDqbTGdMydT3nUCSXzxuGadn2ZBYtLnAlrdAJ3To7vrjEkbNcySLHN7auGD2qIlKa424KZlJ8k04MiEh107wT+7cZeb0odTpdWvWseSKSSgwUpUIAAAAAAGYE27ZNyzJMU9d1W0QRyeeNxFBSc/VrmmaY5kA8nk6l8kbeNK1cLl9Y2Fgmt+HUMEfedvebIiWwB7Sp2GmlxCflzKT45uzxfbMXrQlGKu58/M9SiQHbMi3T3PLWTydQ1bp7nnC6NMXh8AfLnJrbMo2zR/cUvcEAAAAAAJS0L5OYwt95w0gkhrKZbG9/v23b6Uwml8vblvVFqSIFNxgXVVUHBwdnUnyTHopvefPZ1hUby2L1oWhMURTLnGBKF6mocWpu27bzeqar7djRPZuH4r3FbS0AAAAAADPDcChj27l8Xtf1xNCQfLEzlaOQ2RDcTKPFSxYrrSvXiUg4HJruxgAAAAAAAOBrsgP9i5YsLtEVlQEAAAAAAFBAfAMAAAAAAFDSiG8AAAAAAABKGvENAAAAAABASSO+AQAAAAAAKGnENwAAAAAAACWN+AYAAAAAAKCkEd8AAAAAAACUNOKbmcelKNPdBABThS/wa1hRbi5PCAAAwPWJ+GaGWR30/11TfYXLOd0NAUpRbXXVH3//qf/8v/5Hp3NGfo1Uaa6/a6pfGfBPd0MwDqGy2Nq7H7/jsT91qOoVihWl9+YJAQAAuG4R38wkt0dCv1ddGXaqG0LB6W4LUIrKIuH5rXPLIuEZOj7htkgo7FT/oKbylghf4zOGNxCqrJvt9YdELvvcFav35gkBAAC4bs3IX1BfnzaEg49WRkXknYHB1/oGprs5E6Q5tWWzFs+va6kKV7pdbj2vdw327Dm9f2/bgeluGr5mccOC1c0rYqFKRZGeRO+Ok3v2nNk/3Y2a8WrKqp7a+JhH8/zdi39/yQIv9PT7HY7VQf8TleW6ZW9NJCdzuVA0tnT9N0LlsXQivv+z3/SeOz38IZfmufU7fyi2/eFLP8rnstNb5zVv1N57bvXs5U1La8qqgp5Azsj3JHr3nT2469Re27YvKFncJwQAAAAzCPHNzDDL436iMioi7w4kXu6dqdmNiDx102N10Zrhd72at6mysamycU5V0yvb35jGhmGkbyy/c3XziuF366K1ddHaWZUNr33+1jS2aqZbUNf6wKp73S73FcqYtv10V6/LoSzz+56MlbfruXY9N7HLKYqy+vaHNY/3+N6tjS1LV9/+8HvP/9NwqrJgzW1uj2/nh6+OK2eZijqveVfuvd0u7aE197fUNA8f8WpqY0V9Y0V9a3Xzc5++fEGCU8QnBAAAADML8c0M4BB5KlbuVJTD6cxLvf3T3ZxJ+ez45wvq5u06tbdj4LxhGhXB6C0LN7bWNC9pXLiv7eCJrlPT3UDIksaFhezmk8NbPzv+uW3ba5pX3rJww7JZi9v7zu08tWe6GzjzRHzh2xffvKhh/lgKW7b9dGfPX9fX1Lm1p2Ll/+Xs+QsHYIxNRW2TLxg5uuvjo7s3p4cGlt90f92chacP7xSRaFVDY+uyno6T504dmvY6r22j9t5up7u+vC6Ty2w+8tnhjmND2WR5IHrboo0tNc0tNc2LGxbsazt4wSnFekIAAAAws7D2zQywNhSod2t52362u2+m/5h+4OzhX2599UTXqWwua5hGZ7z7ha2vJLMpEZlbPXu6WwcRkVsWbhCRPWf2f3Dg47SeyeSyHx3asvPUXhG5ecF6hV1vxunupbf92b2/v6hhfiaX2XlyTOGXbtlPd/Vatj3L414TnOAitb5gREQGes6LSLz3/PARh0Ndsv4e0zT2ffpOKdR5bRu1905khp779OV/fufpT49uH0jFDdPoGux+YeurA6m4iLTWzL1ktUV5QgAAADCzjD765tEH79+wdvVQMvn3//AviaGh4eOhYOBvfvAnAb//tbd+8/5Hm6eykeMQjFSUVzdGqxsD4TLN49M8PrHFyOeSib49H7+RSnwxcL15ybpQNBaMVLg9PpfHa1tWKjHQ2Xb05P5tRv7CgegOh9o4b3n93MWBcLmIJAf7Ok4cOHN4l2WZE7h60/yVtbMXBCLlqtOVSgy0H9+XHOxvWbY+FI3pmdTxfVvbjuy+oNo7IiER2RQf6ssbl/uP33HLxtrqquqqymDA7/f5TNPs6evfd/DwBx9/quv65D6pU8uyrP7kQMDjVx1X2rRl8jauW7Ni6eKqWIWmaT29fdt37unu6b3rtpvraqqGkqn3Nn2yZduOkeUVRVm+ZNHaVcsb6+vcbi0xlDx64uR7mzZ39/ReUPNjDz3QWF8bDAR8Pq/YdnwwceT4yfc3be6Px0cWmxH3qKasuswfEZGtR7ePPL712PaVs5cGvYGG8rq23vYpbUMkHL795vWtc+dEI2Gn05nJZJPpdHdP76bNW4+fPD2ypM/nvfPWm5YunB8JhwzDONtxvru3b0rbNgEpPZ038jtO7dly5LP68rqVc5aN5awOPbc5kbwpHLyjLLxtKDWB6zpUp4jYliUilmkOH2lesjYYqTi848P00FfPp+JwRCpqBro7iljneI2x95ax9cmax3v3d38gIptff2ag59zw8aqGuWvufERE3nzmv1nmFz3quL4juNyeuUtvrG5s9fpDlmnE+zpTg5cdFDmW3vvsRV9QpmWe7eso80cCnstGM5N/QgAAADCzjB7fvPz627Ma6upra37nyUd/+KMfW5YlIoqifPeRBwN+/7ETpz74eMvUt3Osbn7w90aODrBtW3Eomuotc9fpma9+wF2w+tavneZQQ9FYKBqrbVrwyRvPGLmvXku7Pb4b7nosXFE9fCRSUROpqGloWfLZO8+PrHOMV29auDoQjtqWpWfToWhs4Q13FI7nshlfMLJ0/b1GTh85+6BW0+rcmohsGkxc4T/+wL13jnxXVdW6muq6muoVSxb9P//8P7PZ0l2Kwqt5Y+FKEenoPz+lF7p5/dpYZYVlWUPJVG111YPfvEdEbNtOpzPl0bLHHnogk9V37f1idV63pn3/qcfntzSLiGmapmmWRcJrV61YsXTxvz3z86PHT46seV7LnPKysnw+n9NzmlurrCivrChfuWzxf/+Xp893dQ8XmxH3qKG8TkRSero78bWUqm+ofyibDHoC9dHaKY1vaqpif/FH3/d5vSJimmYmm/V43H6/r6qy4vNde0eWrKwo/7Pf/+1IOFR41+l0tjTPbmkuuTFc247v/Oz4DsO87Kv3y3kvnrgpHGx0a1WaqyuXH+/p2dSQiPhDkd7z4g+ViUgmlfAFIy3L1g8N9JzYv21k4craphvueizR33X60K6OkwdM49KXG1ed4zXG3ntcffIYjf07gj8UvfHe73r8wS8LqhU1sypqZl2y2jH23pfkdXlEJJEZukKZST4hAAAAmFlGj28Mw3j6p8//9V/80Zymxm99465X3vi1iNy8fu2C1rnpdObZ5y9cWHEsbrjz0VhD8xUK9HW2ffrWz8Zb7bBTBz9vP74/lRgw8rqIaB5fMFJx8S9RD23/4OyxvflcVvP4aprmLVp7VyBS3rJs/aHtHwyXWXnrt8MV1flc9sBn73aeOSaKVDe2LFp7Zyhateq2B7e8+dOJXX37e7/sbj9Z1diy5o7viMhHr/x7YqB7wepbm5esm7PohpHxzUK/R0Q69Fzv5X95O+y1N9/5bMfudCYT8PuXLVn48P33VsUq77795tfeHPeMhqm+RyLic3tnVTTcuugmj8t9pufsxUs8TIUfPfPzQ0eOLV4w7/e/913btv/+H/7Huc6uB+69845bNt628cbh+ObJRx+c39KcTmdeeePXO/bssyyruir2+EMPNDXWf+/x7/yf//X/zeW/erH045+9EI8nhpJJEXE4HPPmzvmtxx4K+P3f/uY9/+Pff3JBA0r8HlUEoyISTw2KSMgbfHLjI5pT+/nmX/Yk+uLJeNATKA9Gx9vOcXng3jt9Xm9nV/ezz7/cfu68iCiKEgmHZs9qPHH6zHAxh8Px/d96LBIOJZOpF3/15sEjxxWRlubZ99xxS31tzeWrv5Ipeubz5gRfV3fl8udz+RrNtcjnncCL895zp418rmnh6sG+ruYla0Wkq+3YkvX3OlTn3i1vF0bQDHOozmxqKBStWrrh3oVrbjt7fN+ZwzuTFw0qGVedEzNq/zmBPnmMRv2OoDgcq2570OMP6tn0ga3vdLefFFEqama1LF8fLq++uMJx9d4jxcKVzdWzRWTvmSttyTfJJwQAAAAzy5jWvunrH/jZL18VkVs33rhs8cKa6qr7771TRJ57+VeDiXH/UlFETDNvGlf6Y43/N9Vfa/D5tsG+zsJP/yKSy6b7OtsuLpZODub0jG3beiZ1+tDOwqyl2qavlhetrJtTXjNLRPZ8/Gb78f1GXjdyevvx/bs/el1EolUNVQ2XWJhgLFcvDGLqPnu8EH5lM0kRaTu6R0RC0cqRJRvcbhE5M7a9RfoG4ql02rbtoWTyk0+3fbpth4gsX7JwLOdeYErvUV209n//zl//L/f/+SPrvl0RjO46tfdnm39p2UV47Tcq0zRF5OCRY7ZtK4qSGEqKyKfbd4pITU1VocycpsZlixdalvVvP/n5tp27TdO0bft8Z9e//eTnmWw2EPAv+/qn9Gz7uUJ2IyKWZR06evyt33wgIi1zmlT1whlhJX6PPJpHRLL5rIgsm7W4MlQR9oVWz1khIpm8LiJezTOBpo5drLJCRLbt3FPIbkTEtu2B+ODOPfuSya8GVixZOL+2usq27X/7yS927T2g63pW1/cdPFz4zE/MVPdLE3Ayq4tIg1ubwLn5XPbg9vcDoejGB367oqbp+N5PwxXVlbVNbUd2XzxJqvPM0fde+Kft7/6y++wJ1aXNXrj61of/cN29T1TPmqc4HBOrc2Ku3H9OrE8eo1G/I1Q3toaiMRH5/L0Xz506bORzRl7vbDt6dNcnl6xwXL33MM2pPbjmPofiONZ5ctTV3CfzhAAAAGBmGevOU3sPHPrwk09v3Xjjk498ezAx5HI6P9uxa8/+CQ6X2PHBKxM7cUp1d5ycNX+FNxBWna7C3IGapnkiMhTv7Ww7OrJk19njif6uULSqpmle19njE76ibdu2ZSmq6tLcuWy68BvmwloSw6JOVUR68xP5zeqho8c3rFsTjUQ0lys3zhqm9B4ZZr5vqN/v9hXCgmWzFueM3G/2fTiBkVwTY1mWaZpOp9PjcSdTqVwuJyIu5xef+ZXLlojIkeMnT57+Wu6WTKZOnW5bOL919qzG7TuvtAbt6bZ2EVFV1ef1Dic7l1Rq98ilOkUkZ+RkxMSNwht6XhcRpzq129Wd6+yqKI/evP6G9o7zR0+cvFyxRQtaRaStveN029liXboE+6XuXF5Eyl0T/Jy3Hdnd034yWFaRHorrmfSt3/lDPZM69PmHiqK43N68nhn5FWfbdtfZ411nj3v9oYbWZY2tSytqmipqmrLpobYju88c3aOnk+Ots+imuk8e6eLvCFUNzSIS7zk3xqxqAr23y+l6Yv3DVeHYQCr+2udvjd7IyT0hAAAAmEHG8TPfr95+t6mxvqmxIVbp7u3rf+m10X+ynFkKL05ExKm5Cz+sh8oqRSTR13Vx4cG+rlC0qvCb2CnlcThERLcm8oqoMLRERDwez3ijgSnVNdjzT+/8TxGJ+MLLmhZvmLd2bctq1aG+tfvd6W6aiEh9bbWINNbV/u1f/ukFHwqFgiISCQVHHqyprrpl/dqmxvpQKOjWtEwmO/jlIt+qOsoAt1K7R3nTEBHNqYnI3rYDqqpqqrb9xE4RcbvcIjKBNVzG5dU33qmvrYmWRf709793vqt7x+69n+/aFx8cvKBYdaxSRDq7e6a0MdMua1nyZScwMZlUIpNKiMjSDfe6Pb5dm16rrJu95MZ7XG6Pnknt+eTN7vYTF59ydNfHx3Z/UtUwt3Heisq62a0rbqqdvfDDl3804TqL5Wr2yRd/RwhEKkRkKH7h4uWXM97eW3NqT274TkNFfTKb+vknv0zr6VFPmfwTAgAAgJliHD/zmabZfq6z8LZhmtbVGihx1VhfLtwwvHymU3OLyCXXwsymkyLinOKJJCKSt20RcU5ot+bCRCERcThKdLPneHpw08HNb+9+V0RWzVke9oWmu0UiIl6PR0T8fl91VeyCP4UldTXtq6kKq1cs/as//8N1a1ZWV8Us0+rrHzAtq7a6aozXKrV7lM1lRcTjcouIbds7T+7Zemy7aZki4nW5RSSTm9ollvsGBv7r//fPb7/34WBiqKYqdv89d/4ff/OD33ny0Zqqr70sd7vdIpJMjf76dkYrfOEbk+5so7H6xtblPR2nes6dWrbxPj2b2vPJm5Zlrrj5Aafr0vNubNs2jLxp5KVw9Yu6oAnUOXlXs0++xHcElyYiuexYn7px9d4el/upmx5rqKhP6emffPRcX3Jg9HOK94QAAACg9I1j9M3KZYs3rltjmqaey1XHKh9+4N7nXvrVxK666rYHY/VXWiK0v+vsZ+88P7HKi6iw4Yjbe4mtWz2+gIgYU/xSVkSGTFNEws6p3VT7YsMUsv4AABaFSURBVFfzHu05c+C+FXcrilIVjg2mJ7KaUnFldV1E3v3w49d//d6VSwb8/scf/paqqsdOnHr+ldd7vty1ur625q/+4o+mup1TcY96h/pFJOIPX/yhSCAiImN8VTkZWV1/+90P33n/o3ktzSuWLFq+ZOHyJYuWLJz/zC9eHJ6wWdioqxC0FUsJ9kshpypfdgITpjgcSzbca5rGvk9/Xd3YqjpdR3d9fO7UYYeqLrnxnlh988i10kVE8/gaWpY0ti4v7C2Vz2Xbj+07fXjnZOoslrH3ycPhi6N40/0KV3eNOSEae++tOtTHbnyoLlqTzKZ+8tEvCl+GY1GUJwQAAAAzwlh/rq2OVT7x8LdE5KVfvdU/EP/D3/mtG9esOnr85K69V9oX43JU1aU6XVcoUMQfuCcjMdATqay95JYihYOJ/u6LPzQu7z73Q1Ekr182Bjqn55f6pf6qr0x5Ne+RU3UWfr89vPrMVfCf/6//WxRJpzMXf+hcZ9eshvrWuXNktPimqbG+0Oanf/b8yKryV2Ua1FTco7N9HSLid/tjoYqRe4eXB6NBT0BE2vuKs0LtqCzLOnTk2KEjx159653/8NjD81vnPv7wAwcOHzUMQ0TOd3bPaqhvbmos4hVLsF+q0zQROadP6nFqXrw2GKk4vGNTeijubVkqIkPxPhEZGugVEW/gq6guWt0wa96KmqZ5DocqIoN9XWcO7+w4efDifcTHXmdxjb1PNvM527IUh6OIjSlcPVrVMMbyY++9v7H8zlmVDdlc9tmPnx97diNFekIAAAAwI4zp1Yimab/71OOapm3buXvzZ5+LyKbNW2/deOPjDz1wuq19IH7hshSj2vbuC+Nu6XQ4f/pwY+uyQKS8pmne+dNHho9XN7YUVlg4d/rwJC+R0y8RH4x0PJMVCTd73F6HI1OMfXnH6Greo8UNCwpvdA9eeimT+atuaZq/Mp2M7/jglVSiOKM/UunLzoDYtffAjWtWNdbXrVm57MpLFA/PWHA5XSKj3Mqim4p7dH6gcyAVL/NH1rWuGbly6rqWNSIylEmevUx8MxX3qCCVSr/93qb5rXN9Xm8kHOrt6xeRXfsOrFuzsipWuWbFsu27rnSPxq7U+iWXorT6PPJFJzBBvmCkZfmGoXjvif2fiYhtW/LlbKDC34Ujsfo5C9fcEYiUi4hlmh0nDpw+vPNyC/SOsc6pMPY+2bbtoXhPKFpV1dDcfnxfca5+6lDh6vXNi9tP7B+1/Bh775qyqhWzl4rIy9tf70mMdWEdKdITAgAAgJliTGvfPPjNe2KVFZ3dPS+88kbhyOu/fq+zu8fj8RSG5FyrejpO9Z4/IyLLNtzX0LLUpXlcbk9Dy9LlN90vIv2dZ7vPTtUKncOOZLIZy1IVZV0oMNXXmmqKonxz5T2tNXOD3oDqUFWHGg2UbZi39u6lt4nI6Z62nkTfxWeFy6vmLr3RqblD0ap5K2++Cu08evzkgUNHROTJRx589NvfbGyo87jdLqczFAzOb2levGDecMkzZ9sLi9d89zvfKux4XeByXWkQR4nbdHCziCybtfi2RTf53F6v5rl5wfqVs5eKyEeHtlxyX6Ei3qMnH3nw7ttvrqmKOb5cjTVaFrntphtFJJfLDSa+WBP6yLETh48eF5EnvvOtu2+/uSwSLuzzFS2LTObqJWVV0K8pSsayjkzixfmSG+9RVee+LW/bliUi6aG4fDlQJVJRIyLpRFxEHA41ECnPJAcP79j07vP/uOujX11hc6Ux1jkVxtUnd5w8KCI1TfMXrLnNF4woDofL7ZnMYJyec6d7Ok6JyLKN97UsW+/1hxwO1aVdts4x9t43zb9RRA51HDneOco24RcoyhMCAACAmWL00TfzWprX37DKNM1nn3tpeEqIYRi/ePG1H/zx785rab5h5fJtO3dPcTunza4PX73h7sfC5dXLNt63bON9w8cT/V07Prwa2wwbtr15MHlnWeiustCWxNDEtqAqEbFQ5crZSwtBwAU6490vffb6Jc9yad7htwPh8qlq3Nc989xL33v84UUL5m1Yt2bDujUjP3Tk2In9h774tX8ymXrtrd88+M175rfO/d/+05/nDUPXdZfL5dau9mS3ItrXdrChvG7VnOUb56/bOH/d8PG9Zw7sPHXpcS7FukdOp3PV8iWqqt531+2maWZ13eVyaS6XiNi2/eqb74yclfbMcy/+wfeenD2r4b67br/vrtsnfNGp5nK6fvCNLxZCcihfLIPyVw/8eeGNX2597XRP28VnqYpyT1lYRD4ZHJrwwrR1cxZW1s1uO7qnv6u9cKTzzNH82uy8lTd7A6HZC1dn08nCLlHdHSe3v/vL7vYTo277PfY6p8jY++RTBz+vbmwti9U1L17bvHhtUa6+c9OrN9z5aFmsbt7Km0dNKsfYe8+OzRKRlurm4adipI8Obdl2fOfFx4vyhAAAAGAGGSW+UVX1kW/dJyLvf7S5/dz5kR863XZ2+649N6xcfv+9d+zZf1DP5aawmdNHz6Y3v/6TWfNX1DUvCkYqRCQZ72s/eeDM4Z3W1Vot8t344E3hQJnT+e3ysud7xrEsQqmJpwff3PWbObFZ1WVVAbdfUZRMLts12H2w/ci+toOF7Y0u1td5prv9ZKx+jogUtiu+CnRd/9EzP18wr+WGlctmz2oI+P2KoiRTqfOd3bv2fW29p02bt7afO79h7eqGutpgMOD1eDLZ7OBgIp5IdPf0ZbL61Wlwcb256zdtve1rmlfEwpUi0pPo23lqz+7Tl52BUqx7ZFnWM794cfHCeQ21NcFAwOv1GKbZ09t3uq19y7bPT505O7JwOp357//69A0rl69asaSuutrjcRuGkRhKdnX3nD7bbpTMYq6KKN4R8VbB8BHVcel1be8qC1VrrqxlvRef4OfTpXkW3nCHnk0f2v7B8EEjn9vx/suL1t3VsnR9YqBn36e/tixTRCzT7Dp7vLh1TpGx98mWaW59++dzFt9QO3uBLxhxqE7TyGfTyeRg32Bfpz2hRub17Ja3ftowd0ndnIWhaJVTc1umoWdSQ/Hege6Oi+sctfd2qk7NqRXecF5qcSWXeumhfJN/QgAAADCzKK0r14lIOFwSGzbjcm6PhB6tjIrIv3f2bB+6xKa51zZVdd7y0O/7gpFdm14rTIhAqeEeFVGL1/OXdVUORXm+p/8DXpzPcFPRe/OEAAAAXFeyA/2LliwuiQ2eMKoP4olWn2eZ3/fbVRVZy96Xuuyyu9cYty9QUTOrefFaXzDS03FqinYjxmRwj4prlsf9J7Uxh6LsTqY/5JX5zFf03psnBAAA4PqkltfUi4jH457ulmAU+1KZuV53hcu1KuDry5sd1+hstQusvOVbc5fe6Pb6z506vGvTa1M6KQMTwz0qoqV+35/WxjwOx4mM/q+dPaxpcm0oYu/NEwIAAHAdMrKZWFWM0Tczhm5ZPzzX/Qc1lYt8XlWZ7tZcLedOHUoPxc+dOnSFfXAwvbhHReRTHW6H41A686/ne/TLbzWNmaWIvTdPCAAAwHUom83u3bOXtW9mGEVkecC3K3m9TJ4CrjcrAr7dyTRjKq49xeq9eUIAAACuN6nenrJolNE3M4wtQnYDXMP4Ar9WFav35gkBAAC4PjmmuwEAAAAAAAC4EuIbAAAAAACAkkZ8AwAAAAAAUNKIbwAAAAAAAEoa8Q0AAAAAAEBJI74BAAAAAAAoacQ3AAAAAAAAJY34BgAAAAAAoKQR33zFpSglUgkAAAAAAMCwaY5vaprm3/3dH9z68B8EwuXT25LVQf/fNdVXuJyTqaRKc/1dU/3KgL9YrQIAAAAAAJjm+Gb+qls0jzcQLp+9cPU0NuP2SOj3qivDTnVDKDiZem6LhMJO9Q9qKm+JTKoeAAAAAACAYZMabDJ5ejblD5WJiJ5NF6vOyrrZcxbdYFvWtndfGEv5DeHgo5VREXlnYPC1voHJXPqFnn6/w7E66H+isly37K2J5GRqAwAAAAAAkGmPb3Z/9HrzknV5PXNi39Zi1Rkur6qsm53o7x5L4Vke9xOVURF5dyDxcu+kshsRMW376a5el0NZ5vc9GStv13Ptem6SdQIAAAAAgOvcNE+eSg/F9215+/COTaaRv/pXd4g8FSt3KsrhdOal3v6i1GnZ9tOdPR16zqUoT8XKWccYAAAAAABM0nW989TaUKDereVt+9nuPrt41eqW/XRXr2XbszzuNUGWMQYAAAAAAJMypslTzUvWlcXqgpFytzegOl1GTk8MdHecOHj2+F7bsi4oHIxUlFc3RqsbA+EyzePTPD6xxcjnkom+PR+/kUoMiMjcpevmr7p15FmnD+3cv/Wdy109FI0FIxVuj8/l8dqWlUoMdLYdPbl/m5H/ampSWWXthvu/N/xuKBq7//t/O7Kez997qbPt6Mgjd0RCIrIpPtSXNy556UcfvH/D2tVDyeTf/8O/JIaGvqo8GPibH/xJwO9/7a3fvP/R5otP7NBzmxPJm8LBO8rC24ZSl6wcAAAAAABgLMYU3yxYfevId11uT3l1Y3l1Y2Prsm3vvpD7+qrDNz/4e4ry1Zwh27YVh6Kp3jJ3nZ75Isgwcrls+os0RHP7HKo69quLQw1FY6ForLZpwSdvPGPk9MJhyzILdTpdmtPlti1Lz34tNzHNr83PqtW0OrcmIpsGE5e79Muvvz2roa6+tuZ3nnz0hz/6sWVZIqIoyncfeTDg9x87ceqDj7dc7tz34ombwsFGt1alubpy0zA1DAAAAAAAXBvGsXTxwW3vnzm80zQNt8dX17x4/qpbIpU1q2578NO3fnZx4VMHP28/vj+VGDDyuohoHl8wUjE8WOb04Z2nD+8svL327scr62aPevVD2z84e2xvPpfVPL6apnmL1t4ViJS3LFt/aPsHhQKDfV3vPveP8uXQnqF470ev/vsVKlzo94hIh57rvczQGxExDOPpnz7/13/xR3OaGr/1jbteeePXInLz+rULWuem05lnn3/Zti876aorlz+fy9dorkU+L/ENAAAAAACYsHGsfZNJJUzTEBE9mz55YNuuj14TkfLqxlh988WF+863DfZ1FrIbEcll032dbZNpaDo5mNMztm3rmdTpQzvbjuwWkdqm+ROusMHtFpEzo+0M1dc/8LNfvioit268cdnihTXVVfffe6eIPPfyrwYTlx22U3Ayq4tIg1ubcCMBAAAAAAAmvnTx+dNHEv1dIlIziQxlwro7ToqINxBWna6J1RB1qiLSmx99XMzeA4c+/ORTEXnykW9//8lHXU7nZzt27dl/cPRG5vIiUu6a5t3ZAQAAAADAjDapnaf6u9pFJFweK1JjxkFPJwtvODX3xGrwOBwioltj2nLqV2+/e7rtrNvtjlVW9Pb1v/TaW2M5K2tZwxcCAAAAAACYmEklC3k9KyJOzVOkxoyD9eWOVyOXSR6XvG2LiHNsp5um2X6us/C2YZrW5Ze8GalQuTG2wgAAAAAAAJc0qfjG7fWLiJkfZfmY0RQ53RhjWjJkmiISdl5p06thK5ct3rhujWma6UymOlb58AP3juWskFMdvhAAAAAAAMDETCq+CZdXi8hQvHcylVimKSJX3jt8XGyrUOEoK86c0/MiUj+GdYWrY5VPPPwtEXnpV2/95Bcv2rZ945pVK5YuGvXEOk0bvhAAAAAAAMDETDy+Ka9uDFdUi0j32ROTaYGeTYtIIBSdTCUXV+gLhF1XnNV1PJMVkWaP23vFtWk0Tfvdpx7XNG3bzt2bP/v80NHjmzZvFZHHH3qgLBK+wokuRWn1eYYvBAAAAAAAMDHjiG9alq2vnjXP5fY4NXfdnIVr7nxERFKJ/nOnD02mBfGe8yISrW5obF3m0jxef6i6sSUUrZpEhedExKGqSzfc6w+VOVSn5vHVNM0Ll3+tziOZbMayVEVZFwpcobYHv3lPrLKis7vnhVfeKBx5/dfvdXb3eDyewpCcy1kV9GuKkrGsI8Q3AAAAAABgEsaxp3UoGlt9+0Mjj+jZ9Ofvv2xNbm2Xc6cOtixf7/WHlm74xtIN3ygcPLxjU2FX8glIJQY6Th6sm7Owpmn+yE3ND+/YNNj3VZ2GbW8eTN5ZFrqrLLQlMXTJLajmtTSvv2GVaZrPPvdS/sstxg3D+MWLr/3gj393XkvzDSuXb9u5++ITVUW5pywsIp8MDrF0MQAAAAAAmIxxjL5pO7K77/wZI69blpkeip88sH3Ty/82NNAzyRYY+dyWN3/acfKgnk3blqVn011njw90d0ymzj0fv3Fk50eJ/m7TyNuWpWdSnWeOFLY5H+nd+KBuWWVO57fLyy6uRFXVR751n4i8/9Hm9nPnR37odNvZ7bv2iMj9997h1i6xes5dZaFqzZW1rPfiicn8RwAAAAAAAJTWletEJBwOXaHQ/d//WxHZ8cEr508fvkrtulpuj4QerYyKyL939mwfShWlzhav5y/rqhyK8nxP/wfENwAAAAAAYKJSvT1l0eikdp66BnwQT+xJpUXkt6sqlvh9k69wlsf9J7Uxh6LsTqY/JLsBAAAAAACTdr3HN7bI0529xzNZVVH+uKZybfBKyxiPaqnf9x/rqrwOx4mM/uOuXta8AQAAAAAAk3e9xzciolvWD891H0hnHIqiKpOqyqc63A7HoXTmh+e6dMsqUgMBAAAAAMB1bRw7T13DdMv6x46u5QHfrmR6MvVsTSR1y9qdTDPuBgAAAAAAFMuYli4GAAAAAADA1cfSxQAAAAAAADMA8Q0AAAAAAEBJI74BAAAAAAAoacQ3AAAAAAAAJY34BgAAAAAAoKQR3wAAAAAAAJQ04hsAAAAAAICSRnwDAAAAAABQ0ohvAAAAAAAAStr44pumBSubF6+drpIAAAAAAADXIefYiwbLKhetvUtEkon+rrZjV7kkAAAAAADA9Uktr6kXEY/HPWrRXDadSQ5WN7ZWNcztbj+hZ1JXsyQAAAAAAMD1Jp9Oe73eccQ3IpLo707Ge2tnL6hqbGk/ts8yjatZEgAAAAAA4LpSiG/GMXmq4PzpI6bxYiBckc9lr35JAAAAAACA643SunKdiITDoeluCQAAAAAAAL4m1dtTFo2ycTgAAAAAAEBJI74BAAAAAAAoacQ3AAAAAAAAJY34BgAAAAAAoKQR3wAAAAAAAJQ04hsAAAAAAICSRnwDAAAAAABQ0ohvAAAAAAAAShrxDQAAAAAAQEkjvgEAAAAAAChpxDcAAAAAAAAljfgGAAAAAACgpBHfAAAAAAAAlDTiGwAAAAAAgJJGfAMAAAAAAFDSiG8AAAAAAABKGvENAAAAAABASSO+AQAAAAAAKGnENwAAAAAAACWN+AYAAAAAAKCkEd8AAAAAAACUNOIbAAAAAACAkuYs/DM4mJjedgAAAAAAAOACheCG0TcAAAAAAAAljfgGAAAAAACgpBHfAAAAAAAAlDTiGwAAAAAAgJJGfAMAAAAAAFDSiG8AAAAAAABKGvENAAAAAABASSO+AQAAAAAAKGnENwAAAAAAACWN+AYAAAAAAKCkEd8AAAAAAACUNOIbAAAAAACAkkZ8AwAAAAAAUNKIbwAAAAAAAEoa8Q0AAAAAAEBJI74BAAAAAAAoacQ3AAAAAAAAJY34BgAAAAAAoKQR3wAAAAAAAJQ04hsAAAAAAICSRnwDAAAAAABQ0ohvAAAAAAAAShrxDQAAAAAAQEn7/wEyFJ7iBH30KQAAAABJRU5ErkJggg==" /></p>
+<p>Make an empty chunk below:</p>
+<p>Make and run a chunk that outputs “Hello SUSA!”, using the <code>print</code> function:</p>
+<pre class="r"><code>print(&quot;Hello SUSA!&quot;)</code></pre>
+<pre><code>## [1] &quot;Hello SUSA!&quot;</code></pre>
+<p>How do you make text bold in R Markdown? How would you make text italics in R Markdown? (The R Markdown in the <a href="r1.html#additional-reading">Additional Reading section</a> should be helpful here.)</p>
+<p><em>Hello SUSA!</em><br />
+<strong>Hello SUSA!</strong></p>
 </div>
 <div id="base-r" class="section level1">
 <h1>Base R</h1>
-<p>Base R (known as the <code>base</code> package internally) contains hundreds of functions by default to jumpstart your data analysis workflow. We will go over the syntax of R, as well as some of these functions.</p>
 <div id="basic-r" class="section level2">
 <h2>Basic R</h2>
-<div id="syntax-basics" class="section level3">
-<h3>Syntax Basics</h3>
-<p>R is <em>case-sensitive</em>. So, ensure that you are always using the correct capitalization when dealing with functions, variables, and dataframe column names.</p>
-<p>Additionally, every command is separated by a new line, or a semicolon if you want to make multiple commands on a single line.</p>
-<p>Finally, you can comment code with #, which requests that R ignore the entire rest of the line, and treat it as normal text in the output.</p>
+<div id="syntax" class="section level3">
+<h3>Syntax</h3>
+<p>Comment out the a single line in the following code chunk, so that the output is <code>12</code> rather than <code>20</code>.</p>
+<pre class="r"><code>a = 3 + 3 * 3
+#a = 4 * 4 + 4
+a</code></pre>
+<pre><code>## [1] 12</code></pre>
 </div>
 <div id="expressions" class="section level3">
 <h3>Expressions</h3>
-<p>You can do basic arithmetic in R without the need of more advanced <strong>functions</strong>. These operations include the EMDAS (<code>^</code>, <code>*</code>, <code>/</code>, <code>+</code>, <code>-</code> respectively) operators, as well as the modulo/remainder operator (<code>%%</code>). Some examples are below:</p>
-<pre class="r"><code>2 ^ 3</code></pre>
-<pre><code>## [1] 8</code></pre>
-<pre class="r"><code>4 * 4</code></pre>
-<pre><code>## [1] 16</code></pre>
-<pre class="r"><code>5 / 10</code></pre>
-<pre><code>## [1] 0.5</code></pre>
-<pre class="r"><code>3 + 3</code></pre>
-<pre><code>## [1] 6</code></pre>
-<pre class="r"><code>7 - 6</code></pre>
-<pre><code>## [1] 1</code></pre>
-<pre class="r"><code>8 %% 6</code></pre>
-<pre><code>## [1] 2</code></pre>
-<p>We can also use the equality operator (<code>==</code>) and the inequality operator (<code>!=</code>), as well as operators like greater-than (<code>&gt;</code>) and less-than-or-equal (<code>&lt;=</code>) to <strong>test</strong> values. (To <strong>test</strong> means to return <code>TRUE</code> in some cases and <code>FALSE</code> otherwise). Some examples are below:</p>
-<pre class="r"><code>4 &gt; 4</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>4 &gt;= 4</code></pre>
+<p>Write an arithmetic expression to find the mean of the first five positive integers.</p>
+<pre class="r"><code>(1+2+3+4+5)/5</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>Write an arithmetic expression that uses the modulo and equality operators to test if a number is even or odd.</p>
+<pre class="r"><code>num = 3
+(num %% 2) &gt; 0 # Outputs TRUE for odd, FALSE for even. Could've been switched... QUIZ: How?</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>4 == 4</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>4 != 4</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<p>Note that spaces between operators and operands are optional, but may improve readability.</p>
 </div>
 <div id="variables-assignment" class="section level3">
 <h3>Variables &amp; Assignment</h3>
-<p>In R, a <strong>variable</strong> is an object that stores a value of some sort. After assigning a variable an initial value, you can re-assign it as many time as you’d like, even changing the type of object it stores.</p>
-<p>The most basic way to assign a variable a value in R is to use the <code>=</code> operator, which sets a variable to the value to its right. However, you can also use the <strong>arrow operator</strong> to set variables on either the left or the right of the value.</p>
-<p>As such, the following are equivalent:</p>
-<pre class="r"><code>a = 1
-a &lt;- 1
-1 -&gt; a</code></pre>
-<p>After you have set a variable, you can print its value using <code>print</code>. Alternatively, you can just type the variable to see its value.</p>
-<pre class="r"><code>print(a)</code></pre>
-<pre><code>## [1] 1</code></pre>
-<pre class="r"><code>a</code></pre>
-<pre><code>## [1] 1</code></pre>
-<p>Once you have set a variable, you can use it in arithmetic! For example, let’s emulate the Pythagorean Formula.</p>
-<pre class="r"><code>a &lt;- 3
+<p>Make a set of variable assignments to find the larger root of <span class="math inline">\(x^2 + 4x - 2\)</span></p>
+<pre class="r"><code>a &lt;- 1
 b &lt;- 4
-c &lt;- sqrt(a^2 + b^2)
-c</code></pre>
-<pre><code>## [1] 5</code></pre>
-<p>Normally, R will not let you start a variable with a number or include any spaces in your variable name. To get around this, surround your variable with backticks.</p>
-<pre class="r"><code>`5 and a space` &lt;- 420
-print(`5 and a space`)</code></pre>
-<pre><code>## [1] 420</code></pre>
+c &lt;- -2</code></pre>
+<pre class="r"><code>(-b+sqrt(b^2-4*a*c))/(2*a)</code></pre>
+<pre><code>## [1] 0.4494897</code></pre>
+<p>Make a variable named “susa magic” that evaluates to the value you computed above, without typing any numbers.</p>
+<pre class="r"><code>`susa magic` &lt;- (-b+sqrt(b^2-4*a*c))/(2*a)
+`susa magic` # Just to show output</code></pre>
+<pre><code>## [1] 0.4494897</code></pre>
 </div>
 <div id="atomic-objects" class="section level3">
 <h3>Atomic Objects</h3>
-<p>An <strong>atomic object</strong> in R is an object or list of objects that are both <strong>flat</strong> (cannot be reduced or opened further) and of the same <strong>type</strong>.</p>
-<p>There are three <strong>types</strong> in R - we will be going over their properties individually, before discussing <strong>vectors</strong>, which are collections of atomic objects. To check the type of an object, use the <code>class</code> function:</p>
-<pre class="r"><code>class(1.23)</code></pre>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p>What are the two properties of atomic objects in R? 1. Atomic objects are <strong>flat</strong>. That is, they cannot be reduced further in complexity. 2. Atomic objects are of the same <strong>type</strong>, either <code>numeric</code>, <code>logical</code>, or <code>character</code>.</p>
 <div id="types" class="section level4">
 <h4>Types</h4>
 <div id="numerics" class="section level5">
 <h5>Numerics</h5>
-<p>A <strong>numeric</strong> is an atomic object that refers to integers, doubles (<em>decimals</em>), and more.</p>
-<p>Some examples are below:</p>
-<pre class="r"><code>13</code></pre>
-<pre><code>## [1] 13</code></pre>
-<pre class="r"><code>013</code></pre>
-<pre><code>## [1] 13</code></pre>
-<pre class="r"><code>0130</code></pre>
-<pre><code>## [1] 130</code></pre>
-<pre class="r"><code>1.30</code></pre>
-<pre><code>## [1] 1.3</code></pre>
-<pre class="r"><code>13e-1</code></pre>
-<pre><code>## [1] 1.3</code></pre>
-<p>R also contains the constant <code>pi</code>, which evaluates to 3.141593.</p>
+<p>Create a numeric for one million using scientific notation.</p>
+<pre class="r"><code>mill &lt;- 1e6
+mill # Just to show output</code></pre>
+<pre><code>## [1] 1e+06</code></pre>
+<p>What type is <code>pi</code>? <code>pi</code> is of type <code>numeric</code>. We can verify this in the following code chunk:</p>
+<pre class="r"><code>class(pi)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
 </div>
 <div id="logicals" class="section level5">
 <h5>Logicals</h5>
-<p>A <strong>logical</strong> is a quantity that evaluates to either <code>TRUE</code> or <code>FALSE</code>. Recall the (in)equality testing we reviewed above - the output of these operators are logicals.</p>
-<p>Any non-zero numeric evaluates to <code>TRUE</code>. You can also use <code>T</code> and <code>F</code> rather than <code>TRUE</code> and <code>FALSE</code>, respectively.</p>
-<p>The <strong>boolean operators</strong> in R are operators that have logicals as operands. There are three basic ones:<br />
-- <code>|</code> the binary OR operator, which returns <code>TRUE</code> if either of its arguments are <code>TRUE</code><br />
-- <code>&amp;</code> the binary AND operator, which returns <code>TRUE</code> if both of its arguments are <code>TRUE</code><br />
-- <code>!</code> the unary NOT operator, which returns the opposite of its logical operand</p>
+<p>What numeric quantity is associated with <code>FALSE</code>? <code>0</code> is equivalent to <code>FALSE</code>. We can verify this in the following code chunk:</p>
+<pre class="r"><code>0 == F</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p><strong>Without evaluating it in R first</strong>, what is the output of the following?</p>
+<pre class="r"><code>0 | T</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Since <code>TRUE</code> or’ed with <code>FALSE</code> is <code>TRUE</code>, and <code>0</code> is equivalent to <code>FALSE</code>, the output should be <code>TRUE</code>.</p>
 </div>
 <div id="characters" class="section level5">
 <h5>Characters</h5>
-<p>A single lexographical symbol or <strong>string</strong> of multiple symbols is of type <strong>character</strong>. To make a string, surround one or more symbols in double-quotes (or alternatively, in single-quotes). A string does not evaluate its contents, and so <code>&quot;TRUE&quot;</code> and <code>&quot;123&quot;</code> are distinct from <code>TRUE</code> and <code>123</code>. Observe the functionality of various basic string syntaxes and functions below:</p>
-<pre class="r"><code>str &lt;- &quot;susa&quot;; nchar(str)</code></pre>
-<pre><code>## [1] 4</code></pre>
-<pre class="r"><code>str2 &lt;- &quot;1.2&quot;; str2 == 1.2</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>str3 &lt;- paste(&quot;Statistics&quot;, &quot;Undergraduate&quot;, &quot;Students&quot;, &quot;Association&quot;); print(str3)</code></pre>
-<pre><code>## [1] &quot;Statistics Undergraduate Students Association&quot;</code></pre>
+<p><strong>Without evaluating it in R first</strong>, what is the output of the following?</p>
+<pre class="r"><code>'pi' == pi</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>Here, we highlight the difference between <code>characters</code> and <code>numerics</code>. Since <code>'pi'</code> is of type <code>character</code> and <code>pi</code> is of type <code>numeric</code>, they cannot be equal. So the output should be <code>FALSE</code>.</p>
+<p>What does the <code>paste</code> function do?</p>
+<p>The <code>paste</code> function will output a <code>character</code> string of all its arguments, by default separated by a ` ` (space).</p>
 </div>
 </div>
 <div id="vectors" class="section level4">
 <h4>Vectors</h4>
-<p>A <strong>vector</strong> is an ordered finite sequence of elements, each of the same type. Just like the atomic objects it contains, a vector is also considered an atomic object*. As such, they must be both <strong>flattened</strong> (fully reduced) and of the <strong>same type</strong>. Vectors are an important building block in R, as they compute quickly and are a way to bind together multiple values.</p>
-<p>*(<em>In fact, singleton values are just single-element vectors in R.</em>)</p>
+<p><strong>Without evaluating it in R first</strong>, what is the output of the following?</p>
+<pre class="r"><code>c(1) == 1</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>This code chunk highlights that single-element vectors are identical to just single elements. So, the output should be <code>TRUE</code>.</p>
 <div id="vector-basics" class="section level5">
 <h5>Vector Basics</h5>
-<p>To construct a vector, we use the <code>c</code> function, which stands for <em>concatenate</em>, as it can also add more values to the vector. You can also use the <code>:</code> notation to make ordered sequences of numbers. Finally, you can check the length of a vector using <code>length</code>. Observe these behaviors below:</p>
-<pre class="r"><code>vec &lt;- c(1,2,3,4)
-vec2 &lt;- 1:4
-print(vec)</code></pre>
-<pre><code>## [1] 1 2 3 4</code></pre>
-<pre class="r"><code>length(vec2)</code></pre>
-<pre><code>## [1] 4</code></pre>
-<pre class="r"><code>vec == vec2</code></pre>
-<pre><code>## [1] TRUE TRUE TRUE TRUE</code></pre>
+<p>Name two uses of the <code>c</code> function. 1. <code>c</code> is used to create vectors out of atomic objects.<br />
+2. <code>c</code> is used to concatenate multiple vectors into a single flat vector.</p>
+<p><strong>Without evaluating it in R first</strong>, what is the output of the following?</p>
+<pre class="r"><code>length(c(1,10,2,3,1))</code></pre>
+<pre><code>## [1] 5</code></pre>
+<p>There are 5 elements in the vector, and <code>length</code> will return the number of elements in the vector passed to it. So, the output should be 5.</p>
 </div>
 <div id="vectorized-functionality" class="section level5">
 <h5>Vectorized Functionality</h5>
-<p>Notice that operators (e.g. <code>==</code>) function on vectors <em>element-wise</em>. This is an example of R’s <strong>vectorization</strong> behavior. Essentially, R will try to take basic operators and functions and apply it to each element in a vector automatically, then return the resultant vector. Because of vectorization, vector operation in R is efficient. Here are some examples of vectorization in R:</p>
-<pre class="r"><code>v &lt;- c(1, 12, 169, 7)
-1/v</code></pre>
-<pre><code>## [1] 1.00000000 0.08333333 0.00591716 0.14285714</code></pre>
-<pre class="r"><code>2*v^2 - v + 3</code></pre>
-<pre><code>## [1]     4   279 56956    94</code></pre>
+<p>Use a vector and an operation to find the first 10 powers of 2.</p>
+<pre class="r"><code>powers &lt;- 1:10
+2^powers</code></pre>
+<pre><code>##  [1]    2    4    8   16   32   64  128  256  512 1024</code></pre>
 </div>
 <div id="flattening" class="section level5">
 <h5>Flattening</h5>
-<p>Recall from the previous section that atomic objects are always <em>flattened</em>. That is, they cannot contain non-atomic objects. When you combine two vectors in R with <code>c</code>, they will automatically become one long vector, rather than a 2-element vector of two vectors. To better illustrate this, observe the following examples of <em>flattening</em>:</p>
-<pre class="r"><code>v &lt;- 1:5
-c(1,2,3,v)</code></pre>
-<pre><code>## [1] 1 2 3 1 2 3 4 5</code></pre>
-<pre class="r"><code>c(1:3, v)</code></pre>
-<pre><code>## [1] 1 2 3 1 2 3 4 5</code></pre>
-<pre class="r"><code>w &lt;- c(v, v)
-length(w)</code></pre>
-<pre><code>## [1] 10</code></pre>
-<pre class="r"><code>w</code></pre>
-<pre><code>##  [1] 1 2 3 4 5 1 2 3 4 5</code></pre>
-<p>An example of both properties of atomic objects (<em>flattening</em> and <em>same-typeness</em>) is that R will automatically <strong>cast</strong> elements of different types to be the type. Logicals will turn into numerics, and both numerics and logicals will turn into strings if R has to convert them to retain <em>same-typeness</em>. Consider the following example of this behavior:</p>
-<pre class="r"><code>a &lt;- c(T, F)
-c(a, 3)</code></pre>
-<pre><code>## [1] 1 0 3</code></pre>
-<pre class="r"><code>c(a, &quot;TREE&quot;)</code></pre>
-<pre><code>## [1] &quot;TRUE&quot;  &quot;FALSE&quot; &quot;TREE&quot;</code></pre>
+<p><strong>Without evaluating it in R first</strong>, what is the output of the following?</p>
+<pre class="r"><code>c(0, &quot;TRUE&quot;, FALSE)</code></pre>
+<pre><code>## [1] &quot;0&quot;     &quot;TRUE&quot;  &quot;FALSE&quot;</code></pre>
+<p>Since flattening will cast everything to <code>character</code> if a single <code>character</code> element is present, we expect the output to be a <code>character</code> vector with three elements, <code>&quot;0&quot;</code>, <code>&quot;TRUE&quot;</code>, and <code>&quot;FALSE&quot;</code>. Since the <code>character</code> casting occurs before any numerics are turned into logicals, 0 is not converted to <code>FALSE</code> before it’s converted to a character.</p>
 </div>
 <div id="subsetting-vectors" class="section level5">
 <h5>Subsetting Vectors</h5>
-<p>All vectors are <strong>indexed</strong> (labeled by number) so that you can access them by telling R which elements you want. The indicies are <em>1-indexed</em> - i.e. the first element is labeled <code>1</code>, the second <code>2</code>, and so on. You can specify which elements with square brackets. Finally, you can tell R to <em>exclude</em> rather than <em>select</em> the indices you pass to it using <code>-</code>. Observe the following behaviors:</p>
-<pre class="r"><code>v &lt;- c(&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;)
-v[1]</code></pre>
-<pre><code>## [1] &quot;red&quot;</code></pre>
-<pre class="r"><code>v[2]</code></pre>
-<pre><code>## [1] &quot;blue&quot;</code></pre>
-<pre class="r"><code>v[1:2]</code></pre>
-<pre><code>## [1] &quot;red&quot;  &quot;blue&quot;</code></pre>
-<pre class="r"><code>v[-2]</code></pre>
-<pre><code>## [1] &quot;red&quot;   &quot;green&quot;</code></pre>
-<pre class="r"><code>v[-c(3,1,2)]</code></pre>
-<pre><code>## character(0)</code></pre>
-<p>Alternatively, you can specify an inclusion indicator for each element by giving a vector of logicals. Observe the following behaviors:</p>
-<pre class="r"><code>v &lt;- 1:5
-v[c(T, F, F, F, T)]</code></pre>
-<pre><code>## [1] 1 5</code></pre>
-<pre class="r"><code>v[! c(T, F, T, F, T)]</code></pre>
-<pre><code>## [1] 2 4</code></pre>
-<p>Finally, if you set <strong>names</strong> for the elements of your vector, you can access the elements in your <strong>named vector</strong> by giving which specifying you want. Observe the following behaviors:</p>
-<pre class="r"><code>v &lt;- c(one = 1, two = 2, three = 3)
-v[&quot;one&quot;]</code></pre>
-<pre><code>## one 
-##   1</code></pre>
-<pre class="r"><code>get_these &lt;- c(&quot;one&quot;, &quot;three&quot;)
-v[get_these]</code></pre>
-<pre><code>##   one three 
-##     1     3</code></pre>
+<p>What are the three ways to subset vectors? 1. <code>v[selection]</code>, where <code>selection</code> is a numeric vector of the indices of the elements we wish to keep.<br />
+2. <code>v[selection]</code>, where <code>selection</code> is a logical vector indicating which elements of <code>v</code> we wish to keep.<br />
+3. <code>v[selection]</code>, where <code>selection</code> is a character vector of the names of the elements we wish to keep.</p>
+<p>Use all three ways to subset the vector <code>v</code> to get just the first and last values:</p>
+<pre class="r"><code>v &lt;- c(&quot;red&quot; = 4, &quot;blue&quot; = 0, &quot;green&quot; = 2)
+v[c(1,3)] # Using Method 1 (numeric selection)</code></pre>
+<pre><code>##   red green 
+##     4     2</code></pre>
+<pre class="r"><code>v[c(T,F,T)] # Using Method 2 (logical selection)</code></pre>
+<pre><code>##   red green 
+##     4     2</code></pre>
+<pre class="r"><code>v[c(&quot;red&quot;, &quot;green&quot;)] # Using Method 3 (character selection)</code></pre>
+<pre><code>##   red green 
+##     4     2</code></pre>
+<p>Add a line of code to the chunk below to output all the elements in the vector that are even, without manually specifying their indicies. You will find the modulus operator helpful here.</p>
+<pre class="r"><code>v &lt;- 1:100
+v[v %% 2 == 0] # Using Method 2 (logical)</code></pre>
+<pre><code>##  [1]   2   4   6   8  10  12  14  16  18  20  22  24  26  28  30  32  34
+## [18]  36  38  40  42  44  46  48  50  52  54  56  58  60  62  64  66  68
+## [35]  70  72  74  76  78  80  82  84  86  88  90  92  94  96  98 100</code></pre>
 </div>
 </div>
 </div>
 <div id="lists" class="section level3">
 <h3>Lists</h3>
-<p>Now let’s learn a few <em>non-atomic</em> objects. A <strong>list</strong> is an ordered sequence of values of <em>flexible type</em>. In comparison to vectors, lists are unconstrained in what they can contain. Their elements can be of different type or even be vectors or lists themselves! To access elements of a list, use single square brackets to get a sublist, or <strong>extract</strong> a single value with double bracket.s Observe the following behaviors:</p>
-<pre class="r"><code>vec &lt;- 3:1
-l &lt;- list(&quot;SUSA&quot;, vec, c(F, T)); l</code></pre>
+<p>What is the difference between a vector and a list? A vector is <strong>flat</strong> and only contains elements of the <strong>same type</strong>. However, a list can contain elements of any types, including other lists, and so neither has to be flat nor all of the same type.</p>
+<p>Make a list containing your favorite color, your age, and a logical indicating if you have pets or not.</p>
+<pre class="r"><code>my_list &lt;- list(&quot;green&quot;, 20, F)
+my_list # Just to show output</code></pre>
 <pre><code>## [[1]]
-## [1] &quot;SUSA&quot;
+## [1] &quot;green&quot;
 ## 
 ## [[2]]
-## [1] 3 2 1
+## [1] 20
 ## 
 ## [[3]]
-## [1] FALSE  TRUE</code></pre>
-<pre class="r"><code>length(l)</code></pre>
-<pre><code>## [1] 3</code></pre>
-<pre class="r"><code>l[2] #[] returns a sublist</code></pre>
-<pre><code>## [[1]]
-## [1] 3 2 1</code></pre>
-<pre class="r"><code>l[2:3]</code></pre>
-<pre><code>## [[1]]
-## [1] 3 2 1
-## 
-## [[2]]
-## [1] FALSE  TRUE</code></pre>
-<pre class="r"><code>l[[2]] #[[]] returns the item within the list</code></pre>
-<pre><code>## [1] 3 2 1</code></pre>
+## [1] FALSE</code></pre>
+<p>Now, put that list into a new list, along with your current home address. How many elements does your list have?</p>
+<pre class="r"><code>my_other_list &lt;- list(my_list, &quot;2607 Hillegass Avenue&quot;)
+length(my_other_list) # Showcases that length is only at the top-level</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code># So, the length is 2 (my_list and my home address), not accounting for the length of my_list itself</code></pre>
+<p>Extract your favorite color from this new list.</p>
+<pre class="r"><code>my_other_list[[1]][[1]] # First gets the first element of my_other_list (my_list), then gets the first element of that (green)</code></pre>
+<pre><code>## [1] &quot;green&quot;</code></pre>
 </div>
 <div id="functions" class="section level3">
 <h3>Functions</h3>
-<p>Now that you’ve learnt some of the basic data structures in R, let’s learn some of the <strong>functions</strong> that operate on them! A <strong>function</strong> is a device that accepts zero or more input <strong>arguments</strong> and yields single output, or <strong>result</strong>. Unlike the binary and unary operators (e.g. <code>+</code>, <code>==</code>, etc.) we’ve been reading about, functions have the following usage syntax: <code>f(x,y)</code>, just like functions you study in math class.</p>
+<p>What is the syntax to use a function in R?</p>
+<p>E.g. <code>f(x, a = &quot;something&quot;, b = 3)</code></p>
 <div id="using-functions" class="section level4">
 <h4>Using Functions</h4>
-<p>Let’s learn a couple of functions that should help illustrate how functions work in R. First up, we have the <code>sqrt</code> function, which simply finds the square root of its argument. Observe the following behavior:</p>
-<pre class="r"><code>sqrt(4)</code></pre>
-<pre><code>## [1] 2</code></pre>
-<pre class="r"><code>sqrt(23)</code></pre>
-<pre><code>## [1] 4.795832</code></pre>
-<pre class="r"><code>real_negative = -1; sqrt(real_negative)</code></pre>
-<pre><code>## [1] NaN</code></pre>
-<pre class="r"><code>complex_negative = as.complex(-1); sqrt(complex_negative)</code></pre>
-<pre><code>## [1] 0+1i</code></pre>
-<p><em>Notice that <code>sqrt(-1)</code> returns <code>NaN</code>(“Not a Number”) for real -1, but returns i for complex -1.</em></p>
-<p>To check how a function works in R, simply type e.g. <code>?sqrt</code> in your console. The associated documentation for the function you searched will open up in the Help pane. You will see a <strong>Description</strong> section, which discusses the function’s purpose in English; a <strong>Usage</strong> section, which shows you the right syntax to use the function; a <strong>Arguments</strong> section, which details what kinds of objects will be accepted as arguments; a <strong>Details</strong> section, which explains special cases and considerations; and an <strong>Examples</strong> sections which gives example code segments on how to use the function in question.</p>
-<p>Some functions have <strong>default values</strong> for some arguments. For example, if you type <code>?log</code>, you will see information on R’s log function. Notice that the default base is <code>base = exp(1)</code>. That is, if we use <code>log</code> in R, by default it will take the natural log. If we wanted to change the base, we could specify it as something else than its default value. Finally, note that many functions in R (e.g. <code>log</code>), also support vectorization. Observe the following examples:</p>
-<pre class="r"><code>tens &lt;- 10^(1:10)
-log(tens)</code></pre>
-<pre><code>##  [1]  2.302585  4.605170  6.907755  9.210340 11.512925 13.815511 16.118096
-##  [8] 18.420681 20.723266 23.025851</code></pre>
-<pre class="r"><code>log(tens, base = 10)</code></pre>
-<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
-<pre class="r"><code>log(tens, base = 2)</code></pre>
-<pre><code>##  [1]  3.321928  6.643856  9.965784 13.287712 16.609640 19.931569 23.253497
-##  [8] 26.575425 29.897353 33.219281</code></pre>
+<p>Find the square root of <span class="math inline">\(e\)</span>. You will find the <code>exp</code> function useful here.</p>
+<pre class="r"><code>sqrt(exp(1))</code></pre>
+<pre><code>## [1] 1.648721</code></pre>
+<p>What is the default value of the <code>digits</code> argument of the <code>round</code> function?</p>
+<p>By running <code>?round</code> in the R Console, and looking at the Usage section, we find that it is <code>digits = 0</code>.</p>
 </div>
 <div id="writing-functions" class="section level4">
 <h4>Writing Functions</h4>
-<p>To write your own function in R, we will use curly brackets, the <code>function</code> function, and the <code>return</code> function. For example, to make a function <code>square</code> that returns the 2nd power of its inputted argument, we can run:</p>
-<pre class="r"><code>square &lt;- function(x){return(x^2)}</code></pre>
-<p>Then, we can use the <code>square</code> function anytime we wish. Since the contents of the <code>square</code> function uses the vectorized operator <code>^</code>, our <code>square</code> function is vectorized too.</p>
-<pre class="r"><code>square(12)</code></pre>
-<pre><code>## [1] 144</code></pre>
-<pre class="r"><code>square(1:10)</code></pre>
-<pre><code>##  [1]   1   4   9  16  25  36  49  64  81 100</code></pre>
-<p>Suppose we also wanted to make a more general function <code>power</code>, that will raise a number to the <span class="math inline">\(n^{th}\)</span> power, but default to just squaring a number. We could write it as so:</p>
-<pre class="r"><code>power &lt;- function(x, n = 2){return(x^n)}</code></pre>
-<p>Observe the following behaviors of our handmade function:</p>
-<pre class="r"><code>power(12)</code></pre>
-<pre><code>## [1] 144</code></pre>
-<pre class="r"><code>power(12, n = 5)</code></pre>
-<pre><code>## [1] 248832</code></pre>
-<pre class="r"><code>power(1:10)</code></pre>
-<pre><code>##  [1]   1   4   9  16  25  36  49  64  81 100</code></pre>
-<pre class="r"><code>power(1:10, n = 1/2)</code></pre>
-<pre><code>##  [1] 1.000000 1.414214 1.732051 2.000000 2.236068 2.449490 2.645751
-##  [8] 2.828427 3.000000 3.162278</code></pre>
-<p>Finally, if you want to use multple functions together, you can <strong>compose</strong> them just like you do in math (e.g. <code>f(g(x))</code>). We will later learn about a package called <code>magrittr</code> that makes reading function compositions much easier. Observe the following examples:</p>
-<pre class="r"><code>sqrt(square(12))</code></pre>
-<pre><code>## [1] 12</code></pre>
-<pre class="r"><code>sqrt(power(12))</code></pre>
-<pre><code>## [1] 12</code></pre>
-<pre class="r"><code>sqrt(power(12, n = 3))</code></pre>
-<pre><code>## [1] 41.56922</code></pre>
+<p>Write a function to test if a number is odd. Use it to determine all the odd values of the first 20 squares.</p>
+<pre class="r"><code>is_odd &lt;- function(n){n %% 2 &gt; 0}
+first_twenty_squares &lt;- (1:20)^2
+first_twenty_squares[is_odd(first_twenty_squares)] # Using Method 1 (numeric selection)</code></pre>
+<pre><code>##  [1]   1   9  25  49  81 121 169 225 289 361</code></pre>
+<p>Write a function <code>susa(x, a, b)</code> which returns <span class="math inline">\(x^{\frac{a}{b}}\)</span>. By default, it should return the square root of <code>x</code>.</p>
+<pre class="r"><code>susa &lt;- function(x, a = 1, b = 2) {x^(a/b)}</code></pre>
 </div>
 </div>
 </div>
 <div id="dataframes" class="section level2">
 <h2>Dataframes</h2>
-<p>Now that we’ve learnt about vectors, lists, and functions, we are ready to learn about the most essential object for data analysis: the <strong>dataframe</strong>. A dataframe is a list of (named) vectors, all of the same length.</p>
 <div id="constructing-dataframes" class="section level3">
 <h3>Constructing Dataframes</h3>
-<p>For example, let’s suppose we wanted to make a dataframe of a group of friends, with their ages and favorite colors. First, we would make a vector of their names, a vector of their ages, and a vector of their favorite colors. Notice that these vectors are of different types, but all contain exactly 3 elements:</p>
-<pre class="r"><code>friends &lt;- c(&quot;Hadley&quot;, &quot;Mom&quot;, &quot;R&quot;); class(friends)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<pre class="r"><code>ages &lt;- c(30, 45, 18); class(ages)</code></pre>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
-<pre class="r"><code>fav_colors &lt;- c(&quot;Pink&quot;, &quot;Yellow&quot;, &quot;Blue&quot;); class(fav_colors)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<p>Then, we can combine these into a dataframe, or list of named vectors, using the <code>data.frame</code> function. Alternatively, we can first make a list of vectors, and then give it as an argument to <code>data.frame</code> to acheive the same thing:</p>
-<pre class="r"><code>my_friends &lt;- data.frame(Name = friends,
-                         Age = ages,
-                         `Favorite Color` = fav_colors, check.names = F)
-print(my_friends)</code></pre>
-<pre><code>##     Name Age Favorite Color
-## 1 Hadley  30           Pink
-## 2    Mom  45         Yellow
-## 3      R  18           Blue</code></pre>
-<pre class="r"><code>my_friends_2_precursor &lt;- list(Name = friends, Age = ages, `Favorite Color` = fav_colors)
-my_friends_2 &lt;- data.frame(my_friends_2_precursor, check.names = F)
-# my_friends is identical to my_friends_2</code></pre>
-<p>R has constructed a dataframe called <code>my_friends</code> with three column vectors, <code>Name</code>, <code>Age</code>, and <code>Favorite Color</code>. We can check the <strong>structure</strong> of our dataframe with the <code>str</code> command, which details the number of <strong>observations</strong> (<em>rows</em>) and the number of <strong>variables</strong> (<em>columns</em>), as well as the type of each:</p>
-<pre class="r"><code>str(my_friends)</code></pre>
-<pre><code>## 'data.frame':    3 obs. of  3 variables:
-##  $ Name          : Factor w/ 3 levels &quot;Hadley&quot;,&quot;Mom&quot;,..: 1 2 3
-##  $ Age           : num  30 45 18
-##  $ Favorite Color: Factor w/ 3 levels &quot;Blue&quot;,&quot;Pink&quot;,..: 2 3 1</code></pre>
-<p>Notice that <code>data.frame</code> converted our string vectors (<code>friends</code>, <code>fav_colors</code>) into factor vectors. A <strong>factor</strong> is a new type that refers to categorical data with a finite number of categories. R prefers to work with factors, as it makes checking equality and sorting faster than if it had to parse strings. R will implicitly convert strings into factors, unless you ask it not to by specifying <code>stringsAsFactors=FALSE</code> in the function call of <code>data.frame</code>.</p>
+<p>Make a dataframe containing the first name, last name, favorite ice cream flavor, and approximate height of four other CX members. Include yourself in this dataframe for a total of five entries.</p>
+<pre class="r"><code>`First Names` &lt;- c(&quot;aRun&quot;, &quot;Patrick&quot;, &quot;Alex&quot;, &quot;Dennis&quot;, &quot;Lucas&quot;)
+`Last Names` &lt;- c(&quot;Ramamurthy&quot;, &quot;Chao&quot;, &quot;Chan&quot;, &quot;Yang&quot;, &quot;the CX Pledge Master&quot;)
+`Favorite Ice Cream Flavor` &lt;- c(&quot;Mint Chocolate Chip&quot;, &quot;Vanilla&quot;, &quot;Peach&quot;, &quot;Chocolate&quot;, &quot;Ice&quot;)
+Heights &lt;- c(72, 20, 69, 100, 4)
+cx_df &lt;- data.frame(`First Names`, `Last Names`, `Favorite Ice Cream Flavor`, Heights)
+head(cx_df) # Just to show output</code></pre>
+<pre><code>##   First.Names           Last.Names Favorite.Ice.Cream.Flavor Heights
+## 1        aRun           Ramamurthy       Mint Chocolate Chip      72
+## 2     Patrick                 Chao                   Vanilla      20
+## 3        Alex                 Chan                     Peach      69
+## 4      Dennis                 Yang                 Chocolate     100
+## 5       Lucas the CX Pledge Master                       Ice       4</code></pre>
+<p>Verify the types and structure of your dataframe.</p>
+<pre class="r"><code>str(cx_df)</code></pre>
+<pre><code>## 'data.frame':    5 obs. of  4 variables:
+##  $ First.Names              : Factor w/ 5 levels &quot;Alex&quot;,&quot;aRun&quot;,..: 2 5 1 3 4
+##  $ Last.Names               : Factor w/ 5 levels &quot;Chan&quot;,&quot;Chao&quot;,..: 3 2 1 5 4
+##  $ Favorite.Ice.Cream.Flavor: Factor w/ 5 levels &quot;Chocolate&quot;,&quot;Ice&quot;,..: 3 5 4 1 2
+##  $ Heights                  : num  72 20 69 100 4</code></pre>
 </div>
 <div id="subsetting-dataframes" class="section level3">
 <h3>Subsetting Dataframes</h3>
-<p>To extract a specific vector back out of a dataframe, use <code>$</code> notation. Alternatively, you can use the standard list double square-bracket notation:</p>
-<pre class="r"><code>vec &lt;- my_friends$Name
-print(vec)</code></pre>
-<pre><code>## [1] Hadley Mom    R     
-## Levels: Hadley Mom R</code></pre>
-<pre class="r"><code>vec2 &lt;- my_friends[[1]]
-vec == vec2</code></pre>
-<pre><code>## [1] TRUE TRUE TRUE</code></pre>
-<p>Finally, you can <strong>subset</strong> your dataframe to return a new dataframe with only particular columns or rows with the single square-bracket notation:</p>
-<pre class="r"><code>my_friends[1, ]</code></pre>
-<pre><code>##     Name Age Favorite Color
-## 1 Hadley  30           Pink</code></pre>
-<pre class="r"><code>my_friends[, 3]</code></pre>
-<pre><code>## [1] Pink   Yellow Blue  
-## Levels: Blue Pink Yellow</code></pre>
-<pre class="r"><code>my_friends[1,3]</code></pre>
-<pre><code>## [1] Pink
-## Levels: Blue Pink Yellow</code></pre>
+<p>Using the dataframe from the previous section, make a subset of the dataframe that only contains the name information.</p>
+<pre class="r"><code>cx_df_namesonly &lt;- cx_df[, 1:2] # Notice: second argument is for column selection
+head(cx_df_namesonly) # Just to show output</code></pre>
+<pre><code>##   First.Names           Last.Names
+## 1        aRun           Ramamurthy
+## 2     Patrick                 Chao
+## 3        Alex                 Chan
+## 4      Dennis                 Yang
+## 5       Lucas the CX Pledge Master</code></pre>
+<p>Extract the row associated with you from your dataframe.</p>
+<pre class="r"><code>cx_df[1,] # Notice: first argument is for row selection</code></pre>
+<pre><code>##   First.Names Last.Names Favorite.Ice.Cream.Flavor Heights
+## 1        aRun Ramamurthy       Mint Chocolate Chip      72</code></pre>
 </div>
 </div>
 <div id="rds-files" class="section level2">
 <h2>RDS Files</h2>
-<p>An <strong>RDS</strong> (<em>R Data Structure</em>) is the most efficient way to make your dataframes portable. It simply packages whatever object you pass to the <code>saveRDS</code> function in a memory-efficient way, and then you can Slack, email, or share your object, and another person can read it in R with <code>readRDS</code>.</p>
+<p>Read the documentation of <code>saveRDS</code>. What are its arguments?</p>
+<p>Running <code>?saveRDS</code>, we find that the arguments are: - <code>object</code>, the object you are saving into an RDS file<br />
+- <code>file</code>, the file name for the new RDS file you are creating<br />
+- <code>ascii</code><br />
+- <code>version</code><br />
+- <code>compress</code><br />
+- <code>refhook</code></p>
+<p>Read the documentation of <code>readRDS</code>. What are its arguments?</p>
+<p>Running <code>?readRDS</code>, we find that the arguments are: - <code>file</code>, the file name of the RDS file you are reading<br />
+- <code>refhook</code></p>
+<p>Using <code>saveRDS</code> and <code>readRDS</code>, trade your dataframe from above with the person next to you via Slack. Read their dataframe and check its contents.</p>
+<pre class="r"><code>saveRDS(cx_df, &quot;test.RDS&quot;)
+cx_df_again &lt;- readRDS(&quot;test.RDS&quot;)</code></pre>
 </div>
 </div>
 <div id="installing-using-packages" class="section level1">
 <h1>Installing &amp; Using Packages</h1>
-<p>We’ve now covered a fair amount of base R. We could keep going and learn more, but there are actually packages that accomplish a lot of the things in base R more easily. Next, we will learn how to install and load packages, and then learn about two of the most popular ones: <code>magrittr</code> and <code>stringr</code>.</p>
-<p>A <strong>package</strong> is an addition to the base libraries in R. Some packages contain multiple smaller packages. Packages are easy to install and quick to load in R.</p>
+<p>In your own words, what is a <strong>package</strong>? A <strong>package</strong> is an addition to the Base R functions, usually encapsulating a set of specialized functions for some task(s).</p>
 <div id="installing-packages" class="section level2">
 <h2>Installing Packages</h2>
-<p>The first time you use a package, you will need to install it first. Use the <code>install.packages</code> function to do this. Let’s install the <code>magrittr</code> and <code>stringr</code> packages.</p>
-<pre class="r"><code>install.packages(c(&quot;magrittr&quot;, &quot;stringr&quot;))</code></pre>
-<p>After you’ve installed it the first time, the package will remain downloaded on your machine. Then, you just need to call <code>library</code> each time you re-open R to use the functions from that package. Let’s load up <code>magrittr</code> and <code>stringr</code> for use in the next two sections.</p>
-<pre class="r"><code>library(magrittr)
-library(stringr)</code></pre>
+<p>When should you use <code>install.packages</code>? When should you use <code>library</code>? Use <code>install.packages</code> when downloading and installing a package for the first time on a particular computer. Use <code>library</code> when loading a package for its first use in a particular file.</p>
+<p>Install and load the <code>ubeR</code> package, a package that allows you to use Uber’s API to look at your ride history and even request an Uber, all within R.</p>
+<pre class="r"><code>install.packages(&quot;ubeR&quot;)
+library(ubeR)</code></pre>
 </div>
 <div id="magrittr" class="section level2">
 <h2><code>magrittr</code></h2>
-<p><code>magrittr</code> is a package that allows you to use <strong>piping</strong> in R. Piping is a way to make your code more readable. Essentially, it allows you to compose functions as <code>x %&gt;% g %&gt;% f</code> rather than using <code>f(g(x))</code>. The symbol for pipe is <code>%&gt;%</code>. Since piping reads left-to-right rather than the usual in-to-out, it is more readable and makes your code easier to manage. Furthermore, in <code>magrittr</code> notation, the <code>.</code> symbol is used indicate “what was just passed into the pipe”. Therefore, the following are equivalent:</p>
-<pre class="r"><code>sqrt(power(123, n = 3))</code></pre>
-<pre><code>## [1] 1364.136</code></pre>
-<pre class="r"><code># is equiv. to...
-123 %&gt;% power(n = 3) %&gt;% sqrt</code></pre>
-<pre><code>## [1] 1364.136</code></pre>
-<pre class="r"><code># is equiv. to
-3 %&gt;% power(123, n = .) %&gt;% sqrt</code></pre>
-<pre><code>## [1] 1364.136</code></pre>
-<p>You can also use <code>magrittr</code> to use functions rather than the equivalent operator, again making your code easier to read. To view all the aliases, type <code>multiply_by</code> in your R console. Observe the following example:</p>
-<pre class="r"><code>(((30 + 6) / 4) %% 3) &gt; 0</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>## is equiv. to...
-30 %&gt;% add(6) %&gt;% divide_by(4) %&gt;% mod(3) %&gt;% is_greater_than(0)</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<p>Finally, you can use <code>magrittr</code> for variable assigment, after running a variable through a lot of functions, using <code>%&lt;&gt;%</code>. Observe the following behaviors:</p>
-<pre class="r"><code>a = 64
-a &lt;- a %&gt;% divide_by(4); print(a)</code></pre>
-<pre><code>## [1] 16</code></pre>
-<pre class="r"><code># is equiv. to
-a %&gt;% divide_by(4) -&gt; a; print(a)</code></pre>
-<pre><code>## [1] 4</code></pre>
-<pre class="r"><code># is equiv. to
-a %&lt;&gt;% divide_by(4); print(a)</code></pre>
-<pre><code>## [1] 1</code></pre>
+<p>In your own words, what is a <strong>pipe</strong>? Why is it useful?</p>
+<p>The pipe (<code>%&gt;%</code>) is used to “linearize” nested function calls, to make them easier to easier to read.</p>
+<p>Name three aliases included in the <code>magrittr</code> package that weren’t included in <code>r1</code>.</p>
+<p>By running <code>?multiply_by</code> in the R Console, some answers include: * is_weakly_less_than<br />
+* extract2<br />
+* is_in</p>
+<p>Using piping, reconstruct the Quadratic Formula above to find the larger root of <span class="math inline">\(16x^2 + 14x - 20\)</span>.</p>
+<pre class="r"><code>a &lt;- 16
+b &lt;- 14
+c &lt;- -20
+- b %&gt;% add(
+  sqrt(
+    b %&gt;% raise_to_power(2) %&gt;% 
+      subtract(4 %&gt;% multiply_by(a) %&gt;% multiply_by(c)))) %&gt;%
+  divide_by(2 %&gt;% multiply_by(a))</code></pre>
+<pre><code>## [1] 0.7630858</code></pre>
+<pre class="r"><code>## There are multiple possible answers to this problem - it's just intended to give you some practice with piping</code></pre>
+<p>In your own words, what does the <code>%&lt;&gt;%</code> pipe do?</p>
+<p>The <code>%&lt;&gt;%</code> pipe will operate as the normal <code>%&gt;%</code> pipe does, but sets the variable to its left to its final output when finished.</p>
 </div>
 <div id="stringr" class="section level2">
 <h2><code>stringr</code></h2>
-<p><code>stringr</code> is a package used for text and string manipulation in R. We will learn it to gain more familiarity with functions, as well as ease into the <code>tidyverse</code>, which we will learn more about next week.</p>
-<div id="str_length" class="section level3">
-<h3><code>str_length</code></h3>
-<p><code>stringr</code>’s <code>str_length</code> function returns the number of characters in a string. Observe the following examples:</p>
-<pre class="r"><code>x &lt;- &quot;asdf&quot;
-str_length(x)</code></pre>
-<pre><code>## [1] 4</code></pre>
-<pre class="r"><code>str_length(c(x, x, &quot;asdfgh&quot;))</code></pre>
-<pre><code>## [1] 4 4 6</code></pre>
-<pre class="r"><code>str_length(NA)</code></pre>
-<pre><code>## [1] NA</code></pre>
+<p>There is another function we learned early on in <code>r1</code> that operates identically to <code>str_length</code>. What is that function? <code>nchar</code></p>
+<p>Use <code>str_sub</code> to edit the string below to read <code>&quot;(Your name) is awesome!&quot;</code></p>
+<pre class="r"><code>x &lt;- &quot;CX is awesome.&quot;
+str_sub(x, start = 1, end = 2) &lt;- &quot;R Programming&quot;
+x # Just to show output</code></pre>
+<pre><code>## [1] &quot;R Programming is awesome.&quot;</code></pre>
+<p>Read the documentation for <code>str_trim</code>. Then, use <code>str_trim</code> to edit the string below to read <code>&quot;    Hello world!&quot;</code></p>
+<pre class="r"><code>x &lt;- &quot;    Hello world!        &quot;
+x %&gt;% str_trim(side = &quot;right&quot;)</code></pre>
+<pre><code>## [1] &quot;    Hello world!&quot;</code></pre>
+<p>Use <code>str_detect</code> to make a new vector of all the strings in <code>x</code> that contain the letter <code>a</code>.</p>
+<pre class="r"><code>x &lt;- c(&quot;asdf&quot;, &quot;have a great day!&quot;, &quot;SUSA&quot;, &quot;susa&quot;, &quot;cx&quot;, &quot;cx is awesome&quot;)
+x_a &lt;- x[str_detect(x, pattern = &quot;a&quot;)]
+x_a # Just to show output</code></pre>
+<pre><code>## [1] &quot;asdf&quot;              &quot;have a great day!&quot; &quot;susa&quot;             
+## [4] &quot;cx is awesome&quot;</code></pre>
+<p>Use <code>stringr</code> to replace all the vowels in your name with capital vowels. The adventurous of you could use the regex guide in the <a href="r1.html#additional-reading">Additional Reading section</a>, but repeated calls to <code>str_replace_all</code> would work as well.</p>
+<p><code>str_replace_all</code> solution:</p>
+<pre class="r"><code>my_name &lt;- &quot;arun ramamurthy&quot;
+my_name %&gt;% 
+  str_replace_all(pattern = &quot;a&quot;, replacement = &quot;A&quot;) %&gt;%
+  str_replace_all(pattern = &quot;e&quot;, replacement = &quot;E&quot;) %&gt;%
+  str_replace_all(pattern = &quot;i&quot;, replacement = &quot;I&quot;) %&gt;%
+  str_replace_all(pattern = &quot;o&quot;, replacement = &quot;O&quot;) %&gt;%
+  str_replace_all(pattern = &quot;u&quot;, replacement = &quot;U&quot;) </code></pre>
+<pre><code>## [1] &quot;ArUn rAmAmUrthy&quot;</code></pre>
+<p>Regex solution:</p>
+<pre class="r"><code>my_name &lt;- &quot;arun ramamurthy&quot;
+my_name %&gt;% str_replace_all(pattern = &quot;[aeiou]&quot;, toupper)</code></pre>
+<pre><code>## [1] &quot;ArUn rAmAmUrthy&quot;</code></pre>
 </div>
-<div id="str_sub" class="section level3">
-<h3><code>str_sub</code></h3>
-<p>The <code>str_sub</code> function extracts a substring from a string, given a start and end index. Using negative values for the index indicates that you’d like to count the index from the <em>back</em> of the string rather than from the <em>front</em>. Observe the following examples:</p>
-<pre class="r"><code>x &lt;- &quot;SUSA is awesome!&quot;
-x %&gt;% str_sub(start = 2, end = -2)</code></pre>
-<pre><code>## [1] &quot;USA is awesome&quot;</code></pre>
-<pre class="r"><code>x %&gt;% str_sub(1, 4)</code></pre>
-<pre><code>## [1] &quot;SUSA&quot;</code></pre>
-<pre class="r"><code>x %&gt;% str_sub(3, 3)</code></pre>
-<pre><code>## [1] &quot;S&quot;</code></pre>
-<p>We can also use <code>str_sub</code> to edit a substring of a string. Observe the following example:</p>
-<pre class="r"><code>str_sub(x, 1, 4) &lt;- &quot;ggplot&quot;
-x</code></pre>
-<pre><code>## [1] &quot;ggplot is awesome!&quot;</code></pre>
-</div>
-<div id="str_trim" class="section level3">
-<h3><code>str_trim</code></h3>
-<p>You can easily <strong>trim</strong> off the whitespace at the beginning or end of a string using <code>str_trim</code>. Observe the following example:</p>
-<pre class="r"><code>x &lt;- &quot;    there are unecessary spaces here    &quot;
-str_length(x)</code></pre>
-<pre><code>## [1] 40</code></pre>
-<pre class="r"><code>trimmed_x &lt;- str_trim(x); trimmed_x</code></pre>
-<pre><code>## [1] &quot;there are unecessary spaces here&quot;</code></pre>
-<pre class="r"><code>str_length(trimmed_x)</code></pre>
-<pre><code>## [1] 32</code></pre>
-</div>
-<div id="str_detect" class="section level3">
-<h3><code>str_detect</code></h3>
-<p>You can search a vector of strings for a search pattern using <code>str_detect</code>. Observe the following example:</p>
-<pre class="r"><code>x &lt;- c(&quot;Hello world&quot;, &quot;#SUSA magic&quot;, &quot;#careerexploration&quot;, &quot;no hashtags here&quot;, &quot;#hashtag&quot;); x</code></pre>
-<pre><code>## [1] &quot;Hello world&quot;        &quot;#SUSA magic&quot;        &quot;#careerexploration&quot;
-## [4] &quot;no hashtags here&quot;   &quot;#hashtag&quot;</code></pre>
-<pre class="r"><code>str_detect(x, pattern = &quot;#&quot;)</code></pre>
-<pre><code>## [1] FALSE  TRUE  TRUE FALSE  TRUE</code></pre>
-</div>
-<div id="str_replace-str_replace_all" class="section level3">
-<h3><code>str_replace</code>, <code>str_replace_all</code></h3>
-<p>You can replace all the matches to a particular pattern with a replacement pattern using <code>str_replace_all</code>. In contrast, <code>str_replace</code> will only replace the first instance of a pattern per string. Observe the following example:</p>
-<pre class="r"><code>x &lt;- c(&quot;susa&quot;, &quot;pythons suck&quot;, &quot;r &gt; python &gt; stata&quot;)
-str_replace(x, pattern = &quot;py&quot;, replacement = &quot;mara&quot;)</code></pre>
-<pre><code>## [1] &quot;susa&quot;                 &quot;marathons suck&quot;       &quot;r &gt; marathon &gt; stata&quot;</code></pre>
-<pre class="r"><code>str_replace_all(x, pattern = &quot;s&quot;, replacement = &quot;S&quot;)</code></pre>
-<pre><code>## [1] &quot;SuSa&quot;               &quot;pythonS Suck&quot;       &quot;r &gt; python &gt; Stata&quot;</code></pre>
-<p>This concludes our brief overview of <code>stringr</code>. <code>stringr</code> includes many other very useful functions, so consult the <a href="#additional-reading">Additional Reading</a> section below if you wish to learn more.</p>
-</div>
-</div>
-</div>
-<div id="sneakpeek-at-r2" class="section level1">
-<h1>Sneakpeek at <code>r2</code></h1>
-<p>Next week, we will be covering data cleaning and other data science tools in R. You will learn how to <strong>tidy</strong> your data using the <code>tidyverse</code>, a set of packages designed to make data wrangling in R as rapid and painless as possible. <code>tidyverse</code> actually contains <code>stringr</code>, so you’re already on your way in learning these tools in R! You will also learn a little bit on how to scrape data from the web.</p>
-</div>
-<div id="additional-reading" class="section level1">
-<h1>Additional Reading</h1>
-<ul>
-<li>For a cheatsheet on Base R, visit RStudio’s <a href="https://www.rstudio.com/wp-content/uploads/2016/05/base-r.pdf">Base R Cheat Sheet</a>.</li>
-<li>For more information on R Markdown, visit the <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">R Markdown quick reference guide</a>.<br />
-</li>
-<li>For a quick intro on the <code>magrittr</code> package, visit the <a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html">magrittr vignette</a>.</li>
-<li>For more information on the <code>stringr</code> text manipulation package, visit the <a href="https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html">stringr vignette</a>.</li>
-<li>For a quick introduction to regex, visit <a href="https://www.maketecheasier.com/the-beginner-guide-to-regular-expressions/">this guide</a>.</li>
-<li>The premier free online textbook for R, written by one of the leading developers of the R ecosystem, <a href="http://r4ds.had.co.nz/">“R for Data Science” can be found here</a>.</li>
-<li>The follow-up textbook to <a href="http://r4ds.had.co.nz/">“R for Data Science”</a>, <a href="http://adv-r.had.co.nz/">“Advanced R”, can be found here</a>.</li>
-<li>For a detailed official guide on R, see the first three manuals on <a href="https://cran.cnr.berkeley.edu/manuals.html">this CRAN page</a>.</li>
-<li>For an interactive guide to learning R and Python, visit <a href="https://www.datacamp.com/">DataCamp</a> a paid tutorial website for learning data computing.</li>
-</ul>
 </div>
 
 
