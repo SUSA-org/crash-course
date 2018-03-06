@@ -1,0 +1,49 @@
+---
+title: Introduction to R
+subtitle: "Part 3: Data Visualization and Data Analysis"
+author: "Hosted by and maintained by the [Statistics Undergraduate Students Association (SUSA)](https://susa.berkeley.edu). Originally authored by Arun Ramamurthy."
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+---
+```{r, echo = F}
+knitr::opts_chunk$set(eval = F)
+```
+
+# About this Document
+This is the associated workbook for the [r3](r2.html) tutorial on data visualization and analysis in R. Using RStudio, replace each ` > TODO ` with a code chunk that answers the associated problem. Then, run the chunk to verify your answers. Some problems require a non-code answer, so simply replace ` > TODO ` with the correct textual answer.
+
+# Data Visualization with `ggplot2`
+
+## Tips for Data Viusalization
+
+## Abstractions of Data Visualization
+
+## `ggplot2` Basics
+
+## Modeling with `ggplot2`
+
+# Data Analysis
+
+## What is Regression?
+
+## Linear Regression
+
+## Polynomial Regression
+
+## Model Selection with `broom`
+
+# Mini-projects
+
+The best way to get better at data manipulation, data import, and data cleaning is by practicing with wild datasets! These two miniature data science projects are designed to give you experience cleaning and tidying datasets with `dplyr` and `tidyr`. 
+
+## Cleaning the `articles` dataset
+
+In some spreadsheet software, view `data/wellcome_apce_articles.csv`. Read and clean this dataset. You will need to use heavily use `readr`, `dplyr`, `tidyr`, and even `stringr` to accomplish this. For tips, review all the functions in [`r2`](r2.html). Feel free to email `contact@arun.run` with any questions or for hints.
+
+## Tidying the `plant-ants` dataset
+
+In some spreadsheet software, view `data/plant-ants.xls`. Read and clean this dataset. Additionally, put it into a `tidy` format. You will need to use heavily use `readxl`, `dplyr`, `tidyr`. For tips, review all the functions in [`r2`](r2.html). Feel free to email `contact@arun.run` with any questions or for hints.

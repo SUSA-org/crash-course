@@ -20,7 +20,7 @@ iris_virginica <- iris %>% filter(Species == "virginica")
 
 # Introduction
 
-In this second of SUSA's crash courses on R, you will learn about how to actually use R to conduct data analysis, or more appropriately, how to *clean* your data to prepare them for data analysis. You will continue your foray into R packages with this primer on `tidyverse`, a collection of packages meant to make data science in R rapid and painless. In particular, you will learn how to use `dplyr` and `tidyr` for data cleaning, `readr` and `readxl` for data import, and finally an introduction to R's functional tools, with the `*apply` function family and the `map` and `reduce` functions from the `purrr` package.
+In this second of SUSA's crash courses on R programming, you will learn about how to actually use R to conduct data analysis, or more appropriately, how to *clean* your data to prepare them for data analysis. You will continue your foray into R packages with this primer on `tidyverse`, a collection of packages meant to make data science in R rapid and painless. In particular, you will learn how to use `dplyr` and `tidyr` for data cleaning, `readr` and `readxl` for data import, and finally an introduction to R's functional tools, such as the `map` and `reduce` functions from the `purrr` package.
 
 ## About this Document
 ### Prerequisites
@@ -68,6 +68,11 @@ library(tidyverse)
 
 Notice the output message, which tells you which specific packages of the tidyverse were loaded. 
 
+While we're at it, let's also make sure `magrittr` is loaded into our environment too:
+```{r}
+library(magrittr)
+```
+
 # Data Wranging
 
 The first general topic we will cover in this tutorial is **data wrangling**. **Data wrangling**, or manipulating dataframes, has two components: **data cleaning** and **tidying**. While you may wrangle your dataframe for a variety of purposes (e.g. changing the units of your variables or selecting only part of your dataset), they usually fall into one of those two broader categories. 
@@ -104,7 +109,7 @@ head(iris)
 
 If you look at the documentation for `head` with `?head`, you can verify that the default number of lines outputted is 6. 
 
-Rather than printing the dataframe to the console, the `View` function will open up a new pane in RStudio to view your dataframe as a spreadsheet. This pane is filterable and searchable, so it's useful to quickly glance through large datasets! Let's view our iris dataset in full:
+Rather than printing the dataframe to the console, the `View` function (*note the capital `V`!)* will open up a new pane in RStudio to view your dataframe as a spreadsheet, and also displays additional information like the number of observations (rows) and variables (columns). This pane is filterable and searchable, so it's useful to quickly glance through large datasets! Let's view our iris dataset in full:
 ```{r, eval = F}
 View(iris) ## Run this command in your R Console!
 ```
