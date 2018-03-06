@@ -29,9 +29,9 @@ This document contains textbook-style information on R programming. It will cove
 
 Throughout this tutorial, you will be working with three distinct datasets, to give you familiarity and practice with the `tidyverse`. These datasets are as follows:
 
-1. `iris`, the Edgar Anderson's classical multivariate dataset on 150 flowers in a Canadian field. This dataset will be used to illustrate `dplyr`, `tidyr`, `purrr` functions.
-2. `articles`, an unclean dataset of Wellcome Trust's open access spend from 2012 to 2013. This dataset will be used to give readers practice with `dplyr` and even [`r1`'s `stringr` section](r1.html#stringr).  
-2. `plant-ants`, an untidy matrix of plant-ant interactions recorded in 1996. This dataset will be used to give readers practice with `tidyr` and `readxl`. 
+1. `iris`, the Edgar Anderson's classical multivariate dataset on 150 flowers in a Canadian field. This dataset will be used to illustrate some of the `ggplot` functions.   
+2. `diamonds`, a dataset containing the prices and various attributes of almost 54,000 diamonds. This dataset will be used to illustrate some of the `ggplot` functions.  
+3. `mpg`, a subset of EPA's dataset on fuel economy, including the `hwy` fuel efficiency and other attributes of 234 automobiles from 1999 to 2008. This dataset will be used in the two mini-projects in [r3-workbook](r3-workbook.Rmd#mini-projects).
 
 ### r3-workbook
 The [r3-workbook](r3-workbook.Rmd) contains associated exercises to work through as you learn about the concepts within this document. They are aimed to help you get practice and familiarity with R programming concepts and functions. At the end of each section of this document, solve the problems in the matching section of the workbook to help your understanding of the material.
@@ -72,13 +72,51 @@ One last thought about data visualization - it's a craft, part technique and par
 
 # Data Visualization with `ggplot2`
 
-## Tips for Data Viusalization
+`ggplot2` is R's premier library for data visualization. Although its syntax is quite different than the rest of base R and most packages, there's a method to the madness - `ggplot2` is backed by a  *grammar of graphics* that allows it to make any plot imaginable (within the constraints of its `geoms`). However, just because any plot is possible, doesn't mean every plot is good... Let's start by reviewing some essential tips for effective visual display of data.
+
+## Tips for Data Visualization
+
+First and foremost: tell a story! Data may seem very cold and neutral, but data are quantifications of behaviors in our world. Graphs are how we can make data less cold, and more interpretable for humans. Each graph should show something insightful, important, and easily detectable by the audience. Of course, the are a variety of ways to display the same patterns - the creative process of effective data visualization is choosing *how* to say the story best.
+
+Some other tips for data visualization include:   
+-  Minimize the **data-ink** ratio, or the amount of information you are showing per unit of "ink". You want to only include visual information relevant to your point for that specific graph. If you can't get rid of irrelevant details without the graph looking sparse, consider highlighting the patterns, trends, or outliers you want the audience to concentrate on with color, sizing, or labels.   
+- Include a (zero) **baseline**. Scales give the relative positions between various quantities, but if the audience has no idea what general context the numbers exist in, there's no point in comparing them. Often times, this means including `y = 0` or `x = 0` in your axis, rather than line breaking, which can be seen as intentionally misleading.   
+- Communicative elements are a **must**. Whether this means simply axis and plot titles, rearranging your legend, or adjusting font sizes to show up better on a projector screen, it must be immediately obvious to a new viewer what your graph aims to display.   
+- Keep engrained preconceptions of **colors** in mind. For example, it is generally inadvisable to use bright red to indicate positive trends. Additionally, be wary of color-blindness, which affects over seven percent of the American populace. Finally, use differentiating colors to highlight factors, sequential colors to highlight trends, and diverging colors to highlight splits in behavior. The [`RColorBrewer`](http://colorbrewer2.org/) package is an extension of `ggplot2` that allows you to easily switch between color themes specially designed for data visualization.    
+* Order bars by height. Humans prefer things ordered, and it makes relative comparison between bars much more visible.   
+* Never use pie charts. This is decreed by the legendary Edward Tufte, one of the founders of data visualization, who noted its imprecision for more than a couple categories or dimensions. Usually, bar charts are just better. Also, stay away from double-axis graphs - unless you *want* to mislead someone...
+
+> “The only worse design than a pie chart is several of them,”  — Edward Tufte
+
+## Vocabulary for Data Visualizations
+
+* a **geom** is the visualization's representation of an aspect of a dataset, e.g. bars in a bar plot, or points in a scatterpoint. geoms have various **aesthetics** (*aesthetic properties*), like x-location, y-location, transparency, shape, and color, that can be mapped to variables in a dataframe   
+* a **glyph** is the visual equivalent of a single datapoint, e.g. a single point in a scatterplot    
+* a **layer** is a set of *glyphs* of the same *geom*, e.g. the collection of points in a scatterplot
 
 ## Abstractions of Data Visualization
 
-The `gg` in `ggplot2` stands for *"Grammar of Graphics"*. It is the implementation of an idea that all data visualizations decompose into specific components, and so if we have a way to manipulate each component and then sum them together, we can make a plot! 
+The `gg` in `ggplot2` stands for *"Grammar of Graphics"*. `ggplot2` is the implementation of this idea that all data visualizations decompose into specific components, and so if we have a way to manipulate each component and then sum them together, we can make any plot!
 
-The components used in the *grammar* underyling `ggplot2` are as follows:
+The components used in the *layered grammar of graphics* underyling `ggplot2` are as follows:   
+1) a base **dataset**, and a set of mappings from **variables** to **aesthetics**   
+2) one or more **layers**, with each layer of **glyphs** having:  
+    - one geometric object, or **geom**
+    - (optionally) one statistical transformation  
+    - (optionally) one position adjustment  
+    - (optionally) an alternative dataset and set of aesthetic mappings  
+3) a **scale** for each aesthetic mapping  
+4) a **coordinate system**    
+5) (optionally) **facet specification**  
+6) **communicative elements** (labels, borders, titles, etc.)  
+
+The basic idea is that we first construct an empty ggplot by specifying the dataset and mappings, then add layers of geometric objects, then alternative scales, coordinates, or faceting if we wish to deviate from the default, and finally communicative elements for human audiences, such as labels, subtitles, and grid lines.
+
+To make this abstraction a little more relatable, imagine you are tasked to draw a scatterplot by hand for a Statistics class. First, you would $(1)$ decide on what **data** you would be plotting, and then draw the relevant **axes**. Then, you would $(2)$ plot a **layer** of points onto your page, $(3)$ choosing your position by whatever **scale** you set for each axis. If you were going to either use $(4)$ another **coordinate system** or $(5)$ some sort of **faceting**, you would also need to draw the graph accordingly. The final step would be to $(6)$ add axis labels, a title, and other **communicative elements**. 
+
+As you could imagine, you could make up a similar recipe for any plot possible. Just like this analagy and the abstraction it illustrates, the syntactic structure of `ggplot2` is meant to mimic the actual modular creation of plots. We're going to drop this diagram here (*notice the similarity to the grammar above!*) for now, but we will be going into it in much more detail in the following section, on `ggplot2` basics!
+
+![](images/ggplot-syntax.png)
 
 ## `ggplot2` Basics
 
@@ -93,6 +131,20 @@ The components used in the *grammar* underyling `ggplot2` are as follows:
 ## Polynomial Regression
 
 ## Model Selection with `broom`
+
+# Mini-projects
+
+There are two mini-projects for this tutorial, designed to give you practice with EDA and more advanced model selection. Find the full project specifications in the [mini-project section of the r3-workbook](r3-workbook.Rmd#mini-project).
+
+## Exploratory Data Analysis
+
+Exploratory Data Analysis (**EDA**) is the process of using summary data and data visualization to get a sense of the underlying structures within your data *before* analysis. It's a fairly creative process, and like most creative processes, the best way to learn how to do EDA effectively is with practice. In this mini-project, you will explore either either the `diamonds` or the `mpg` dataset, noting any unusual relationships or outliers. 
+
+## Validation & Elastic Net Regression
+
+Now that you're familiar with graphing with `ggplot2` and model selection with `broom`, try your skills at this fairly advanced graphing exercise with the `mpg` dataset. You will learn a new type of regression, **elastic net regression**, which has not one but two hyperparameters! You will use function definitions to **grid search** hyperparameters, construct a dataframe of various models for predicting the `hwy` of each car with `broom`, and finally graph your validation process with `ggplot2.`
+
+
 
 # Conclusion
 
@@ -111,9 +163,9 @@ This marks the end of our introductory series into R programming! Congratulation
     - [Functional Programming Cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/purrr.pdf): Contains information on the `*apply` family as well as `purrr`   
     - [String Manipulation Cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/strings.pdf): Contains information on the `stringr` package for text manipulation    
 * For more packages that are useful with `ggplot2`, check out:  
-  - `ggthemr`  
-  - `plotly::ggplotly`  
-  - `ggmap`   
-  - `sf`  
+    - `ggthemr`  
+    - `plotly::ggplotly`  
+    - `ggmap`   
+    - `sf`  
 * For more information on the `tidyverse` packages, visit the official [tidyverse package listing](https://www.tidyverse.org/packages/).  
 * For an interactive guide to learning R and Python, visit [DataCamp](https://www.datacamp.com/) a paid tutorial website for learning data computing.

@@ -223,15 +223,42 @@ div.tocify {
 
 <div id="about-this-document" class="section level1">
 <h1>About this Document</h1>
-<p>This is the associated workbook for the <a href="r2.html">r3</a> tutorial on data visualization and analysis in R. Using RStudio, replace each <code>&gt; TODO</code> with a code chunk that answers the associated problem. Then, run the chunk to verify your answers. Some problems require a non-code answer, so simply replace <code>&gt; TODO</code> with the correct textual answer.</p>
+<p>This is the associated workbook for the <a href="r3.html">r3</a> tutorial on data visualization and analysis in R. Unlike the previous workshops, this workbook will not be problem set, but project-focused. After all, graphing is fairly subjective, and a creative process requires time trying various approaches to the same problem.</p>
+<p>Using RStudio, replace each <code>&gt; TODO</code> with a code chunk that answers the associated problem. Then, run the chunk to verify your answers. Some problems require a non-code answer, so simply replace <code>&gt; TODO</code> with the correct textual answer.</p>
 </div>
 <div id="data-visualization-with-ggplot2" class="section level1">
 <h1>Data Visualization with <code>ggplot2</code></h1>
 <div id="tips-for-data-viusalization" class="section level2">
 <h2>Tips for Data Viusalization</h2>
+<p>What does “tell a story” mean to you? How can you apply your storytelling skills to data visualization?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>Argue for a counter-example usecase for one of the tips listed in this tutorial. When would it actually be a good idea to do the reverse?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>In the tutorial, I advise that you stay away from double-axis graphs. Why? In what way can a data scientist intentionally mislead with them?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+</div>
+<div id="vocabulary-for-data-visualization" class="section level2">
+<h2>Vocabulary for Data Visualization</h2>
+<p>Briefly define the following terms in your own words: - <em>geom</em><br />
+- <em>aesthetic</em><br />
+- <em>glyph</em><br />
+- <em>layer</em></p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
 </div>
 <div id="abstractions-of-data-visualization" class="section level2">
 <h2>Abstractions of Data Visualization</h2>
+<p>Write the general workflow for constructing a ggplot, either with a code recipe, description, or story analogy.</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
 </div>
 <div id="ggplot2-basics" class="section level2">
 <h2><code>ggplot2</code> Basics</h2>
@@ -257,14 +284,14 @@ div.tocify {
 </div>
 <div id="mini-projects" class="section level1">
 <h1>Mini-projects</h1>
-<p>The best way to get better at data manipulation, data import, and data cleaning is by practicing with wild datasets! These two miniature data science projects are designed to give you experience cleaning and tidying datasets with <code>dplyr</code> and <code>tidyr</code>.</p>
-<div id="cleaning-the-articles-dataset" class="section level2">
-<h2>Cleaning the <code>articles</code> dataset</h2>
-<p>In some spreadsheet software, view <code>data/wellcome_apce_articles.csv</code>. Read and clean this dataset. You will need to use heavily use <code>readr</code>, <code>dplyr</code>, <code>tidyr</code>, and even <code>stringr</code> to accomplish this. For tips, review all the functions in <a href="r2.html"><code>r2</code></a>. Feel free to email <code>contact@arun.run</code> with any questions or for hints.</p>
+<p>There are two mini-projects for this tutorial, designed to give you practice with EDA and more advanced model selection.</p>
+<div id="exploratory-data-analysis" class="section level2">
+<h2>Exploratory Data Analysis</h2>
+<p>Exploratory Data Analysis (<strong>EDA</strong>) is the process of using summary data and data visualization to get a sense of the underlying structures within your data <em>before</em> analysis. It’s a fairly creative process, and like most creative processes, the best way to learn how to do EDA effectively is with practice. In this mini-project, you will explore either either the <code>diamonds</code> or the <code>mpg</code> dataset, noting any unusual relationships or outliers. For tips, review all the functions in <a href="r3.html"><code>r3</code></a>. Feel free to email <code>contact@arun.run</code> with any questions or for hints.</p>
 </div>
-<div id="tidying-the-plant-ants-dataset" class="section level2">
-<h2>Tidying the <code>plant-ants</code> dataset</h2>
-<p>In some spreadsheet software, view <code>data/plant-ants.xls</code>. Read and clean this dataset. Additionally, put it into a <code>tidy</code> format. You will need to use heavily use <code>readxl</code>, <code>dplyr</code>, <code>tidyr</code>. For tips, review all the functions in <a href="r2.html"><code>r2</code></a>. Feel free to email <code>contact@arun.run</code> with any questions or for hints.</p>
+<div id="validation-elastic-net-regression" class="section level2">
+<h2>Validation &amp; Elastic Net Regression</h2>
+<p>Now that you’re familiar with graphing with <code>ggplot2</code> and model selection with <code>broom</code>, try your skills at this fairly advanced graphing exercise with the <code>mtcars</code> dataset. You will learn a new type of regression, <strong>elastic net regression</strong>, which has not one but two hyperparameters! You will use function definitions to <strong>grid search</strong> hyperparameters, construct a dataframe of various models for predicting the <code>mpg</code> of each car with <code>broom</code>, and finally graph your validation process with <code>ggplot2.</code> For tips, review all the functions in <a href="r3.html"><code>r3</code></a>. Feel free to email <code>contact@arun.run</code> with any questions or for hints.</p>
 </div>
 </div>
 
