@@ -36,7 +36,7 @@ In the tutorial, I advise that you stay away from double-axis graphs. Why? In wh
 
 ## Vocabulary for Data Visualization
 
-Briefly define the following terms in your own words: 
+Briefly define the following terms in your own words:   
 - *geom*  
 - *aesthetic*  
 - *glyph*  
@@ -52,11 +52,57 @@ Write the general workflow for constructing a ggplot, either with a code recipe,
 
 ## `ggplot2` Basics
 
-## Modeling with `ggplot2`
+### `ggplot`, `aes`
+
+In your own words, describe the purpose and use of the `aes` function.
+
+> TODO
+
+`TRUE`/`FALSE`: The following command is equivalent to the example in this section:
+```{r}
+iris %>% ggplot(aes(y = Sepal.Length, x = ))
+```
+
+> TODO 
+
+Without running it in R first, draw or describe a quick sketch of the output of the following command:
+```{r}
+ggplot(iris, aes(Species, Sepal.Length))
+```
+
+> TODO
+
+## `geom_*`
+
+### `geom_point`, `geom_jitter`
+
+Without running them in R first, what are the differences between the outputs of the following lines of code? Which achieves the desired effect?
+
+```{r}
+ggplot(diamonds, aes(cut, clarity, alpha = .6), position = "jitter") + geom_point()
+ggplot(diamonds, aes(x = cut, y = clarity)) + geom_point(alpha = .6, position = "jitter")
+ggplot(diamonds) + geom_point(aes(x = cut, y = clarity, alpha = .6), position = "jitter")
+```
+
+> TODO
+
+#### `geom_histogram`, `geom_area(stat = "bin")`, `geom_density`
+
+#### `geom_bar`, `geom_col`
+
+#### `geom_line`, `geom_smooth`
+
+### `facet_wrap`, `facet_grid`
+
+### `labs`, `theme`
 
 # Data Analysis
 
 ## What is Regression?
+
+In your own words, what is the difference between regression and classification?
+
+> TODO
 
 ## Linear Regression
 

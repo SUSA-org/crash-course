@@ -12,8 +12,7 @@ output:
 
 
 ```{r, echo = F, message = F, warning = F}
-library(dplyr);library(stringr);library(magrittr)
-
+library(tidyverse);library(magrittr);library(ggplot2)
 ```
 
 # Introduction
@@ -72,7 +71,7 @@ One last thought about data visualization - it's a craft, part technique and par
 
 # Data Visualization with `ggplot2`
 
-`ggplot2` is R's premier library for data visualization. Although its syntax is quite different than the rest of base R and most packages, there's a method to the madness - `ggplot2` is backed by a  *grammar of graphics* that allows it to make any plot imaginable (within the constraints of its `geoms`). However, just because any plot is possible, doesn't mean every plot is good... Let's start by reviewing some essential tips for effective visual display of data.
+`ggplot2` is R's premier library for data visualization. Although its syntax is quite different than the rest of base R and most packages, there's a method to its madness - `ggplot2` is backed by a  *grammar of graphics* that allows it to make any plot imaginable (within the constraints of its `geoms`). However, just because any plot is possible, doesn't mean every plot is good... Let's start by reviewing some essential tips for effective visual display of data.
 
 ## Tips for Data Visualization
 
@@ -118,7 +117,94 @@ As you could imagine, you could make up a similar recipe for any plot possible. 
 
 ![](images/ggplot-syntax.png)
 
-## `ggplot2` Basics
+## `ggplot2`
+
+### `ggplot`, `aes`
+Creating a ggplot starts with constucting an `ggplot` object. If you check `?ggplot`, you will see that `ggplot` has two arguments:   
+- `data`, the dataframe you wish to display  
+- `mapping`, a function call to `aes`, to make a mapping between aesthetics in the plot and variables in `data`  
+
+The `aes` (*aesthetic mapping*) function is used to tie visual elements of the plot to variables in the dataframe. The function header for `aes` is as follows:
+```{r, eval = F}
+aes(x, y, ...)
+```
+By default, the first argument (`x`) you supply to `aes` indicates which variable in your dataframe corresponds to the x-axis, and the second argument (`y`) indicates which variable corresponds to the y-axis.
+
+However, you can also make mappings with, for example:     
+- `col`/`color`/`colour`, the colors of the geoms you are plotting  
+- `fill`, the filled color of the geoms you are plotting  
+- `shape`, used to map the shape of the points you are plotting  
+- `linetype`, used to map the linetype (e.g. dashed, dotted, etc.) of the lines you are plotting     
+- `alpha`, used to vary the *transparency* of the geoms by some variable   
+
+Although the "default" mappings can be set in the `ggplot` constructor, you can also set a different `data` and `mapping` argument in your specific geoms too.
+
+An important warning here: `aes` is used to map **aesthetics** to **variables**, *NOT* to make declare constants. If you wished to set your geom to be red for example, you cannot use `aes(col = "red")`. You must instead declare `col = "red"` *outside* of the `aes` function call.
+
+Let's make a ggplot object for the `iris`, mapping `Petal.Length` to the x-axis and `Sepal.Length` to the y-axis:
+```{r}
+ggplot(iris, aes(Petal.Length, Sepal.Length))
+```
+
+As you can see from the figure above, the output of the `ggplot` constructor function is a `ggplot` object. The x-axis is already labeled to map to `Petal.Length`, as is the y-axis for `Sepal.Length` - just as we had told the `aes` function.
+
+However, the plot is still empty. Why? Because we haven't supplied any more components to add to it! Specifically, we haven't added any **layers**. 
+In `ggplot2` syntax, you can add layers and other components to a `ggplot` by literally using the addition operator, `+`. Since a `ggplot` object `+` any layers is still a `ggplot` object, we can use this modular approach to add as many layers and components as we want to a `ggplot` object.
+
+### `geom_*`
+
+Layers of geoms can be added to a `ggplot` object with one of the `geom_*` functions. As always, you can quickly glance over the documentation of each `geom_*` function we go over by checking e.g. `?geom_point`. There are dozens of `geom_*` functions in `ggplot2`, so this text will focus on a few of them to illustrate the general `ggplot2` syntax. You can easily find a visual listing of the geoms in `ggplot2` in the official [ggplot2 Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf).
+
+#### `geom_point`, `geom_jitter`
+
+First, let's add on `geom_point` as a layer to turn our empty `ggplot` into an actual scatterplot. As a reminder, a scatterplot uses a layer of points to display the relationship between the `x` and the `y` variables in your data. In this case, we set our `x` to map to `Petal.Length` and `y` to map to `Sepal.Length`. So, by adding a single layer with `point` as the geom, we can visualize the relationship between `Petal.Length` and `Sepal.Length` in the `iris` dataset.
+
+```{r}
+ggplot(iris, aes(Petal.Length, Sepal.Length)) + geom_point()
+```
+
+Neat! We can already see a positive, linear relationship between `Petal.Length` and `Sepal.Length` - a relationship that would have been difficult to notice by just reading through all fifty entries in the `iris` dataframe.
+
+Sometimes you will encounter datasets that have a small number of discrete values for either the `x` variable or the `y` variable. These datasets initially seem like terrible candidates for `geom_point`, because the datapoints overlap too much to discern any patterns. For example, suppose we wanted to display the relationship between the `cut` of a diamond and its `clarity`, using the data in the `diamonds` dataset. 
+
+```{r}
+diamonds %>% ggplot(aes(cut, clarity)) + geom_point()
+```
+
+In our initial display, we cannot see any pattern whatsoever, as though there are multiple points for each combination of `cut` and `clarity`, but we have no information about how many points are in each. To solve this, and also to illustrate the modifiable nature of `geoms` in `ggplot2`, we can adjust the `position` option argument of `geom_point` to **jitter**, or add a small amount of randomness to, each point to spread them out a little.
+
+```{r}
+ggplot(diamonds, aes(cut, clarity)) + geom_point(position = "jitter")
+```
+
+Already, we can see the underlying pattern of the data more clearly. A diamond with high clarity, such as `IF` or `VVS1`, is more likely to be of a high cut than a low one. Since the "jitter" option for `geom_point` is so commonplace, `ggplot2` has a shortcut function for `geom_point(position = "jitter")`, `geom_jitter`. 
+
+To showcase the other options of `geom_point`, let's also set the `alpha` to be a constant 10%, to allow us to see through dense clusters of points, and the `size` of the points to be 0.5.
+
+```{r}
+ggplot(diamonds, aes(cut, clarity)) + geom_jitter(alpha = .1, size = .5)
+```
+
+
+Finally, note that since we are only plotting a single geom, we could (just for fun) move all of the "global" arguments for `ggplot` to be "specific" arguments for just the `geom_jitter` layer, and the graph would look identical:
+```{r}
+ggplot() + geom_jitter(data = diamonds, aes(cut, clarity), alpha = .1, size = .5)
+```
+
+(*NOTICE: the constant setting to `alpha` and `size` is done outside of `aes`*)
+
+Now, we can see even more facts about our data. For example, it is now visually obvious that most of the diamonds in the `diamonds` dataset are of `VS2` clarity and `Ideal` cut.
+
+#### `geom_histogram`, `geom_area(stat = "bin")`, `geom_density`
+
+To display univariate data (*displays that only view a single variable*), `ggplot2` has a variety of geoms. One common way to diplay the distrubtion of 
+#### `geom_bar`
+
+#### `geom_line`, `geom_smooth`
+
+### `facet_wrap`, `facet_grid`
+
+### `labs`, `theme`
 
 ## Modeling with `ggplot2`
 
