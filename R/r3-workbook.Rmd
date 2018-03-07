@@ -159,6 +159,13 @@ In your own words, what is the difference between regression and classification?
 
 ## Linear Regression
 
+### The Linear Regression Model
+
+Prove that, for any simple linear regression with intercept $\hat{\alpha} = \bar{y} - b \bar{x}$, the sum of the residuals is $\sum{e_i} = 0$.
+
+> TODO
+
+### Linear 
 ## Polynomial Regression
 
 ## Model Selection with `broom`

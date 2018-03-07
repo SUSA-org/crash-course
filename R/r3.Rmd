@@ -366,9 +366,111 @@ Finally, sometimes you may feel like choosing a different color scheme, for a va
 
 # Data Analysis
 
+At this point, you're ready to begin practicing EDA for yourself, and will quickly get used to using `ggplot2` to make beautiful visualizations of data. But, data visualization is a more powerful tool than just a tool for exploratory data anlaysis. Heavy statistical analysis, in the form of regression or other machine algorithms, can also be aided significantly by data visualization. This can come in the form of EDA being used to verify vital assumptions for these methods, but also to graph information about the models themselves! 
+
+**Data analysis** pertains primarily to **Objective II** and **Objective III** in the Data Science Objectives outlined above. Once you have begun to suspect the existence of certain patterns, relationships, and structures in your data from EDA, data analysis is how you formalize these structures for statistical inference (**Objective II**) and predict the properties of new data with quantifiable accuracy (**Objective III**).
+
+In this section, you will learn the essentials of one of the most commonplace machine learning algorithms used for data analysis, linear regression. **Linear regression** is an ML model that learns about the linear relationships between the variables in your data, given some training dataset. Linear regression is different than the more cutting edge algorithms, such as neural nets and XG Boost, in two ways:    
+1. Linear regression has a long history rooted in Statistics. Some would even say linear regression was invented *before* statistics itself - [the **least squares method** was invented by Carl Gauss himself in 1809](https://en.wikipedia.org/wiki/Least_squares#History). So, the statistical theory underying linear regression is well-understood.   
+2. Linear regression is a fairly simplistic model. It comes with a host of assumptions, but because the model is so rigid, we can interpret its results easily. This is in contrast to other ML algorithms, like neural nets, that are "black-box" models - humans struggle to understand why these models output the results they do.   
+
+Because of its rich history and relatively simple structure, linear regression comes with **statistical interpretability** of its results. That is, you can directly interpret the optimal slopes of your independent variables to make statistically-backed statements about the relationships in your data. But before we dive into linear regression in more detail, what is regression anyway?
+
 ## What is Regression?
 
+**Supervised** machine learning algorithms, or models that use **training** data to understand and predict the nature of new (**test**) data, can be divided into two categories: ($1$) classification algorithms, where the response variable $Y$ is discrete, and $(2)$ regression algorithms, where the response variable $Y$ is continuous. 
+
+For example, suppose we used student information (e.g. major, hobbies, hometown region, etc.) from the CX committee to predict the favorite ice cream flavors of the entire SUSA member population, given the same information about each member. This would be a *classification* problem, since we are trying to classify our members into distinct categories (favorite ice cream flavor). On the other hand, suppose we wanted to use that same information to predict the GPAs of each SUSA member, or the likelihood of them getting a particular grade in STAT 133. These are *regression* problems, since we are not classifying, but predicting numerical values for our members. 
+
+In particular, the regression models we will be covering today concern themselves with finding the average (read: expected) value of the **response variable** $Y$ given information about one or more **explanatory variables** $X$. Formally, for a dataset with $n$ datapoints and $k$ explanatory variables, given some information about a datapoint in the form of its explanatory variables $X$ we want to predict $\hat{Y} = \mathbb{E}(Y|X)$, our expectation for $Y$. In the example above, GPA would be our response variable $Y$, and major, hobbies, and hometown would be our response variables $X$. 
+
+Note: I used plural for $X$ because $X$ is best understood as a matrix of several variables. The specifics of the geometric and linear algebra interpretation of the linear regression model will be much further developed in your classes, specifically STAT 135 and STAT 151A. 
+
 ## Linear Regression
+
+### The Linear Regression Model
+
+The linear regression model further specifies that there is a linear relationship between $X$ and the predicted value of $Y$, captured by the slope, $B$. Formally, the model becomes: $\hat{Y} = \mathbb{E}(Y|X) = XB$.
+
+For now, let's quickly review **simple regression**, which the regression of a single variable $x$ onto $y$. The simple regression model can be written as: $\hat{y} = \alpha + \beta x$. The trick to linear regression is that we will choose $\hat{\alpha}$ and $\hat{\beta}$ that maximize the **fit**, or *accuracy* of our line. This is why the line determined by $\hat{\alpha} + \hat{\beta}x$ is known as the *line of best fit*.  
+
+But how do we determine the fit/accuracy of a given simple linear regression model on our data? We need some sort of **objective function** that rates how well accurate our model is. Usually, the objective function is some rating of the error in our model - minimizing this objective function will then yield the most optimal model.
+
+One naive approach is to minimize $z_0(a, b) = \sum e_i = \sum (y_i - \hat{y_i})$, or the sum of all the errors our model $y_i$ has with the true $y$ in the data. As it turns out, this is not an effective metric for a variety of reasons - in fact, for any linear regression that passes through the mean of our dataset, $(\bar{x}, \bar{y})$, $z_0(a,b) = 0$, regardless of $b$. Instead, we will use the $sum of squares$ method: $z(a,b) = \sum(e_i)^2 = \sum (y_i - \hat{y_i})^2 = \sum (y_i - a - bx)^2$
+
+If you were to use a technique like the First Derivative Test to find the optimal values of $a^* = \hat{\alpha}$ and $b^* = \hat{\beta}$, you would find:
+$ \hat{\alpha} = \bar{y} - \hat{\beta} \bar{x} $
+$ \hat{\beta} = \frac{\textit{Cov}(x,y)}{\textit{Var}(x)} $
+
+The value for $\hat{\alpha}$ necessarily forces the line to always pass through the mean of the data, $(\bar{x}, \bar{y})$, and the value of $\hat{\beta}$ offers information about the slope, or relationship, between $x$ and $y$.
+
+### Linear Regression in R
+
+Of course, although all of this math is important for understanding of the linear regression model, in practice, R will do it all for you! Simply use the base R function, `lm`. `lm` uses a **formula** syntax, where the reponse variable is on the left and the explanatory variable(s) are on the right: `Y ~ X1 + X2 + X3 ...`.
+
+Let's use linear regression to understand the relationship between petal lengths and sepal lengths in the `iris` dataset:
+```{r}
+length_model <- lm(iris, formula = Sepal.Length ~ Petal.Length)
+print(length_model)
+```
+The output of the `lm` function can be read as follows: for every centimeter increase in `Petal.Length`, `Sepal.Lengths` increases by an average of 0.4089 centimeters. For a theoretical flower with a `Petal.Length` of zero, the `Sepal.Length` would hypothetically be 4.3066.
+
+To get even more information about the model you created, like its squared error `z`, or the $R^2$ (how much of the total variation in $Y$ is explained by our model $\hat{Y}$?), you can call `summary` on your model:
+```{r}
+summary(length_model)
+```
+
+The "residual square error" is 0.407, which is quite tiny! Our model fits evidently fits quite well. Indeed, by verifying the "Multiple R-squared" of our model, we can see that it explains $76%$ of the variation in `Sepal.Length`. The other statistics on each coefficient (e.g. the asterisks next to each) indicate that we are very certain that a relationship between `Petal.Length` and `Sepal.Length` does in fact exist.
+
+### Assumptions (and Limitations) of Linear Regression
+
+Simple as it is, linear regression comes with rigid assumptions. If you fit a linear regression model to data that does not actually maintain these assumptions itself, *your linear regression model means absolutely nothing*, and will likely suffer from either model bias or high variability of results. Fortunately, we can quickly check if these assumptions hold for our data graphically. Sometimes, this involves graphing a scatter plot of $X$ and $Y$. Other times, it's easier to construct a **residual plot**, which places the explanatory variable's $X_i$ on the x-axis and the **residuals**, or individual errors, $e_i$ on the y-axis. We will showcase how to verify these assumptions shortly.
+
+The essential assumptions underlying linear regression are as follows:   
+1. **Linearity**: The relationship between $X$ and $Y$ must be linear. Graphically, the scatterplot should show a linear trend, and the residuals plot should show no curvature.   
+2. **Constant Variance of Errors**: The "spread" of our errors should not depend on the value of $X$. Put in another way, our model should perform just as well predicting $Y$, regardless of which $X$ it is considering. Graphically, the residuals plot should show a band of roughly constant width.   
+3. **Normality of Error**: Even more stringently, the distribution of our residuals should be roughly normal. This is the most strict assumption of the linear model, but also gives it all of its statistical interpretability. Graphically, you can verify this assumption by graphing a density plot of the residuals.  
+
+Apart from these three statistical assumptions, there are a couple of other desirable attributes that make our linear regression analysis a bit more robust:   
+4. **Wide Distribution of Explanatory Variable(s)**: We would like to have as wide a range of $X$ values as possible. In fact, if all the $x$'s are of the same value, we cannot fit a linear regression model at all. Graphically, this can be quickly checked by constructing a density plot of the individual $X$ variables.   
+5. **Few Outliers**: Linear regression is particularily sensitive to **outliers**, datapoints that do not fit with the general trend. Outliers, especially outliers far from the center of our data cloud, can easily skew our regression line. You should always pinpoint, identify, and explain outliers in your data before running a regression analysis.
+
+Let's check through all three assumptions and two desirables for our `Sepal.Length`/`Petal.Length` model. Before we do this, however, I need to introduce a very simple, but tremendously useful package for model evaluation: `broom`.
+
+### A Brief Detour: `broom`
+
+`broom` is a package for turning models into dataframes! There are only three `broom` functions: `augment`, `tidy`, and `glance`. 
+
+`augment` will accept a model and output the same dataframe that was used to construct the model, but also include columns about the predicted $\hat{y}$, residual, and more for each row. Check out the output of `augment` on our `length_model`:
+```{r}
+augment(length_model) %>% sample_n(3)
+```
+As you can see, the `.fitted` values are quite close to those of `Sepal.Length`.
+
+`tidy` will accept a model and output a dataframe representing its model output, as seen in its `summary`. This outputted dataframe will have one row for each parameter - in this case, one for $\hat{\alpha}$ and one for $\hat{\beta}$. Observe the output of `tidy` for our `length_model`:
+```{r}
+tidy(length_model)
+```
+You can go back and verify that these values match those in the `summary(length_model)` code chunk above.
+
+`glance` will accept a model and output a single row, representing the performance of the model on the dataset as a whole. Again, these values will match those at the bottom of what's seen in `summary`. Observe the output of `glance` for our `length_model`:
+```{r}
+glance(length_model)
+```
+
+First, let's check for linearity by reproducing the scatterplot of their relationships:
+```{r}
+ggplot(iris, aes(Petal.Length, Sepal.Length)) +
+  geom_point() + geom_smooth(method = "lm")
+```
+They look roughly linear! We can double-check with a residuals plot using the `broom` package.
+```{r}
+length_model %>% augment %>%
+  transmute(Petal.Length, Error = .resid) %>%
+  ggplot(aes(Petal.Length, Error)) + 
+  geom_point() + geom_hline(yintercept = 0, col = "red", linetype = "dashed")
+```
+The residuals don't show a curve or pattern, so the inearity assumption holds.
 
 ## Polynomial Regression
 
