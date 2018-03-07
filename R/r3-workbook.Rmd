@@ -1,7 +1,7 @@
 ---
 title: Introduction to R
 subtitle: "Part 3: Data Visualization and Data Analysis"
-author: "Hosted by and maintained by the [Statistics Undergraduate Students Association (SUSA)](https://susa.berkeley.edu). Originally authored by Arun Ramamurthy."
+author: "Hosted by and maintained by the [Statistics Undergraduate Students Association (SUSA)](https://susa.berkeley.edu). Originally authored by [Arun Ramamurthy](mailto:contact@arun.run)."
 output: 
   html_document:
     toc: true
@@ -104,11 +104,50 @@ Briefly, what is the difference between `geom_bar` and `geom_col`?
 
 > TODO 
 
+Comment in a brief explanation next to each line of the following code chunk:
+```{r}
+mpg %>% group_by(manufacturer) %>%
+  summarise(`Average HWY Fuel Economy` = mean(hwy)) %>%
+  mutate(manufacturer = factor(manufacturer,
+                               levels = manufacturer[order(`Average HWY Fuel Economy`)],
+                               ordered = T)) %>%
+  ggplot(aes(manufacturer, `Average HWY Fuel Economy`, fill = manufacturer)) + 
+  geom_col()
+```
+
 #### `geom_line`, `geom_smooth`
+
+What does `expand_limits` do? What is its syntax?
+
+> TODO
+
+Describe the `geom_smooth` layer. What are some of its arguments?
+
+> TODO
 
 ### `facet_wrap`, `facet_grid`
 
-### `labs`, `theme`
+What is facetting? What are some use-cases you can think of for it? 
+
+> TODO
+
+What is the difference between `facet_wrap` and `facet_grid`, in terms of their purpose, syntax, and behavior?
+
+> TODO
+
+### `labs`, `theme`, `scale_*_*`
+
+How do you add axis and plot titles to a graph?
+
+> TODO
+
+Read the `theme` documentation. Pick some element in it, and describe what it corresponds to in a plot.
+
+> TODO
+
+Pick one of the linked packages or guides for colors in `ggplot2`. What was one feature you liked about it?
+
+> TODO
 
 # Data Analysis
 
@@ -138,7 +177,7 @@ Pick either `diamonds`, a dataset of over fifty-thousand diamonds, or `mpg`, a d
 
 ### 2.
 
-Now that you've familiarized yourself with the dataset, make three graphs, each revealing some sort of pattern, trend, or relationship in the dataset. Consult the [ggplot2 Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) for ideas on what kinds of 
+Now that you've familiarized yourself with the dataset, make three graphs, each revealing some sort of pattern, trend, or relationship in the dataset. Consult the [ggplot2 Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) for ideas on what kinds of geoms you can use to visualize various aspects of the data.
 
 ### 3. 
 

@@ -1,7 +1,7 @@
 ---
 title: Introduction to R
 subtitle: "Part 3: Data Visualization and Data Analysis" 
-author: "Hosted by and maintained by the [Statistics Undergraduate Students Association (SUSA)](https://susa.berkeley.edu). Originally authored by Arun Ramamurthy."
+author: "Hosted by and maintained by the [Statistics Undergraduate Students Association (SUSA)](https://susa.berkeley.edu). Originally authored by [Arun Ramamurthy](mailto:contact@arun.run)."
 output: 
   html_document:
     toc: true
@@ -12,7 +12,7 @@ output:
 
 
 ```{r, echo = F, message = F, warning = F}
-library(tidyverse);library(magrittr);library(ggplot2)
+library(tidyverse);library(magrittr);library(ggplot2);library(anytime);library(broom)
 ```
 
 # Introduction
@@ -149,15 +149,15 @@ ggplot(iris, aes(Petal.Length, Sepal.Length))
 As you can see from the figure above, the output of the `ggplot` constructor function is a `ggplot` object. The x-axis is already labeled to map to `Petal.Length`, as is the y-axis for `Sepal.Length` - just as we had told the `aes` function.
 
 However, the plot is still empty. Why? Because we haven't supplied any more components to add to it! Specifically, we haven't added any **layers**. 
-In `ggplot2` syntax, you can add layers and other components to a `ggplot` by literally using the addition operator, `+`. Since a `ggplot` object `+` any layers is still a `ggplot` object, we can use this modular approach to add as many layers and components as we want to a `ggplot` object.
+In `ggplot2` syntax, you can add layers and other components to a `ggplot` by literally using the addition operator, `+`. Since a `ggplot` object `+` any layer is still a `ggplot` object, we can use this modular approach to add as many layers and components as we want to a `ggplot` object.
 
 ### `geom_*`
 
 Layers of geoms can be added to a `ggplot` object with one of the `geom_*` functions. As always, you can quickly glance over the documentation of each `geom_*` function we go over by checking e.g. `?geom_point`. There are dozens of `geom_*` functions in `ggplot2`, so this text will focus on a few of them to illustrate the general `ggplot2` syntax. You can easily find a visual listing of the geoms in `ggplot2` in the official [ggplot2 Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf).
 
-#### `geom_point`, `geom_jitter`
+#### Continuous Bivariate Data (`geom_point`, `geom_jitter`)
 
-First, let's add on `geom_point` as a layer to turn our empty `ggplot` into an actual scatterplot. As a reminder, a scatterplot uses a layer of points to display the relationship between the `x` and the `y` variables in your data. In this case, we set our `x` to map to `Petal.Length` and `y` to map to `Sepal.Length`. So, by adding a single layer with `point` as the geom, we can visualize the relationship between `Petal.Length` and `Sepal.Length` in the `iris` dataset.
+First, let's add on `geom_point` as a layer to turn our empty `ggplot` into an actual scatterplot. As a reminder, a **scatterplot** uses a layer of points to display the relationship between the `x` and the `y` variables in your data. In this case, we set our `x` to map to `Petal.Length` and `y` to map to `Sepal.Length`. So, by adding a single layer with `point` as the geom, we can visualize the relationship between `Petal.Length` and `Sepal.Length` in the `iris` dataset.
 
 ```{r}
 ggplot(iris, aes(Petal.Length, Sepal.Length)) + geom_point()
@@ -195,7 +195,7 @@ ggplot() + geom_jitter(data = diamonds, aes(cut, clarity), alpha = .1, size = .5
 
 Now, we can see even more facts about our data. For example, it is now visually obvious that most of the diamonds in the `diamonds` dataset are of `VS2` clarity and `Ideal` cut.
 
-#### `geom_histogram`, `geom_area(stat = "bin")`, `geom_density`
+#### Continuous Univariate Data (`geom_histogram`, `geom_area(stat = "bin")`, `geom_density`)
 
 To display continuous univariate data (*data of just one variable*), `ggplot2` has a variety of geoms. One common way to diplay the distribution of a continuous variable is via a **histogram**. A histogram consists of **bins** on the x-axis, and the counts of each bin as the y-axis.
 
@@ -218,15 +218,151 @@ Hmm... that's still not very smooth. To instead see a Guassian-smoothed **densit
 iris %>% ggplot(aes(Petal.Length)) + geom_density(fill = "orchid")
 ```
 
-#### `geom_bar`, `geom_col`
+#### Discrete Univariate & Bivariate Data (`geom_bar`, `geom_col`)
 
-#### `geom_line`, `geom_smooth`
+Now, suppose we want to graph the counts, not per bin of a continuous variable, but rather per value of a discrete variable. For example, let's find out how many cars are from each `manufacturer` from the `mpg` dataset:
+```{r}
+mpg %>% ggplot(aes(manufacturer)) + geom_bar()
+```
 
-### `facet_wrap`, `facet_grid`
+Sometimes we want to plot some other variable than just the counts per value of a discrete variable. To plot other variables than the `count` for a discrete `x` value, use `geom_col` instead of `geom_bar`. For example, suppose we wanted to plot the average fuel economy for each car manufacturer. Let's also make each bar a different color, just to make things more interesting.
+```{r}
+mpg %>% group_by(manufacturer) %>%
+  summarise(`Average HWY Fuel Economy` = mean(hwy)) %>%
+  ggplot(aes(manufacturer, `Average HWY Fuel Economy`, fill = manufacturer)) +
+  geom_col()
+```
 
-### `labs`, `theme`
+(*Check for understanding: why was `fill` used in the `aes` call rather than outside the `aes` call this time?*)
 
-## Modeling with `ggplot2`
+Apparently Honda and VW are the build the most efficient engines. However, humans find it easier to read bars that are ordered in height. Sometimes, you might want to try doing this with your graphs, using `dplyr`'s `mutate` function:
+```{r}
+mpg %>% group_by(manufacturer) %>%
+  summarise(`Average HWY Fuel Economy` = mean(hwy)) %>%
+  mutate(manufacturer = factor(manufacturer,
+                               levels = manufacturer[order(`Average HWY Fuel Economy`)],
+                               ordered = T)) %>%
+  ggplot(aes(manufacturer, `Average HWY Fuel Economy`, fill = manufacturer)) + 
+  geom_col()
+```
+
+That looks a little clearer! Now that we've finished a several ways to display data directly, let's discuss a couple of  geoms designed to highlight trends in data.
+
+#### Trends (`geom_line`, `geom_smooth`)
+
+Sometimes, you're given a **time series** that is best presented as a **line graph**. For example, suppose we had a dataframe called `stock_prices` that tracked the valuation of some statistical consulting company. We could use `geom_line` to create a line graph of the stock price over time:
+```{r, echo=F}
+stock_price <- data.frame(Date = anydate(anydate("2017.12.20"):anydate("2019.01.01"))) %>%
+  mutate(`Stock Price` = rnorm(nrow(.), 100, 20) %>% sort) %>%
+  filter(Date >= anydate("2018.01.01"), Date <= anydate("2018.03.01"))
+```
+```{r}
+stock_price %>% ggplot(aes(Date, `Stock Price`)) + geom_line()
+```
+
+To make the line thicker, we can use the `size` option for `geom_line`. Remember, you can always check e.g. `?geom_line` to see what optional arguments you can specify about your geoms.
+
+```{r}
+stock_price %>% ggplot(aes(Date, `Stock Price`)) + 
+  geom_line(size = 2)
+```
+
+To showcase the modularity of `ggplot2`'s components, let's also add a layer of points to the line plot too. Additionally, I beleive it can be misleading to not include the 0 in your plots. To expand the axes of your plots, use `expand_limits`, as seen here:
+```{r}
+stock_price %>% ggplot(aes(Date, `Stock Price`)) + 
+  geom_line(size = 2) + 
+  geom_point(size = 2) +
+  expand_limits(y = 0)
+```
+
+Of course, if we really wanted to, we could just go overboard and add even more geoms...
+```{r}
+stock_price %>% ggplot(aes(Date, `Stock Price`)) + 
+  geom_col(alpha = .3) +
+  geom_line(size = 2) + 
+  geom_point(size = 2) 
+```
+
+But that would clearly violate our dedication to a high data-ink ratio. It is better to use data visualization to highlight, rather than obsfucate, patterns and trends. Suppose we wanted to go back to our petal and sepal length scatterplot and more clearly highlight the relationship between the two variables. We could use `geom_smooth`, a geom that will add a smooth trend line to our visualization.
+```{r}
+iris %>% ggplot(aes(Petal.Length, Sepal.Length)) + 
+  geom_smooth(size = 2, alpha = .9) + 
+  geom_point(alpha = .7, size = 4) 
+```
+
+To turn off the **confidence band** around the smooth line, you can specify `se = FALSE`. Additionally, if you'd rather fit a **linear model** rather than the default model (usually **loess**, which you can read about [here](https://en.wikipedia.org/wiki/Local_regression)), you can manually specify `method = "lm"`. Finally, let's add a bit more information to this plot by coloring our points by `Species`. Our final plot is constructed as so:
+```{r}
+iris %>% ggplot(aes(Petal.Length, Sepal.Length)) + 
+  geom_smooth(method = "lm", se = F, size = 2, alpha = .9, col = "black") + 
+  geom_point(alpha = .7, size = 4, aes(col = Species)) 
+```
+
+This plot is relatively simple, but reveals several facts all at once:   
+1. Virginica are usually bigger than Versicolor, which are usually bigger than Setosa irises
+2. There is a clear linear relationship between petal length and sepal length in this sample of irises
+3l Virginica and Versicolor irises are noticably closer in size than the much smaller Setosa irises
+4. Setosa irises tend to vary less in size than the other two species
+
+### Faceting (`facet_wrap`, `facet_grid`)
+
+It's useful to view all three species together to compare and constrast them, but if we wanted to fit a line through each species, by specifying `color = Species` as a grouping aethetic for both `geom_point` and `geom_smooth`, our plot would look a bit messier:
+```{r}
+iris %>% ggplot(aes(Petal.Length, Sepal.Length, col = Species)) + 
+  geom_smooth(method = "lm", se = F, size = 2, alpha = .9, aes(col = Species)) + 
+  geom_point(alpha = .7, size = 4, aes(col = Species)) 
+```
+
+(*NOTE: alternatively, you can specify `aes(col = Species)` in just the `ggplot` constructor*)
+
+Sometimes, it's easier to read a lot of information if the graph is split into panels, one for each discrete case. The process of splitting your data into discrete panels is called **facetting**. In this case, let's **facet** by the `Species` of the irises. The syntax for `facet_wrap`, which is used to facet by a single variable, is `facet_wrap(~ VARIABLE)`. Observe the effect of facetting on this altered version of the plot above:
+```{r}
+iris %>% ggplot(aes(Petal.Length, Sepal.Length, col = Species)) + 
+  geom_smooth(method = "lm", se = F, size = 2, alpha = .9) +
+  geom_point(alpha = .7, size = 2) + 
+  facet_wrap(~ Species)
+```
+
+You can also specify the number of rows/columns, and whether or not every facet should have the same scale or not. Check `?facet_wrap` for more info. Here's another version of the plot above:
+```{r}
+iris %>% ggplot(aes(Petal.Length, Sepal.Length, col = Species)) + 
+  geom_smooth(method = "lm", se = F, size = 2, alpha = .9, aes(col = Species)) + 
+  geom_point(alpha = .7, size = 2, aes(col = Species)) + 
+  facet_wrap(~ Species, ncol = 1, scales = "free_y")
+```
+
+In some other cases, we want to make a grid of panels, for every combination of *two* discrete variables. The syntax for `facet_grid`, the two-dimensional version of `facet_wrap`, is `facet_grid(Y_VARIABLE ~ X_VARIABLE)`. Suppose we wanted to investigate how `carat` affected `price`, for each particular `color` and `cut` combination. One example plot to display this would be to have `carat` as the x-axis, `price` as the y-axis, and **facet** by `color` and `cut`, like so:
+```{r}
+diamonds %>% ggplot(aes(carat, price, col = color)) + 
+  geom_jitter(size = .5) + 
+  geom_smooth(method = "lm", se = F, alpha = .5, col = "black") +
+  facet_grid(color ~ cut)
+```
+
+Perhaps interestingly, it appears that the relationship between the carat of a diamond and its value are similarily related regardless of the diamond's color or cut. We will investigate the effect of the color and the cut of a diamond on the relationship between its carat and value near the end of this text.
+
+### Communicative Elements (`labs`, `theme`, `scale_*_*`)
+
+As described at the beginning of this workshop, communicative elements are essential for humans to be able to read and interpret your graph quickly. Words can direct the audience to notice such things as the purpose of a graph, the units of the variables, and more. Especially in presentations, labels are important because you rely on your audience understanding the graph within a few seconds of its display. To add labels to a plot, simply use the `labs` function:
+```{r}
+iris %>% ggplot(aes(Petal.Length, Sepal.Length)) + 
+  geom_smooth(method = "lm", size = 2, alpha = .9, col = "black", se = F) + 
+  geom_point(size = 4, aes(col = Species)) +
+  labs(x = "Petal Length (cm)", y = "Sepal Length (cm)", title = "Relationship between Petal Length and Sepal Length", 
+       subtitle = "You can make subtitles too!", caption = "And captions will appear here.")
+```
+
+If you want to modify parts of our plot, like how the title and labels appear, where the legend goes and more, you can use the `theme` function. This function has a literal tonne of parameters, so check `?theme`, `?element_blank`, `?element_line`, `?element_rect`, and `?element_text` to view them all! I won't go into detailed use of how to use theme, but here's an example of some of the more common options:
+```{r}
+iris %>% ggplot(aes(Petal.Length, Sepal.Length)) +
+  geom_smooth(method = "lm", size = 2, alpha = .9, col = "black", se = F) + 
+  geom_point(size = 4, aes(col = Species)) +
+  labs(x = "Petal Length (cm)", y = "Sepal Length (cm)", title = "Relationship between Petal Length and Sepal Length", 
+       subtitle = "You can make subtitles too!", caption = "And captions will appear here.") + 
+  theme(plot.title = element_text(face = "bold", size = 16, hjust = .5), 
+        legend.position = "bottom", panel.grid.minor = element_blank())
+```
+
+Finally, sometimes you may feel like choosing a different color scheme, for a variety of reasons, whether subjective or utilitary. In any case, use the `scale_*_*` functions (e.g. `scale_fill_brewer`, `scale_color_gradient2`, etc.) to easily select alternative color schemes. While I won't go into detail here, you can read up on how to edit the scales of both your [colors](http://ggplot2.tidyverse.org/reference/scale_brewer.html) and your [axis](http://r4ds.had.co.nz/graphics-for-communication.html#scales). There are also additional packages designed to make choosing themes in `ggplot2` easier and more fun, like [`RColorBrewer`](https://www.r-bloggers.com/how-to-expand-color-palette-with-ggplot-and-rcolorbrewer/), [`ggthemes`](https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html), and my personal favorite collection of `ggplot2` themes, [`ggthemr`](https://github.com/cttobin/ggthemr).
 
 # Data Analysis
 
@@ -237,6 +373,10 @@ iris %>% ggplot(aes(Petal.Length)) + geom_density(fill = "orchid")
 ## Polynomial Regression
 
 ## Model Selection with `broom`
+
+```{r}
+diamonds %>% group_by(cut, color) %>% do(lm(., formula = price ~ carat) %>% tidy) %>% filter(term == "carat") %>% ggplot(aes(cut, color, fill = estimate)) + geom_tile() + scale_fill_gradient2()
+```
 
 # Mini-projects
 
