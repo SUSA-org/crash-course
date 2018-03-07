@@ -197,8 +197,28 @@ Now, we can see even more facts about our data. For example, it is now visually 
 
 #### `geom_histogram`, `geom_area(stat = "bin")`, `geom_density`
 
-To display univariate data (*displays that only view a single variable*), `ggplot2` has a variety of geoms. One common way to diplay the distrubtion of 
-#### `geom_bar`
+To display continuous univariate data (*data of just one variable*), `ggplot2` has a variety of geoms. One common way to diplay the distribution of a continuous variable is via a **histogram**. A histogram consists of **bins** on the x-axis, and the counts of each bin as the y-axis.
+
+To make a histogram in `ggplot2`, you just supply one variable to `aes` and use the `geom_histogram` geom. For example, suppose we wanted to visualize the distribution of the petal lengths of the fifty irises. Just to fit the theme, let's also make the bars orchid-coloured.
+```{r}
+iris %>% ggplot(aes(Petal.Length)) + geom_histogram(fill = "orchid")
+```
+
+(*NOTICE: We used `fill` instead of `color` here to modify the color of the filled bars instead their edges*)
+
+There seems to be a lot of flowers with noticably shorter petals than the rest. However, the low-resolution of the bars make it difficult to exactly see the shape of the distribution. A smoother way to display the counts of a single continuous variable is with a **binned area plot**, called binned because the y-axis again corresponds to the counts of each bin.
+
+The `geom_area(stat = "bin")` function specification is used to create these "smoothened" histograms. Let's recreate a smoother version of our petal length plot:
+```{r}
+iris %>% ggplot(aes(Petal.Length)) + geom_area(fill = "orchid", stat = "bin")
+```
+
+Hmm... that's still not very smooth. To instead see a Guassian-smoothed **density plot**, which approximates a more curvy shape for the distribution of some variable, use `geom_density`. Let's make one last rendering of the petal lengths in the `iris` dataset:
+```{r}
+iris %>% ggplot(aes(Petal.Length)) + geom_density(fill = "orchid")
+```
+
+#### `geom_bar`, `geom_col`
 
 #### `geom_line`, `geom_smooth`
 
