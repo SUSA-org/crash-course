@@ -223,7 +223,7 @@ div.tocify {
 
 <div id="about-this-document" class="section level1">
 <h1>About this Document</h1>
-<p>This is the associated workbook for the <a href="r2.html">r2</a> tutorial on R programming and tidyverse. Using RStudio, replace each <code>&gt; TODO</code> with a code chunk that answers the associated problem. Then, run the chunk to verify your answers. Some problems require a non-code answer, so simply replace <code>&gt; TODO</code> with the correct textual answer.</p>
+<p>This is the answer manual to the associated workbook for the <a href="r1.html">r2</a> tutorial on R programming, <a href="r2-workbook.Rmd">r2-workbook</a>.</p>
 </div>
 <div id="data-wranging" class="section level1">
 <h1>Data Wranging</h1>
@@ -232,25 +232,17 @@ div.tocify {
 <div id="head-view-arrange" class="section level3">
 <h3><code>head</code>, <code>View</code>, <code>arrange</code></h3>
 <p>A pop-quiz on <code>%&gt;%</code> from the <code>magrittr</code> package! Write a command to view the <code>iris</code> dataset in two ways, one with piping and one without. What do you notice about the tab titles of each?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>View(iris)
+iris %&gt;% View</code></pre>
+<p>Notice that the tab name of <code>View(iris)</code> is <code>iris</code>, and the tab name of <code>iris %&gt;% View</code> is <code>.</code>. This behavior is related to non-standard evaluation (NSE) in R, as well as the <code>.</code> placecard in <code>magrittr</code>.</p>
 <p>Use <code>head</code> to read the first ten lines of the <code>iris</code> dataset.</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>head(iris)</code></pre>
 <p>Read the documentation of <code>head</code>. How could we easily see the <strong>last</strong> ten lines of the <code>iris</code> dataset?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>tail(iris, 10)</code></pre>
 <p>Using <code>View</code>, see if you can find out how many entries are in the <code>iris</code> dataset.</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p>After running <code>View(iris)</code>, the number of entries/rows (150) can be seen in the lower-left corner.</p>
 <p>Using <code>desc</code> and <code>tail</code>, find an alternative command to find the shortest six petals in the <code>iris</code> dataset.</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>iris %&gt;% arrange(desc(Petal.Length)) %&gt;% tail</code></pre>
 </div>
 <div id="dataframe-subsetting" class="section level3">
 <h3>Dataframe Subsetting</h3>
@@ -258,42 +250,47 @@ div.tocify {
 <h4>Row Selection (<code>sample_*</code>, <code>slice</code>, <code>filter</code>)</h4>
 <p>Read the documentation for <code>sample_n</code> to determine how to sample <strong>with replacement</strong>. Using the following dataframe, simulate ten rolls of a die.</p>
 <pre class="r"><code>dice &lt;- data.frame(Dots = 1:6)
-## TODO</code></pre>
+dice %&gt;% sample_n(size = 10, replace = T)</code></pre>
+<p>Notice that <code>Dots</code> yields our ten outcomes for the dice rolls, but the <code>rownames</code>, curiously, gives information about the cumulative counts of specific outcomes over the rolls.</p>
 <p>Use <code>sample_n</code> and <code>nrow</code> (outputs the number of rows in a dataframe) to write <code>scramble</code>, a function that takes in a dataframe and outputs the same dataframe in a scrambled order.</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>scramble &lt;- function(df) {df %&gt;% sample_n(size = nrow(.))}
+scramble(dice) ## Just to show function behavior</code></pre>
 <p>Using <code>slice</code>, write <code>my_head</code>, a function that operates identically to the default behavior of the <code>head</code> function. Use the following function header:</p>
 <pre class="r"><code>my_head &lt;- function(df, size = 6) {
-  ## TODO
-}</code></pre>
+  df %&gt;% slice(1:size)
+}
+my_head(iris) ## Just to show function behavior
+head(iris) ## For comparison - QUIZ: How does head's output differ from my_head's output?</code></pre>
 <p>Select only the setosa flowers in <code>iris</code> with Sepal.Length’s over 5.</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>iris %&gt;% filter(Sepal.Length &gt; 5)</code></pre>
 </div>
 <div id="column-selection-select-rename-pull" class="section level4">
 <h4>Column Selection (<code>select</code>, <code>rename</code>, <code>pull</code>)</h4>
 <p>Use <code>select</code> to make a sub-dataframe of <code>iris</code> with only the columns about lengths.</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>iris %&gt;% select(ends_with(&quot;Length&quot;))</code></pre>
 <p>Rename the columns of <code>iris</code> to have more natural grammar. (Read: spaces rather than periods).</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>## Basic Solution
+iris %&gt;% rename(&quot;Petal Length&quot; = Petal.Length, &quot;Petal Width&quot; = &quot;Petal.Width&quot;, 
+                `Sepal Length` = Sepal.Length, `Sepal Width` = &quot;Sepal.Width&quot;) 
+## As you can see, you can either use ticks or quotes (no ticks needed for e.g. Petal.Length because it doesn't contain spaces)
+
+## Advanced Solution
+iris %&gt;% rename_all(funs(str_replace(., pattern = &quot;\\.&quot;, replacement = &quot; &quot;)))</code></pre>
 <p>In your own words, what is the difference betwee <code>select</code> and <code>pull</code>?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<ul>
+<li><code>select</code> returns a dataframe, and multiple columns can be <code>select</code>ed</li>
+<li><code>pull</code> returns a vector, and only one column can be <code>pull</code>ed</li>
+</ul>
 <p>In <code>r2</code>, what was the difference in behavior between using <code>select</code> vs. using <code>rename</code> on the <code>iris</code> dataset? How would you fix the <code>select</code> statement to work identically in this case?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p><code>select</code> will output the columns in the order they’re stated in the <code>select</code> call. In contrast, <code>rename</code> never alters the order of the columns in the dataframe.</p>
+<pre class="r"><code>iris %&gt;% select(- Species, `Species Name` = Species) %&gt;% head(1)
+iris %&gt;% rename(`Species Name` = Species) %&gt;% head(1) ## For comparison</code></pre>
 <p>Using <code>select</code>, write <code>my_rename</code>, a function that operates (nearly) identically to the default behavior of the <code>rename</code> function. Use the following function header:</p>
 <pre class="r"><code>my_rename &lt;- function(df, ...) {
-  ## TODO
-}</code></pre>
+  df %&gt;% select(..., everything())
+}
+iris %&gt;% my_rename(A = Sepal.Length, B = Sepal.Width) %&gt;% head(1) ## Just to showcase function behavior
+iris %&gt;% rename(A = Sepal.Length, B = Sepal.Width) %&gt;% head(1) ## For comparison</code></pre>
 </div>
 </div>
 <div id="adding-modifying-columns-mutate-transmute" class="section level3">
@@ -301,121 +298,107 @@ div.tocify {
 <div id="mutate" class="section level4">
 <h4><code>mutate</code></h4>
 <p>What are the two uses for <code>mutate</code>?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p><code>mutate</code> can be used to: - Modify existing columns of a dataframe - Add new columns to a dataframe</p>
 <p>Use <code>mutate</code> to make a two new columns in <code>iris</code>, 1) <code>Petal/Sepal Width Ratio</code>, the ratio between <code>Petal.Width</code> and <code>Sepal.Width</code> and 2) <code>Petal Area</code>, using <code>Petal.Width</code> and <code>Petal.Length</code>.</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>iris %&gt;% mutate(`Petal/Sepal Width Ratio` = Petal.Width/Sepal.Width, `Petal Area` = Petal.Width*Petal.Length) %&gt;% head(1)</code></pre>
 <p>In the above problem, what is the window function you used to calculate <code>Petal/Sepal Width Ratio</code>? What is the window function used to calculate <code>Petal Area</code>?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p>The window function for <code>Petal/Sepal Width Ratio</code> was the divide operator, <code>/</code>. The window function for <code>Petal Area</code> was the multiplication operator, <code>*</code>.</p>
 <p>Challenge question! Look up the documentation for <code>mutate_if</code>, and use it to modify <code>iris</code>to have its numerical values in units of inches rather than centimeters (what it is now).</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>iris %&gt;% mutate_if(is.numeric, funs(. * 0.394)) %&gt;% head ## is.numeric is used as our predicate because we only want to modify the numerical columns</code></pre>
 </div>
 <div id="transmute" class="section level4">
 <h4><code>transmute</code></h4>
 <p>In your own words, what is the difference between <code>mutate</code> and <code>transmute</code>?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p><code>mutate</code> will modify existing columns or tack on new ones, but won’t get rid of any columns. <code>transmute</code> will only keep the modified/added columns.</p>
 </div>
 </div>
 <div id="summarise-summary" class="section level3">
 <h3><code>summarise</code>, <code>summary</code></h3>
 <p>Use <code>summarise</code> to compute the largest petal lengths and petal widths in the <code>iris</code> dataset. (For the particularily adventurous, try to figure out how to use <code>summarise_at</code> for this problem).</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>## Basic Solution
+iris %&gt;% summarise(`Largest Petal Length` = max(Petal.Length), `Largest Petal Width` = max(Petal.Width)) 
+
+## Advanced Solution
+iris %&gt;% summarise_at(vars(starts_with(&quot;Petal&quot;)), funs(Largest = max))</code></pre>
 <p>In the above problem, what is the <strong>summary function</strong> you used to calculate the summary columns?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p>The summary function used above was <code>max</code>.</p>
 <p>In your own words, what is <code>summary</code> useful for?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p><code>summary</code> can be used to conduct a quick EDA of a dataset, as it gives a five-number summary and other information for each column.</p>
 <p>In your own words, what is the difference between <code>summarise</code> and <code>summary</code>?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p><code>summarise</code> is a <code>dplyr</code> verb used to apply summary functions to a dataframe. <code>summary</code> is a base R function used to print out a quick summary statement about a dataframe or model.</p>
 </div>
 <div id="grouped-data" class="section level3">
 <h3>Grouped Data</h3>
 <p>In your own words, what is the purpose or function of grouping data?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p>Grouping data allows you to apply window or summary functions by group, rather than to the dataset as a whole.</p>
 <p>Find the largest petal lengths and petal widths in the <code>iris</code> dataset <strong>for each Species</strong>. (Again, for the particularily adventurous, try to figure out how to use <code>summarise_at</code> for this problem).</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>## Basic Solution
+iris %&gt;% group_by(Species) %&gt;% summarise(`Largest Petal Length` = max(Petal.Length), `Largest Petal Width` = max(Petal.Width))
+
+## Advanced Solution
+iris %&gt;% group_by(Species) %&gt;% summarise_at(vars(starts_with(&quot;Petal&quot;)), funs(Largest = max))</code></pre>
 <p>Use grouped <code>mutate</code> and the <code>sort</code> function to sort the flowers in <code>iris</code> by <code>Petal.Length</code>, within their Species.</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>iris %&gt;% group_by(Species) %&gt;% mutate(Petal.Length = sort(Petal.Length)) </code></pre>
 </div>
 <div id="combining-datasets" class="section level3">
 <h3>Combining Datasets</h3>
 <p>In your own words, what is the difference between <strong>binds</strong> and <strong>joins</strong>?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p>A <strong>bind</strong> will glue the columns or rows of two dataframes together, as they are. A <strong>join</strong> will also glue together columns, but only after matching up the rows using some common <em>key column</em> between the two dataframes.</p>
 <p>Bind the following two dataframes into a single dataframe, row-wise:</p>
 <pre class="r"><code>a &lt;- data.frame(ID = 1:3, Name = c(&quot;Alice&quot;, &quot;Bob&quot;, &quot;Catherine&quot;), Age = c(19, 19, 21))
 b &lt;- data.frame(ID = 4:5, Name = c(&quot;Dennis&quot;, &quot;Edward&quot;), Age = c(22, 20))
-## TODO</code></pre>
+bind_rows(a, b)</code></pre>
 <p>Bind the following three dataframes into a single dataframe, column-wise:</p>
 <pre class="r"><code>a &lt;- data.frame(ID = 1:5, Name = c(&quot;Alice&quot;, &quot;Bob&quot;, &quot;Catherine&quot;, &quot;Dennis&quot;, &quot;Edward&quot;))
 b &lt;- data.frame(Age = c(19, 19, 21, 22, 20))
-## TODO</code></pre>
+bind_cols(a, b)</code></pre>
 <p>Join the following two dataframes:</p>
 <pre class="r"><code>a &lt;- data.frame(ID = 1:5, Name = c(&quot;Alice&quot;, &quot;Bob&quot;, &quot;Catherine&quot;, &quot;Dennis&quot;, &quot;Edward&quot;))
 b &lt;- data.frame(ID = c(5, 3, 4, 2, 1), Age = c(20, 21, 22, 19, 19))
-## TODO</code></pre>
+inner_join(a, b)</code></pre>
 <p>In your own words, what is the difference between a <strong>left join</strong> and an <strong>inner join</strong>?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p>A <strong>left join</strong> will keep all the rows in the left dataframe, filling any missing keys in the right data with <code>NA</code>. In contrast, an <strong>inner join</strong> will only keep the rows that have matching keys in both the left and the right dataframes.</p>
 </div>
 </div>
 <div id="tidyr" class="section level2">
 <h2><code>tidyr</code></h2>
 <p>Make a small tidy dataset.</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>data.frame(`Package Name` = c(&quot;dplyr&quot;, &quot;tidyr&quot;, &quot;readr&quot;, &quot;readxl&quot;, &quot;purrr&quot;),
+           `Description` = c(&quot;Used to manipulate dataframes&quot;, &quot;Used to clean and wrangle data into a tidy form&quot;, 
+                             &quot;Used to read text files as dataframes&quot;, &quot;Used to read Excel spreadsheets as dataframes&quot;, &quot;Used for functional programming in R&quot;))</code></pre>
 <p>Make a small wide dataset.</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>data.frame(`dplyr` = &quot;Used to manipulate dataframes&quot;, 
+           `tidyr` = &quot;Used to clean and wrangle data into a tidy form&quot;, 
+           `readr` = &quot;Used to read text files as dataframes&quot;, 
+           `readxl` = &quot;Used to read Excel spreadsheets as dataframes&quot;, 
+           `purrr` = &quot;Used for functional programming in R&quot;)</code></pre>
 <div id="gather" class="section level3">
 <h3><code>gather</code></h3>
 <p>Tidy the following dataset and save it to the variable <code>tidy_practice_df</code>:</p>
 <pre class="r"><code>wide_practice_df &lt;- data.frame(`CS61A` = &quot;A-&quot;,`S134` = &quot;B-&quot;, `S133` = &quot;A&quot;, `S135` = &quot;B+&quot;, check.names = F)
-## TODO</code></pre>
+wide_practice_df %&gt;% gather(Course, Grade) -&gt; tidy_practice_df
+tidy_practice_df ## Just to show solution dataframe</code></pre>
 </div>
 <div id="spread" class="section level3">
 <h3><code>spread</code></h3>
 <p>Now, take your <code>tidy_practice_df</code> and put it back into the wide format of <code>wide_practice_df</code>.</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>tidy_practice_df %&gt;% spread(Course, Grade)</code></pre>
 </div>
 <div id="na-values" class="section level3">
 <h3>NA Values</h3>
 <p>What does <code>NA</code> represent? Why are <code>NA</code> values “bad”?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p><code>NA</code> values represent cells where the data was <em>Not Available</em>. <code>NA</code> values are infectious - any operation that “touches” an <code>NA</code> value will usually just return <code>NA</code>.</p>
 <p>Clean out the <code>NA</code> values in the following dataset, in two ways.</p>
 <pre class="r"><code>dirty_practice_df &lt;- data.frame(A = rnorm(5, 10, 5), B = c(T, NA, NA, NA, F))
-## TODO: tidyr approach
-## TODO: dplyr approach</code></pre>
+
+## tidyr approach
+dirty_practice_df %&gt;% drop_na
+
+## dplyr approach
+dirty_practice_df %&gt;% filter(! is.na(B))
+
+## dplyr approach (general)
+dirty_practice_df %&gt;% filter_all(all_vars(! is.na(.)))</code></pre>
 </div>
 </div>
 </div>
@@ -424,55 +407,53 @@ b &lt;- data.frame(ID = c(5, 3, 4, 2, 1), Age = c(20, 21, 22, 19, 19))
 <div id="readr-readxl" class="section level2">
 <h2><code>readr</code> &amp; <code>readxl</code></h2>
 <p>Use <code>readr</code> to read in <code>data/wellcome_apc_articles.csv</code>. You don’t need to worry about cleaning - that will be the topic of the first mini-project.</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>articles &lt;- read_csv(&quot;data/wellcome_apc_articles.csv&quot;)
+head(articles)</code></pre>
 <p>Use <code>readxl</code> to read in <code>data/plant-ants.xls</code>. You don’t need to worry about tidying - that will be the topic of the second mini-project. (<em>Hint: Use the <code>range</code> argument</em>)</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>plantants &lt;- read_excel(&quot;data/plant-ants.xls&quot;, sheet = 1, range = &quot;A3:R28&quot;) ## Range determined by viewing the file in some spreadsheet software
+head(plantants)</code></pre>
 </div>
 <div id="column-types" class="section level2">
 <h2>Column Types</h2>
 <p>What is a <strong>factor</strong>? How does it differ from the <strong>character</strong> type?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p><strong>factor</strong> is R’s data type for categorical labels. It is designed for a relatively small number of (potentially ordered) discrete categories. In contrast, <strong>character</strong> is R’s data type for <em>any</em> text, whether that text is a label, key, category, or anything else.</p>
 <p>What are the two ways to specify the <code>col_types</code> argument in <code>readr</code> functions?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p>There are two ways to specify <code>col_types</code> in <code>readr</code>, one with <code>cols</code> &amp; the <code>col_*</code> functions, the other with string abbreviations:<br />
+- <code>col_types = cols(Hello = col_guess(), World = col_date())</code><br />
+- <code>col_types = &quot;?D&quot;</code></p>
 </div>
 </div>
 <div id="functional-programming-in-r-purrr" class="section level1">
 <h1>Functional Programming in R (<code>purrr</code>)</h1>
 <p>In your own words, what is <strong>functional programming</strong>?</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p><strong>Functional programming</strong> is a style of programming that focuses on applying functions generically to objects or lists of objects.</p>
 <div id="the-map-family" class="section level2">
 <h2>The <code>map</code> Family</h2>
 <p>Make a function called <code>quadratic_solver(a, b, c)</code> that finds the larger root of a quadratic polynomial.</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>quadratic_solver &lt;- function(a,b,c) {
+  (-b + sqrt(b^2 - 4*a*c))/(2*a)
+}</code></pre>
 <p>Use <code>quadratic_solver</code> and one of the <code>pmap_*</code> functions to output a vector of the larger roots of the following polynomials:<br />
 <span class="math inline">\(\{6x^2 + 12x - 15, x^2 - 3x - 90, x^2 + x - 1\}\)</span></p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>a_list &lt;- list(6, 1, 1)
+b_list &lt;- list(12, -3, 1)
+c_list &lt;- list(-15, -90, -1)
+poly_list &lt;- list(a_list, b_list, c_list) 
+pmap_dbl(poly_list, quadratic_solver) ## pmap applies a function to a list of lists. pmap_dbl makes it return a double vector</code></pre>
 </div>
 <div id="more-purrr" class="section level2">
 <h2>More <code>purrr</code></h2>
 <p>Make a function called <code>factorial</code> that uses <code>multiply_by</code> and <code>reduce</code> to find the factorial of a number. (Recall that <code>factorial(4)</code> returns <span class="math inline">\((((1 \times 2) \times 3) \times 4)\)</span>.)</p>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>factorial &lt;- function(n) {
+  reduce(1:n, multiply_by)
+}</code></pre>
 <p>Challenge question! <code>purrr</code> has <code>map_*</code> functions for dataframes too! Using <code>?&lt;func&gt;</code> to check the documentation of the functions used below, and see if you can describe what exactly is happening in each section of the pipe.</p>
-<pre class="r"><code>iris %&gt;% split(.$Species) %&gt;% map_dfr(function(df){df %&gt;% summarise_if(is.numeric, sum)}, .id = &quot;f&quot;)</code></pre>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<pre class="r"><code>iris %&gt;% ## Take the iris dataset,
+  split(.$Species) %&gt;% ## then split it into three dataframes by the `Species` column,
+  map_dfr(function(df){df %&gt;%  ## And apply the following function to each Species dataframe, before row_binding them back together.
+      summarise_if(is.numeric, ## Summarize each numeric column
+                   sum)},      ## as the sum of its entries
+      .id = &quot;f&quot;)               ## In the binded dataframe, name the Species column, &quot;f&quot;</code></pre>
 </div>
 </div>
 <div id="mini-projects" class="section level1">
