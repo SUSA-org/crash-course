@@ -223,7 +223,7 @@ div.tocify {
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>In this second of SUSA’s crash courses on R, you will learn about how to actually use R to conduct data analysis, or more appropriately, how to <em>clean</em> your data to prepare them for data analysis. You will continue your foray into R packages with this primer on <code>tidyverse</code>, a collection of packages meant to make data science in R rapid and painless. In particular, you will learn how to use <code>dplyr</code> and <code>tidyr</code> for data cleaning, <code>readr</code> and <code>readxl</code> for data import, and finally an introduction to R’s functional tools, with the <code>*apply</code> function family and the <code>map</code> and <code>reduce</code> functions from the <code>purrr</code> package.</p>
+<p>In this second of SUSA’s crash courses on R programming, you will learn about how to actually use R to conduct data analysis, or more appropriately, how to <em>clean</em> your data to prepare them for data analysis. You will continue your foray into R packages with this primer on <code>tidyverse</code>, a collection of packages meant to make data science in R rapid and painless. In particular, you will learn how to use <code>dplyr</code> and <code>tidyr</code> for data cleaning, <code>readr</code> and <code>readxl</code> for data import, and finally an introduction to R’s functional tools, such as the <code>map</code> and <code>reduce</code> functions from the <code>purrr</code> package.</p>
 <div id="about-this-document" class="section level2">
 <h2>About this Document</h2>
 <div id="prerequisites" class="section level3">
@@ -278,6 +278,8 @@ div.tocify {
 ## ✖ dplyr::lag()       masks stats::lag()
 ## ✖ purrr::set_names() masks magrittr::set_names()</code></pre>
 <p>Notice the output message, which tells you which specific packages of the tidyverse were loaded.</p>
+<p>While we’re at it, let’s also make sure <code>magrittr</code> is loaded into our environment too:</p>
+<pre class="r"><code>library(magrittr)</code></pre>
 </div>
 </div>
 <div id="data-wranging" class="section level1">
@@ -311,7 +313,7 @@ div.tocify {
 ## 5          5.0         3.6          1.4         0.2  setosa
 ## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
 <p>If you look at the documentation for <code>head</code> with <code>?head</code>, you can verify that the default number of lines outputted is 6.</p>
-<p>Rather than printing the dataframe to the console, the <code>View</code> function will open up a new pane in RStudio to view your dataframe as a spreadsheet. This pane is filterable and searchable, so it’s useful to quickly glance through large datasets! Let’s view our iris dataset in full:</p>
+<p>Rather than printing the dataframe to the console, the <code>View</code> function (<em>note the capital <code>V</code>!)</em> will open up a new pane in RStudio to view your dataframe as a spreadsheet, and also displays additional information like the number of observations (rows) and variables (columns). This pane is filterable and searchable, so it’s useful to quickly glance through large datasets! Let’s view our iris dataset in full:</p>
 <pre class="r"><code>View(iris) ## Run this command in your R Console!</code></pre>
 <p>Although you can sort your dataset in the View pane, suppose you want to sort your dataframe before using <code>head</code> to see the first six entries <em>by some column</em>. This is where <code>dplyr</code>’s sorting function comes in, <code>arrange</code>. By default, it will arrange your dataframe from least to greatest of some column variable. For example, let’s check the shortest petals in the <code>iris</code> dataset:</p>
 <pre class="r"><code>iris %&gt;% arrange(Petal.Length) %&gt;% head</code></pre>
@@ -344,11 +346,11 @@ div.tocify {
 <p>To randomly select a few rows from your dataset, use <code>sample_n</code>, which takes a dataframe and a number of entries to sample. There’s also <code>sample_frac</code>, which takes a dataframe and a fraction of the size of the dataframe to sample. Observe the following behaviors:</p>
 <pre class="r"><code>iris %&gt;% sample_n(size = 5)</code></pre>
 <pre><code>##     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-## 24           5.1         3.3          1.7         0.5     setosa
-## 18           5.1         3.5          1.4         0.3     setosa
-## 137          6.3         3.4          5.6         2.4  virginica
-## 83           5.8         2.7          3.9         1.2 versicolor
-## 71           5.9         3.2          4.8         1.8 versicolor</code></pre>
+## 54           5.5         2.3          4.0         1.3 versicolor
+## 147          6.3         2.5          5.0         1.9  virginica
+## 132          7.9         3.8          6.4         2.0  virginica
+## 47           5.1         3.8          1.6         0.2     setosa
+## 105          6.5         3.0          5.8         2.2  virginica</code></pre>
 <pre class="r"><code>## NOTE: iris has 150 entries. 33% of 150 is ~50.
 iris %&gt;% sample_frac(.33) %&gt;% nrow</code></pre>
 <pre><code>## [1] 50</code></pre>
@@ -593,13 +595,13 @@ str(grouped_iris)</code></pre>
 ##       &lt;fctr&gt;        &lt;dbl&gt;                                    &lt;dbl&gt;
 ## 1     setosa          1.6                                     0.76
 ## 2     setosa          1.5                                     0.49
-## 3     setosa          1.7                                     0.90
-## 4 versicolor          4.8                                     0.90
-## 5 versicolor          4.0                                     0.22
-## 6 versicolor          3.9                                     0.16
-## 7  virginica          4.9                                     0.06
-## 8  virginica          6.0                                     0.80
-## 9  virginica          5.1                                     0.18</code></pre>
+## 3     setosa          1.3                                     0.08
+## 4 versicolor          4.0                                     0.22
+## 5 versicolor          4.3                                     0.47
+## 6 versicolor          4.4                                     0.51
+## 7  virginica          5.7                                     0.63
+## 8  virginica          5.1                                     0.18
+## 9  virginica          5.8                                     0.69</code></pre>
 </div>
 </div>
 <div id="combining-datasets" class="section level3">
@@ -628,16 +630,16 @@ str(grouped_iris)</code></pre>
 <p>If we wanted to <strong>bind</strong> these together into a single dataframe, we first notice that we want to combine <em>rows</em>, not <em>columns</em>. Observe the following behavior:</p>
 <pre class="r"><code>bind_rows(iris_setosa, iris_virginica, iris_versicolor) %&gt;% sample_n(size = 10)</code></pre>
 <pre><code>##     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-## 33           5.2         4.1          1.5         0.1     setosa
-## 117          5.6         3.0          4.5         1.5 versicolor
-## 99           6.2         3.4          5.4         2.3  virginica
-## 41           5.0         3.5          1.3         0.3     setosa
-## 119          6.2         2.2          4.5         1.5 versicolor
-## 70           6.0         2.2          5.0         1.5  virginica
-## 7            4.6         3.4          1.4         0.3     setosa
-## 138          6.3         2.3          4.4         1.3 versicolor
-## 131          5.5         2.4          3.8         1.1 versicolor
-## 4            4.6         3.1          1.5         0.2     setosa</code></pre>
+## 115          5.6         2.9          3.6         1.3 versicolor
+## 16           5.7         4.4          1.5         0.4     setosa
+## 56           7.6         3.0          6.6         2.1  virginica
+## 52           5.8         2.7          5.1         1.9  virginica
+## 98           6.5         3.0          5.2         2.0  virginica
+## 141          5.5         2.6          4.4         1.2 versicolor
+## 82           7.9         3.8          6.4         2.0  virginica
+## 74           6.3         2.7          4.9         1.8  virginica
+## 76           7.2         3.2          6.0         1.8  virginica
+## 147          5.7         2.9          4.2         1.3 versicolor</code></pre>
 <p>If we instead <strong>binded</strong> the <em>columns</em> together, we would see the following behavior:</p>
 <pre class="r"><code>bind_cols(iris_setosa, iris_virginica, iris_versicolor) %&gt;% str</code></pre>
 <pre><code>## 'data.frame':    50 obs. of  15 variables:
@@ -700,42 +702,42 @@ full_join(worker_hours, worker_pay, by = c(&quot;Name&quot;))</code></pre>
 </ol>
 <p>Let’s illustrate the difference between <strong>tidy</strong> and <strong>wide</strong> data with a couple of examples:</p>
 <pre class="r"><code>head(wide_dataset)</code></pre>
-<pre><code>##   Year       Jan       Feb       Mar      Apr       May      June
-## 1 2015 100.54790 102.34568  96.89543 117.7509 119.27908  99.35564
-## 2 2016  88.30119  86.87001  86.71292  94.0965  92.68733 101.65214
-## 3 2017 114.78690  92.33089 104.65875 106.3204 106.61717 103.35476
-##        July       Aug      Sep      Oct       Nov       Dec
-## 1  80.72397  98.63981 84.88460 93.95717 114.87252 103.90262
-## 2 102.31260 104.92687 94.34730 98.70680 132.53627  79.14743
-## 3  87.53109 101.69297 94.26639 95.00268  99.80762  94.66242</code></pre>
+<pre><code>##   Year       Jan      Feb       Mar       Apr       May      June
+## 1 2015  97.36476 109.8633 101.81566  96.76982 107.30600  93.08192
+## 2 2016 111.08158  89.7403  91.72008 112.65582 106.20730  96.43232
+## 3 2017 112.82670 112.1236  99.70381  97.37177  97.82331 100.32960
+##        July       Aug       Sep       Oct      Nov       Dec
+## 1  97.89800  82.64665 102.48015  95.81758 97.55374  98.75837
+## 2  96.83301 107.57467 105.48091 112.74316 87.09467  91.67383
+## 3 101.32571 105.09665  85.28725  96.74593 88.63767 109.71750</code></pre>
 <pre class="r"><code>str(wide_dataset)</code></pre>
 <pre><code>## 'data.frame':    3 obs. of  13 variables:
 ##  $ Year: int  2015 2016 2017
-##  $ Jan : num  100.5 88.3 114.8
-##  $ Feb : num  102.3 86.9 92.3
-##  $ Mar : num  96.9 86.7 104.7
-##  $ Apr : num  117.8 94.1 106.3
-##  $ May : num  119.3 92.7 106.6
-##  $ June: num  99.4 101.7 103.4
-##  $ July: num  80.7 102.3 87.5
-##  $ Aug : num  98.6 104.9 101.7
-##  $ Sep : num  84.9 94.3 94.3
-##  $ Oct : num  94 98.7 95
-##  $ Nov : num  114.9 132.5 99.8
-##  $ Dec : num  103.9 79.1 94.7</code></pre>
+##  $ Jan : num  97.4 111.1 112.8
+##  $ Feb : num  109.9 89.7 112.1
+##  $ Mar : num  101.8 91.7 99.7
+##  $ Apr : num  96.8 112.7 97.4
+##  $ May : num  107.3 106.2 97.8
+##  $ June: num  93.1 96.4 100.3
+##  $ July: num  97.9 96.8 101.3
+##  $ Aug : num  82.6 107.6 105.1
+##  $ Sep : num  102.5 105.5 85.3
+##  $ Oct : num  95.8 112.7 96.7
+##  $ Nov : num  97.6 87.1 88.6
+##  $ Dec : num  98.8 91.7 109.7</code></pre>
 <pre class="r"><code>head(tidy_dataset)</code></pre>
 <pre><code>##   Year Month Stock Price
-## 1 2015   Jan   100.54790
-## 2 2015   Feb   102.34568
-## 3 2015   Mar    96.89543
-## 4 2015   Apr   117.75086
-## 5 2015   May   119.27908
-## 6 2015  June    99.35564</code></pre>
+## 1 2015   Jan    97.36476
+## 2 2015   Feb   109.86328
+## 3 2015   Mar   101.81566
+## 4 2015   Apr    96.76982
+## 5 2015   May   107.30600
+## 6 2015  June    93.08192</code></pre>
 <pre class="r"><code>str(tidy_dataset)</code></pre>
 <pre><code>## 'data.frame':    36 obs. of  3 variables:
 ##  $ Year       : int  2015 2015 2015 2015 2015 2015 2015 2015 2015 2015 ...
 ##  $ Month      : Ord.factor w/ 12 levels &quot;Jan&quot;&lt;&quot;Feb&quot;&lt;&quot;Mar&quot;&lt;..: 1 2 3 4 5 6 7 8 9 10 ...
-##  $ Stock Price: num  100.5 102.3 96.9 117.8 119.3 ...</code></pre>
+##  $ Stock Price: num  97.4 109.9 101.8 96.8 107.3 ...</code></pre>
 <p>Tidy data is very desirable for <code>tidyverse</code> functions because tidy data works best with concepts such as grouping, window functions, and the grammar for <code>ggplot2</code>, which we will learn next week.</p>
 <div id="gather" class="section level3">
 <h3><code>gather</code></h3>
@@ -744,12 +746,12 @@ full_join(worker_hours, worker_pay, by = c(&quot;Name&quot;))</code></pre>
 <pre class="r"><code>tidy_dataset_2 &lt;- wide_dataset %&gt;% gather(&quot;Month&quot;, &quot;Stock Price&quot;, - c(&quot;Year&quot;)) # Gather every column that is NOT Year  
 head(tidy_dataset_2)</code></pre>
 <pre><code>##   Year Month Stock Price
-## 1 2015   Jan   100.54790
-## 2 2016   Jan    88.30119
-## 3 2017   Jan   114.78690
-## 4 2015   Feb   102.34568
-## 5 2016   Feb    86.87001
-## 6 2017   Feb    92.33089</code></pre>
+## 1 2015   Jan    97.36476
+## 2 2016   Jan   111.08158
+## 3 2017   Jan   112.82670
+## 4 2015   Feb   109.86328
+## 5 2016   Feb    89.74030
+## 6 2017   Feb   112.12365</code></pre>
 </div>
 <div id="spread" class="section level3">
 <h3><code>spread</code></h3>
@@ -757,14 +759,14 @@ head(tidy_dataset_2)</code></pre>
 <p>Again, this is best illustrated with an example. Let’s turn the <code>tidy_dataset</code> into the <code>wide_dataset</code>:</p>
 <pre class="r"><code>wide_dataset_2 &lt;- tidy_dataset %&gt;% spread(Month, `Stock Price`)
 head(wide_dataset_2)</code></pre>
-<pre><code>##   Year       Jan       Feb       Mar      Apr       May      June
-## 1 2015 100.54790 102.34568  96.89543 117.7509 119.27908  99.35564
-## 2 2016  88.30119  86.87001  86.71292  94.0965  92.68733 101.65214
-## 3 2017 114.78690  92.33089 104.65875 106.3204 106.61717 103.35476
-##        July       Aug      Sep      Oct       Nov       Dec
-## 1  80.72397  98.63981 84.88460 93.95717 114.87252 103.90262
-## 2 102.31260 104.92687 94.34730 98.70680 132.53627  79.14743
-## 3  87.53109 101.69297 94.26639 95.00268  99.80762  94.66242</code></pre>
+<pre><code>##   Year       Jan      Feb       Mar       Apr       May      June
+## 1 2015  97.36476 109.8633 101.81566  96.76982 107.30600  93.08192
+## 2 2016 111.08158  89.7403  91.72008 112.65582 106.20730  96.43232
+## 3 2017 112.82670 112.1236  99.70381  97.37177  97.82331 100.32960
+##        July       Aug       Sep       Oct      Nov       Dec
+## 1  97.89800  82.64665 102.48015  95.81758 97.55374  98.75837
+## 2  96.83301 107.57467 105.48091 112.74316 87.09467  91.67383
+## 3 101.32571 105.09665  85.28725  96.74593 88.63767 109.71750</code></pre>
 </div>
 <div id="na-values" class="section level3">
 <h3>NA Values</h3>
@@ -985,16 +987,16 @@ reduce(v, subtract)</code></pre>
 <pre class="r"><code>iris_dfs &lt;- list(iris_setosa, iris_virginica, iris_versicolor)
 iris_dfs %&gt;% reduce(bind_rows) %&gt;% sample_n(10)</code></pre>
 <pre><code>##     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-## 9            4.4         2.9          1.4         0.2     setosa
-## 124          6.1         2.8          4.7         1.2 versicolor
-## 2            4.9         3.0          1.4         0.2     setosa
-## 62           6.4         2.7          5.3         1.9  virginica
-## 36           5.0         3.2          1.2         0.2     setosa
-## 65           5.8         2.8          5.1         2.4  virginica
-## 79           6.4         2.8          5.6         2.1  virginica
-## 139          5.6         3.0          4.1         1.3 versicolor
-## 118          5.8         2.7          4.1         1.0 versicolor
-## 101          7.0         3.2          4.7         1.4 versicolor</code></pre>
+## 3            4.7         3.2          1.3         0.2     setosa
+## 25           4.8         3.4          1.9         0.2     setosa
+## 39           4.4         3.0          1.3         0.2     setosa
+## 43           4.4         3.2          1.3         0.2     setosa
+## 47           5.1         3.8          1.6         0.2     setosa
+## 84           6.3         2.8          5.1         1.5  virginica
+## 147          5.7         2.9          4.2         1.3 versicolor
+## 81           7.4         2.8          6.1         1.9  virginica
+## 17           5.4         3.9          1.3         0.4     setosa
+## 137          6.7         3.1          4.7         1.5 versicolor</code></pre>
 </div>
 <div id="walk" class="section level3">
 <h3><code>walk</code></h3>
