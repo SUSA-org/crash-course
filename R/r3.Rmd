@@ -78,11 +78,12 @@ One last thought about data visualization - it's a craft, part technique and par
 First and foremost: tell a story! Data may seem very cold and neutral, but data are quantifications of behaviors in our world. Graphs are how we can make data less cold, and more interpretable for humans. Each graph should show something insightful, important, and easily detectable by the audience. Of course, the are a variety of ways to display the same patterns - the creative process of effective data visualization is choosing *how* to say the story best.
 
 Some other tips for data visualization include:   
--  Minimize the **data-ink** ratio, or the amount of information you are showing per unit of "ink". You want to only include visual information relevant to your point for that specific graph. If you can't get rid of irrelevant details without the graph looking sparse, consider highlighting the patterns, trends, or outliers you want the audience to concentrate on with color, sizing, or labels.   
-- Include a (zero) **baseline**. Scales give the relative positions between various quantities, but if the audience has no idea what general context the numbers exist in, there's no point in comparing them. Often times, this means including `y = 0` or `x = 0` in your axis, rather than line breaking, which can be seen as intentionally misleading.   
-- Communicative elements are a **must**. Whether this means simply axis and plot titles, rearranging your legend, or adjusting font sizes to show up better on a projector screen, it must be immediately obvious to a new viewer what your graph aims to display.   
+
+-  Minimize the **data-ink** ratio, or the amount of information you are showing per unit of "ink". You want to only include visual information relevant to your point for that specific graph. If you can't get rid of irrelevant details without the graph looking sparse, consider highlighting the patterns, trends, or outliers you want the audience to concentrate on with color, sizing, or labels.      
+- Include a (zero) **baseline**. Scales give the relative positions between various quantities, but if the audience has no idea what general context the numbers exist in, there's no point in comparing them. Often times, this means including `y = 0` or `x = 0` in your axis, rather than line breaking, which can be seen as intentionally misleading.     
+- Communicative elements are a **must**. Whether this means simply axis and plot titles, rearranging your legend, or adjusting font sizes to show up better on a projector screen, it must be immediately obvious to a new viewer what your graph aims to display.     
 - Keep engrained preconceptions of **colors** in mind. For example, it is generally inadvisable to use bright red to indicate positive trends. Additionally, be wary of color-blindness, which affects over seven percent of the American populace. Finally, use differentiating colors to highlight factors, sequential colors to highlight trends, and diverging colors to highlight splits in behavior. The [`RColorBrewer`](http://colorbrewer2.org/) package is an extension of `ggplot2` that allows you to easily switch between color themes specially designed for data visualization.    
-* Order bars by height. Humans prefer things ordered, and it makes relative comparison between bars much more visible.   
+* Order bars by height. Humans prefer things ordered, and it makes relative comparison between bars much more visible.     
 * Never use pie charts. This is decreed by the legendary Edward Tufte, one of the founders of data visualization, who noted its imprecision for more than a couple categories or dimensions. Usually, bar charts are just better. Also, stay away from double-axis graphs - unless you *want* to mislead someone...
 
 > “The only worse design than a pie chart is several of them,”  — Edward Tufte
@@ -98,6 +99,7 @@ Some other tips for data visualization include:
 The `gg` in `ggplot2` stands for *"Grammar of Graphics"*. `ggplot2` is the implementation of this idea that all data visualizations decompose into specific components, and so if we have a way to manipulate each component and then sum them together, we can make any plot!
 
 The components used in the *layered grammar of graphics* underyling `ggplot2` are as follows:   
+
 1) a base **dataset**, and a set of mappings from **variables** to **aesthetics**   
 2) one or more **layers**, with each layer of **glyphs** having:  
     - one geometric object, or **geom**
@@ -128,6 +130,7 @@ The `aes` (*aesthetic mapping*) function is used to tie visual elements of the p
 ```{r, eval = F}
 aes(x, y, ...)
 ```
+
 By default, the first argument (`x`) you supply to `aes` indicates which variable in your dataframe corresponds to the x-axis, and the second argument (`y`) indicates which variable corresponds to the y-axis.
 
 However, you can also make mappings with, for example:     
@@ -184,7 +187,6 @@ To showcase the other options of `geom_point`, let's also set the `alpha` to be 
 ```{r}
 ggplot(diamonds, aes(cut, clarity)) + geom_jitter(alpha = .1, size = .5)
 ```
-
 
 Finally, note that since we are only plotting a single geom, we could (just for fun) move all of the "global" arguments for `ggplot` to be "specific" arguments for just the `geom_jitter` layer, and the graph would look identical:
 ```{r}
@@ -297,11 +299,12 @@ iris %>% ggplot(aes(Petal.Length, Sepal.Length)) +
   geom_point(alpha = .7, size = 4, aes(col = Species)) 
 ```
 
-This plot is relatively simple, but reveals several facts all at once:   
-1. Virginica are usually bigger than Versicolor, which are usually bigger than Setosa irises
-2. There is a clear linear relationship between petal length and sepal length in this sample of irises
-3l Virginica and Versicolor irises are noticably closer in size than the much smaller Setosa irises
-4. Setosa irises tend to vary less in size than the other two species
+This plot is relatively simple, but reveals several facts all at once:    
+
+1. Virginica are usually bigger than Versicolor, which are usually bigger than Setosa irises   
+2. There is a clear linear relationship between petal length and sepal length in this sample of irises   
+3l Virginica and Versicolor irises are noticably closer in size than the much smaller Setosa irises   
+4. Setosa irises tend to vary less in size than the other two species   
 
 ### Faceting (`facet_wrap`, `facet_grid`)
 
@@ -406,13 +409,14 @@ The value for $\hat{\alpha}$ necessarily forces the line to always pass through 
 
 ### Linear Regression in R
 
-Of course, although all of this math is important for understanding of the linear regression model, in practice, R will do it all for you! Simply use the base R function, `lm`. `lm` uses a **formula** syntax, where the reponse variable is on the left and the explanatory variable(s) are on the right: `Y ~ X1 + X2 + X3 ...`.
+Of course, although all of this math is important for understanding of the linear regression model, in practice, R will do it all for you! Simply use the base R function, `lm`. `lm` uses a **formula** syntax, where the reponse variable is on the left and the explanatory variable(s) are on the right: `Y ~ X1 + X2 + X3 ...`. The complete function sytax is `lm(data, formula)`.
 
 Let's use linear regression to understand the relationship between petal lengths and sepal lengths in the `iris` dataset:
 ```{r}
-length_model <- lm(iris, formula = Sepal.Length ~ Petal.Length)
+length_model <- lm(data = iris, formula = Sepal.Length ~ Petal.Length)
 print(length_model)
 ```
+
 The output of the `lm` function can be read as follows: for every centimeter increase in `Petal.Length`, `Sepal.Lengths` increases by an average of 0.4089 centimeters. For a theoretical flower with a `Petal.Length` of zero, the `Sepal.Length` would hypothetically be 4.3066.
 
 To get even more information about the model you created, like its squared error `z`, or the $R^2$ (how much of the total variation in $Y$ is explained by our model $\hat{Y}$?), you can call `summary` on your model:
@@ -427,8 +431,8 @@ The "residual square error" is 0.407, which is quite tiny! Our model fits eviden
 Simple as it is, linear regression comes with rigid assumptions. If you fit a linear regression model to data that does not actually maintain these assumptions itself, *your linear regression model means absolutely nothing*, and will likely suffer from either model bias or high variability of results. Fortunately, we can quickly check if these assumptions hold for our data graphically. Sometimes, this involves graphing a scatter plot of $X$ and $Y$. Other times, it's easier to construct a **residual plot**, which places the explanatory variable's $X_i$ on the x-axis and the **residuals**, or individual errors, $e_i$ on the y-axis. We will showcase how to verify these assumptions shortly.
 
 The essential assumptions underlying linear regression are as follows:   
-1. **Linearity**: The relationship between $X$ and $Y$ must be linear. Graphically, the scatterplot should show a linear trend, and the residuals plot should show no curvature.   
-2. **Constant Variance of Errors**: The "spread" of our errors should not depend on the value of $X$. Put in another way, our model should perform just as well predicting $Y$, regardless of which $X$ it is considering. Graphically, the residuals plot should show a band of roughly constant width.   
+1. **Linearity**: The relationship between $X$ and $Y$ must be linear. Graphically, the scatterplot should show a linear trend, and the residuals plot should show no curvature.    
+2. **Constant Variance of Errors**: The "spread" of our errors should not depend on the value of $X$. Put in another way, our model should perform just as well predicting $Y$, regardless of which $X$ it is considering. Graphically, the residuals plot should show a band of roughly constant width.    
 3. **Normality of Error**: Even more stringently, the distribution of our residuals should be roughly normal. This is the most strict assumption of the linear model, but also gives it all of its statistical interpretability. Graphically, you can verify this assumption by graphing a density plot of the residuals.  
 
 Apart from these three statistical assumptions, there are a couple of other desirable attributes that make our linear regression analysis a bit more robust:   
@@ -445,12 +449,14 @@ Let's check through all three assumptions and two desirables for our `Sepal.Leng
 ```{r}
 augment(length_model) %>% sample_n(3)
 ```
+
 As you can see, the `.fitted` values are quite close to those of `Sepal.Length`.
 
 `tidy` will accept a model and output a dataframe representing its model output, as seen in its `summary`. This outputted dataframe will have one row for each parameter - in this case, one for $\hat{\alpha}$ and one for $\hat{\beta}$. Observe the output of `tidy` for our `length_model`:
 ```{r}
 tidy(length_model)
 ```
+
 You can go back and verify that these values match those in the `summary(length_model)` code chunk above.
 
 `glance` will accept a model and output a single row, representing the performance of the model on the dataset as a whole. Again, these values will match those at the bottom of what's seen in `summary`. Observe the output of `glance` for our `length_model`:
@@ -458,11 +464,12 @@ You can go back and verify that these values match those in the `summary(length_
 glance(length_model)
 ```
 
-First, let's check for linearity by reproducing the scatterplot of their relationships:
+Now, let's get back to verifying the assumptions of our linear regression model on the `iris` dataset. First, let's check for linearity by reproducing the scatterplot of their relationships:
 ```{r}
 ggplot(iris, aes(Petal.Length, Sepal.Length)) +
   geom_point() + geom_smooth(method = "lm")
 ```
+
 They look roughly linear! We can double-check with a residuals plot using the `broom` package.
 ```{r}
 length_model %>% augment %>%
@@ -470,15 +477,156 @@ length_model %>% augment %>%
   ggplot(aes(Petal.Length, Error)) + 
   geom_point() + geom_hline(yintercept = 0, col = "red", linetype = "dashed")
 ```
-The residuals don't show a curve or pattern, so the inearity assumption holds.
+
+The residuals don't show a curve or pattern, so the linearity assumption holds.
+
+Additionally, the band of residuals around the $y=0$ line seems to be fairly consistent regardless of the value of $x$ (aka `Petal.Length`). So, the second assumption, constant variance for the residuals, holds as well.
+
+Finally, we wish to check for the normality assumption, so let's make a density plot of the residuals:
+```{r}
+length_model %>% augment %>%
+  transmute(Error = .resid) %>%
+  ggplot(aes(Error)) + geom_density(fill = "grey")
+```
+
+Ooh, how deliciously normal! It's safe to say that all three of the fundamental assumptions of linear regression hold for the `Petal.Length` and `Sepal.Length` variables of the `iris` dataset. 
+
+Just to check up on some of the desirable properties of linear regression, let's check for outliers and a wide distribution of `Petal.Length`. As we can see in the scatterplot above, there seems to be a fairly wide distribution of `Petal.Length`, ranging from 1 centimeter to 6.9 centimeters. Furthermore, although there definitely seems to be a cluster of `Petal.Length`'s around 1.5cm, there don't seem to be any notable outliers that we need to evaluate.
+
+Now that we've gotten down the basics of linear regression, including how to use `ggplot2` and `broom` to check for all of its assumptions, let's look at a more general form of linear regression, polynomial regression.
 
 ## Polynomial Regression
+```{r, echo = F}
+nonlinear_dataset <- data.frame(x = rep(seq(0, 10, .25), each = 5)) %>%
+  mutate(y = rnorm(205, (2*x^3- 6*x^2 - 2*x - 14), 20))
+```
+
+Obviously, the linearity assumption of linear regression is very strong, and not all relationships we find in real life will be as strong. For example, consider this illustrative dataset, with a clear nonlinear relationship:
+```{r}
+ggplot(nonlinear_dataset, aes(x,y)) + geom_point() + geom_smooth(method ="lm")
+```
+
+Clearly, if we fit a line to it, it's fundamentally **biased**, or systematically "misses" the true relationship in the data. This type of systematic mistake is called **underfitting**, because our model is not complex enough to capture the patterns in our data. This can be seen even more clearly in the shape of our residual plot:
+```{r}
+linear_model <- lm(nonlinear_dataset, formula = y ~ x)
+linear_model %>% augment %>%
+  ggplot(aes(x, .resid)) + geom_point() + 
+  geom_hline(yintercept = 0, col = "red", linetype = "dashed")
+```
+
+The linearity assumption implies that the residual plot should have no discernable pattern - however, in this case, a clear curve is immediately evident. This is evidence of the strong bias linear regression has for non-linear data. 
+
+Of course, with our human eyes, we can clearly see that this is some sort of quadratic or cubic relationship. If only we could specify that we wanted to fit a quadratic, rather than linear model to our data...
+
+**Polynomial regression** is an immediate extension of linear regression to account for polynomial relationships. If you recall from your theoretical math classes, polynomials are useful because they can arbitrarily approximate most functions. So, with polynomial regression, our model becomes more complex, and therefore more suspectible to random **variations** in our data, but less rigid, therefore able to avoid **bias** a bit better. 
+
+This last point is worth repeating: although increasing model complexity *reduces bias*, it also makes the model more susceptible to *picking up random noise* as genuine structure in the data. Since our data is almost always a sample of our true population, we do not want to overly consider our sample, since what's true for the sample may not be true for the population in general. This phenomenon, the counterpart to bias, is called **variance** because it is a class of error that comes from the *sampling variablity* of the dataset we are training the model on.
+
+To use polynomial regression in R, simply use the `poly` helper function. The syntax for this function is `poly(x, d)`, and its output will be an orthogonal polynomial of degree d, evaluated at the points in `x`. This behavior is much clearly to see in illustration, so lets fit a 2-degree polynomial (aka quadratic) model to our nonlinear data:
+```{r}
+nonlinear_model <- lm(nonlinear_dataset, formula = y ~ poly(x, 2))
+summary(nonlinear_model)
+```
+
+We can of course graph this model using `geom_smooth` by changing the formula for our `lm` in the same fashion:
+```{r}
+nonlinear_dataset %>% ggplot(aes(x, y)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", formula = y ~ x, col = "red") +
+  geom_smooth(method = "lm", formula = y ~ poly(x,2), col = "blue")
+```    
+
+(*NOTE: when using formulas in `geom_smooth`, the formula must always use `y` and `x` as proxy variables for the true variable names*)
+
+Obviously, the blue quadratic of best fit has a lower sum of squared errors than the red linear fit. Let's compare the results of our two models for `nonlinear_dataset`, `linear_model` and `nonlinear_model`, more exactly. Just to make things more interesting, let's use `broom`'s `glance` package to display the differences as a dataframe. We will use `map_dfr` (of the `purrr` package) to apply the `glance` function to both `linear_model` and `nonlinear_model` and then combine them into a single dataframe, then label the rows just to make them easier to read:
+```{r}
+map_dfr(list(linear_model, nonlinear_model), glance) %>%
+  mutate(Model = c("Linear", "Quadratic")) %>%
+  select(Model, everything())
+```
+
+Our quadratic model performs better on every metric, with a higher $R^2$, and a much smaller $\sigma$ (**sigma** is another name for the residual standard error).
+
+Perhaps overzealous with our sucess with the quadratic model, let's try an even more general model, a tenth-degree polynomial.
+```{r}
+nonlinear_dataset %>% ggplot(aes(x, y)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", formula = y ~ x, col = "red", alpha = .6) +
+  geom_smooth(method = "lm", formula = y ~ poly(x,2), col = "blue", alpha = .6) +
+  geom_smooth(method = "lm", formula = y ~ poly(x,10), col = "green", alpha = .6)
+```
+
+It still looks good! In fact, on paper, more complex models will always look better, in terms of $R^2$. 
+
+Let's make a simple function, `generate_poly_glance`, that generates a `glance` dataframe for an $n^{\textit{th}}$-degree polynomial regression model applied to the `nonlinear_dataset`. Then, we use `map_dfr` to bind together all the rows into a single dataframe, and then graph the sum of square errors ($\sigma^2$) and $R^2$ for each model as a function of model complexity:
+```{r}
+generate_poly_glance <- function(degree) {
+  lm(nonlinear_dataset, formula = y ~ poly(x,degree)) %>% glance
+}
+
+models<- map_dfr(1:20, generate_poly_glance, .id = "Model Degree") %>%
+  mutate(`Model Degree` = as.numeric(`Model Degree`),
+         `Sum of Squared Errors` = sigma^2,
+         `R-squared` = r.squared) 
+
+models %>% select(`Model Degree`, `R-squared`, `Sum of Squared Errors`) %>% head
+```
+```{r}
+  ggplot(models, aes(`Model Degree`, `R-squared`)) +
+  geom_point(size = 2) + geom_line(size = 2)
+
+  ggplot(models, aes(`Model Degree`, `Sum of Squared Errors`)) +
+  geom_point(size = 2) + geom_line(size = 2)
+```
+
+Hmm... the `R^2` value seems to just get better and better. In fact, it is a statistical theorem that $R^2$ will always increase with model complexity - one of the reasons $R^2$ is not an effective metric for model fit for complex or high-dimensional data.
+
 
 ## Model Selection with `broom`
 
+The problem with our current method for model evaluation is that we may end up **overfitting** to our data. That is, given that there is some amount of random noise in our data, our complex models may end up getting confused by these errors, interpreting them as literal, but complex, patterns in our data. For example, observe the fit of a 25-degree polynomial to our noisy, quadratic data:
 ```{r}
-diamonds %>% group_by(cut, color) %>% do(lm(., formula = price ~ carat) %>% tidy) %>% filter(term == "carat") %>% ggplot(aes(cut, color, fill = estimate)) + geom_tile() + scale_fill_gradient2()
+ggplot(nonlinear_dataset, aes(x,y)) + geom_point() + geom_smooth(method = "lm", formula = y ~ poly(x,25), size = 2)
 ```
+
+Especially near the ends of our data, we see these perturbations in our model, that are clearly misinterpretations of the noise in our data. How can we decide, then, which polynomial fit is best? 
+
+We need a method that trains a model on only a sample of the data (called the **test set**), and then validates that model on a different sample of the data (the **validation set**). That way, when we evaluate our models, we are seeking to minimize the **validation error**, which is not directly affected by the optimization of the model as it trains on the **training data**. Put another way, polynomial and linear regression will always minimize their error on the **training data**, and then we look to the **validation error** to see how the model performs on new data. After all, **Objective III** concerns *additional data*, so better and better performance on the same training data can very easily transform into *overfitting*, when the model performs really well on *training data* but not so well on new *validation data*.
+
+At the heart of machine learning is **model selection**. Essentially, you try to **tune** a hyperparameter (e.g. the degree of our polynomial regression) by training the data on part of the data, then validating its performance on a different part of the data. 
+
+Let's make a function that trains a model on some of the data in `nonlinear_dataset`, then tests it on other data in `nonlinear_data` to make an entry to dataframe of model errors. We will then graph the sum of square validation error of these models to see which degree we should pick.
+```{r}
+training_set = nonlinear_dataset %>% sample_frac(.4)
+validation_set = setdiff(nonlinear_dataset, training_set)
+
+generate_poly_validation <- function(degree) {
+  lm(training_set, formula = y ~ poly(x,degree)) %>% 
+    augment(newdata = validation_set) %>%
+    summarise(`Sum of Squared Errors (Validation Set)` = sum((y - .fitted)^2)) %>%
+    mutate(`Model Degree` = degree)
+}
+```
+
+Now let's use `mapdfr` again to graph the validation errors of each model:
+```{r}
+model_validations <- map_dfr(1:10, generate_poly_validation)
+ggplot(model_validations, aes(`Model Degree`, `Sum of Squared Errors (Validation Set)`)) +
+  geom_point(size = 2) + geom_line(size = 2)
+```
+
+The one-degree and two-degree (linear and quadratic, respectively) cases have too much error, diminishing the visibility of the other models. Let's "zoom-in" on just the `degree > 2` models by filtering `model_validations` before graphing it:
+```{r}
+model_validations %>% filter(`Model Degree` > 2) %>% 
+  ggplot(aes(`Model Degree`, `Sum of Squared Errors (Validation Set)`)) +
+  geom_point(size = 2) + geom_line(size = 2)
+```
+
+Interestingly, even though one-degree and two-degree polynomial regression performs poorly, using a cubic (`degree = 3`) polynomial model works better than more complex models. So, our validation tells us that the best fit for new data is a third-degree polynomial model, which achieves the best balance between the model bias (**underfitting**) of  simple models and the model variance (**overfitting**) of complex models. This makes sense, since this data secretly arises from a cubic polynomial originally anyway. The tradeoff between simple and complex models is infamously known as the **bias-variance tradeoff** and its role in **model selection** is an essential concept in machine learning.
+
+In more advanced courses, you will learn a more effective method for validation called **cross-validation**. Essentially, cross-validation will conduct a similar validation process to that outlined above, but several times, and then average the results. That way, we get rid of sampling variance in our validation set.
+
+For now though, we've gone through a lot! We've covered the objectives of data science, effective data visualization with `ggplot2`, and R's built-in function for linear and polynomial regression, `lm`, as well as how the `broom` package can be used to turn models into dataframes, and therefore graphs. We've also touched upon some of the essentials of machine learning, like the bias-variance tradeoff, how to do conduct validation, and sum of square errors. 
 
 # Mini-projects
 
@@ -491,8 +639,6 @@ Exploratory Data Analysis (**EDA**) is the process of using summary data and dat
 ## Validation & Elastic Net Regression
 
 Now that you're familiar with graphing with `ggplot2` and model selection with `broom`, try your skills at this fairly advanced graphing exercise with the `mpg` dataset. You will learn a new type of regression, **elastic net regression**, which has not one but two hyperparameters! You will use function definitions to **grid search** hyperparameters, construct a dataframe of various models for predicting the `hwy` of each car with `broom`, and finally graph your validation process with `ggplot2.`
-
-
 
 # Conclusion
 

@@ -368,12 +368,76 @@ ggplot(diamonds) + geom_point(aes(x = cut, y = clarity, alpha = .6), position = 
 </div>
 <div id="linear-regression" class="section level2">
 <h2>Linear Regression</h2>
+<div id="the-linear-regression-model" class="section level3">
+<h3>The Linear Regression Model</h3>
+<p>Prove that, for any simple linear regression with intercept <span class="math inline">\(\hat{\alpha} = \bar{y} - b \bar{x}\)</span>, the sum of the residuals is <span class="math inline">\(\sum{e_i} = 0\)</span>.</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>Use the First Derivative Test to derive the optimal <span class="math inline">\(a^*\)</span> and <span class="math inline">\(b^*\)</span> for the sum of squares objective function.</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+</div>
+<div id="linear-regression-in-r" class="section level3">
+<h3>Linear Regression in R</h3>
+<p>Use <code>lm</code> and <code>summary</code> to characterize the relationship between <code>carat</code> and <code>price</code> in the <code>diamonds</code> dataset. What effect does <code>carat</code> have on <code>price</code>? Also, make a ggplot of this simple linear regression to supplement your response.</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+</div>
+<div id="assumptions-and-limitations-of-linear-regression" class="section level3">
+<h3>Assumptions (and Limitations) of Linear Regression</h3>
+<p>Briefly, what are the assumptions of the linear regression model? How might each be violated?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>Does the relationship between <code>carat</code> and <code>price</code> fit all the assumptions of linear regression? Verify them each graphically.</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+</div>
+<div id="a-brief-detour-broom" class="section level3">
+<h3>A Brief Detour: <code>broom</code></h3>
+<p>In your own words, what does each of <code>tidy</code>, <code>glance</code>, and <code>augment</code> do?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>The <code>do</code> function is a <code>dplyr</code> verb that applies a general process <strong>by group</strong>. Describe the purpose of each line of code in the code chunk below, and in light of the discussion of <code>cut</code>, <code>color</code>, <code>price</code>, and <code>carat</code> in the text, interpret the outputted plot.</p>
+<pre class="r"><code>diamonds %&gt;% 
+  group_by(cut, color) %&gt;% 
+  do(lm(., formula = price ~ carat) %&gt;% tidy) %&gt;% 
+  filter(term == &quot;carat&quot;) %&gt;% 
+  ggplot(aes(cut, color, fill = estimate)) + 
+  geom_tile() + 
+  scale_fill_gradient2()
+## TODO: comment each line ^^^</code></pre>
+</div>
 </div>
 <div id="polynomial-regression" class="section level2">
 <h2>Polynomial Regression</h2>
+<p>In your own words, what is underfitting? What is overfitting? What is the relationship between the two?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>In your own words, what is the relationship between the degree of a polynomial regression model, its complexity, its bias, and its variance?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
 </div>
 <div id="model-selection-with-broom" class="section level2">
 <h2>Model Selection with <code>broom</code></h2>
+<p>The code chunk in the text for simple validation of polynomial regression is a lot to look at at once, but breaks into parts easily. Describe the purpose of each line of code in the code chunk below.</p>
+<pre class="r"><code>training_set = nonlinear_dataset %&gt;% sample_frac(.6)
+validation_set = setdiff(nonlinear_dataset, training_set)
+
+generate_poly_validation &lt;- function(degree) {
+  lm(training_set, formula = y ~ poly(x,degree)) %&gt;% 
+    augment(newdata = validation_set) %&gt;%
+    summarise(`Sum of Squared Error (Validation Set)` = sum((y - .fitted)^2)) %&gt;%
+    mutate(`Model Degree` = degree)
+}
+## TODO: comment each line ^^^</code></pre>
 </div>
 </div>
 <div id="mini-projects" class="section level1">
