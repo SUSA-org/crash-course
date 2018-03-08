@@ -216,55 +216,252 @@ div.tocify {
 
 <h1 class="title toc-ignore">Introduction to R</h1>
 <h3 class="subtitle"><em>Part 3: Data Visualization and Data Analysis</em></h3>
-<h4 class="author"><em>Hosted by and maintained by the <a href="https://susa.berkeley.edu">Statistics Undergraduate Students Association (SUSA)</a>. Originally authored by Arun Ramamurthy.</em></h4>
+<h4 class="author"><em>Hosted by and maintained by the <a href="https://susa.berkeley.edu">Statistics Undergraduate Students Association (SUSA)</a>. Originally authored by <a href="mailto:contact@arun.run">Arun Ramamurthy</a>.</em></h4>
 
 </div>
 
 
 <div id="about-this-document" class="section level1">
 <h1>About this Document</h1>
-<p>This is the associated workbook for the <a href="r2.html">r3</a> tutorial on data visualization and analysis in R. Using RStudio, replace each <code>&gt; TODO</code> with a code chunk that answers the associated problem. Then, run the chunk to verify your answers. Some problems require a non-code answer, so simply replace <code>&gt; TODO</code> with the correct textual answer.</p>
+<p>This is the associated workbook for the <a href="r3.html">r3</a> tutorial on data visualization and analysis in R. Unlike the previous workshops, this workbook will not be problem set, but project-focused. After all, graphing is fairly subjective, and a creative process requires time trying various approaches to the same problem.</p>
+<p>Using RStudio, replace each <code>&gt; TODO</code> with a code chunk that answers the associated problem. Then, run the chunk to verify your answers. Some problems require a non-code answer, so simply replace <code>&gt; TODO</code> with the correct textual answer.</p>
 </div>
 <div id="data-visualization-with-ggplot2" class="section level1">
 <h1>Data Visualization with <code>ggplot2</code></h1>
 <div id="tips-for-data-viusalization" class="section level2">
 <h2>Tips for Data Viusalization</h2>
+<p>What does “tell a story” mean to you? How can you apply your storytelling skills to data visualization?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>Argue for a counter-example usecase for one of the tips listed in this tutorial. When would it actually be a good idea to do the reverse?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>In the tutorial, I advise that you stay away from double-axis graphs. Why? In what way can a data scientist intentionally mislead with them?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+</div>
+<div id="vocabulary-for-data-visualization" class="section level2">
+<h2>Vocabulary for Data Visualization</h2>
+<p>Briefly define the following terms in your own words:<br />
+- <em>geom</em><br />
+- <em>aesthetic</em><br />
+- <em>glyph</em><br />
+- <em>layer</em></p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
 </div>
 <div id="abstractions-of-data-visualization" class="section level2">
 <h2>Abstractions of Data Visualization</h2>
+<p>Write the general workflow for constructing a ggplot, either with a code recipe, description, or story analogy.</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
 </div>
-<div id="ggplot2-basics" class="section level2">
-<h2><code>ggplot2</code> Basics</h2>
+<div id="ggplot2" class="section level2">
+<h2><code>ggplot2</code></h2>
+<div id="ggplot-aes" class="section level3">
+<h3><code>ggplot</code>, <code>aes</code></h3>
+<p>In your own words, describe the purpose and use of the <code>aes</code> function.</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p><code>TRUE</code>/<code>FALSE</code>: The following command is equivalent to the example in this section:</p>
+<pre class="r"><code>iris %&gt;% ggplot(aes(y = Sepal.Length, x = ))</code></pre>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>Without running it in R first, draw or describe a quick sketch of the output of the following command:</p>
+<pre class="r"><code>ggplot(iris, aes(Species))</code></pre>
+<blockquote>
+<p>TODO</p>
+</blockquote>
 </div>
-<div id="modeling-with-ggplot2" class="section level2">
-<h2>Modeling with <code>ggplot2</code></h2>
+</div>
+<div id="geom_" class="section level2">
+<h2><code>geom_*</code></h2>
+<div id="geom_point-geom_jitter" class="section level3">
+<h3><code>geom_point</code>, <code>geom_jitter</code></h3>
+<p>Without running them in R first, what are the differences between the outputs of the following lines of code? Which achieves the desired effect?</p>
+<pre class="r"><code>ggplot(diamonds, aes(cut, clarity, alpha = .6), position = &quot;jitter&quot;) + geom_point()
+ggplot(diamonds, aes(x = cut, y = clarity)) + geom_point(alpha = .6, position = &quot;jitter&quot;)
+ggplot(diamonds) + geom_point(aes(x = cut, y = clarity, alpha = .6), position = &quot;jitter&quot;)</code></pre>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<div id="geom_histogram-geom_areastat-bin-geom_density" class="section level4">
+<h4><code>geom_histogram</code>, <code>geom_area(stat = &quot;bin&quot;)</code>, <code>geom_density</code></h4>
+<p>Briefly, what are the differences between histograms, area plots, and density plots?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>How can you use the <code>color</code> specification to turn off the black edge of the following density plot?</p>
+<pre class="r"><code>iris %&gt;% ggplot(aes(Petal.Length)) + geom_density(fill = &quot;orchid&quot;)
+### TODO: CHANGE THIS ^^^</code></pre>
+</div>
+<div id="geom_bar-geom_col" class="section level4">
+<h4><code>geom_bar</code>, <code>geom_col</code></h4>
+<p>Briefly, what is the difference between <code>geom_bar</code> and <code>geom_col</code>?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>Comment in a brief explanation next to each line of the following code chunk:</p>
+<pre class="r"><code>mpg %&gt;% group_by(manufacturer) %&gt;%
+  summarise(`Average HWY Fuel Economy` = mean(hwy)) %&gt;%
+  mutate(manufacturer = factor(manufacturer,
+                               levels = manufacturer[order(`Average HWY Fuel Economy`)],
+                               ordered = T)) %&gt;%
+  ggplot(aes(manufacturer, `Average HWY Fuel Economy`, fill = manufacturer)) + 
+  geom_col()</code></pre>
+</div>
+<div id="geom_line-geom_smooth" class="section level4">
+<h4><code>geom_line</code>, <code>geom_smooth</code></h4>
+<p>What does <code>expand_limits</code> do? What is its syntax?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>Describe the <code>geom_smooth</code> layer. What are some of its arguments?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+</div>
+</div>
+<div id="facet_wrap-facet_grid" class="section level3">
+<h3><code>facet_wrap</code>, <code>facet_grid</code></h3>
+<p>What is facetting? What are some use-cases you can think of for it?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>What is the difference between <code>facet_wrap</code> and <code>facet_grid</code>, in terms of their purpose, syntax, and behavior?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+</div>
+<div id="labs-theme-scale__" class="section level3">
+<h3><code>labs</code>, <code>theme</code>, <code>scale_*_*</code></h3>
+<p>How do you add axis and plot titles to a graph?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>Read the <code>theme</code> documentation. Pick some element in it, and describe what it corresponds to in a plot.</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>Pick one of the linked packages or guides for colors in <code>ggplot2</code>. What was one feature you liked about it?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+</div>
 </div>
 </div>
 <div id="data-analysis" class="section level1">
 <h1>Data Analysis</h1>
 <div id="what-is-regression" class="section level2">
 <h2>What is Regression?</h2>
+<p>In your own words, what is the difference between regression and classification?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
 </div>
 <div id="linear-regression" class="section level2">
 <h2>Linear Regression</h2>
+<div id="the-linear-regression-model" class="section level3">
+<h3>The Linear Regression Model</h3>
+<p>Prove that, for any simple linear regression with intercept <span class="math inline">\(\hat{\alpha} = \bar{y} - b \bar{x}\)</span>, the sum of the residuals is <span class="math inline">\(\sum{e_i} = 0\)</span>.</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>Use the First Derivative Test to derive the optimal <span class="math inline">\(a^*\)</span> and <span class="math inline">\(b^*\)</span> for the sum of squares objective function.</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+</div>
+<div id="linear-regression-in-r" class="section level3">
+<h3>Linear Regression in R</h3>
+<p>Use <code>lm</code> and <code>summary</code> to characterize the relationship between <code>carat</code> and <code>price</code> in the <code>diamonds</code> dataset. What effect does <code>carat</code> have on <code>price</code>? Also, make a ggplot of this simple linear regression to supplement your response.</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+</div>
+<div id="assumptions-and-limitations-of-linear-regression" class="section level3">
+<h3>Assumptions (and Limitations) of Linear Regression</h3>
+<p>Briefly, what are the assumptions of the linear regression model? How might each be violated?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>Does the relationship between <code>carat</code> and <code>price</code> fit all the assumptions of linear regression? Verify them each graphically.</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+</div>
+<div id="a-brief-detour-broom" class="section level3">
+<h3>A Brief Detour: <code>broom</code></h3>
+<p>In your own words, what does each of <code>tidy</code>, <code>glance</code>, and <code>augment</code> do?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>The <code>do</code> function is a <code>dplyr</code> verb that applies a general process <strong>by group</strong>. Describe the purpose of each line of code in the code chunk below, and in light of the discussion of <code>cut</code>, <code>color</code>, <code>price</code>, and <code>carat</code> in the text, interpret the outputted plot.</p>
+<pre class="r"><code>diamonds %&gt;% 
+  group_by(cut, color) %&gt;% 
+  do(lm(., formula = price ~ carat) %&gt;% tidy) %&gt;% 
+  filter(term == &quot;carat&quot;) %&gt;% 
+  ggplot(aes(cut, color, fill = estimate)) + 
+  geom_tile() + 
+  scale_fill_gradient2()
+## TODO: comment each line ^^^</code></pre>
+</div>
 </div>
 <div id="polynomial-regression" class="section level2">
 <h2>Polynomial Regression</h2>
+<p>In your own words, what is underfitting? What is overfitting? What is the relationship between the two?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
+<p>In your own words, what is the relationship between the degree of a polynomial regression model, its complexity, its bias, and its variance?</p>
+<blockquote>
+<p>TODO</p>
+</blockquote>
 </div>
 <div id="model-selection-with-broom" class="section level2">
 <h2>Model Selection with <code>broom</code></h2>
+<p>The code chunk in the text for simple validation of polynomial regression is a lot to look at at once, but breaks into parts easily. Describe the purpose of each line of code in the code chunk below.</p>
+<pre class="r"><code>training_set = nonlinear_dataset %&gt;% sample_frac(.6)
+validation_set = setdiff(nonlinear_dataset, training_set)
+
+generate_poly_validation &lt;- function(degree) {
+  lm(training_set, formula = y ~ poly(x,degree)) %&gt;% 
+    augment(newdata = validation_set) %&gt;%
+    summarise(`Sum of Squared Error (Validation Set)` = sum((y - .fitted)^2)) %&gt;%
+    mutate(`Model Degree` = degree)
+}
+## TODO: comment each line ^^^</code></pre>
 </div>
 </div>
 <div id="mini-projects" class="section level1">
 <h1>Mini-projects</h1>
-<p>The best way to get better at data manipulation, data import, and data cleaning is by practicing with wild datasets! These two miniature data science projects are designed to give you experience cleaning and tidying datasets with <code>dplyr</code> and <code>tidyr</code>.</p>
-<div id="cleaning-the-articles-dataset" class="section level2">
-<h2>Cleaning the <code>articles</code> dataset</h2>
-<p>In some spreadsheet software, view <code>data/wellcome_apce_articles.csv</code>. Read and clean this dataset. You will need to use heavily use <code>readr</code>, <code>dplyr</code>, <code>tidyr</code>, and even <code>stringr</code> to accomplish this. For tips, review all the functions in <a href="r2.html"><code>r2</code></a>. Feel free to email <code>contact@arun.run</code> with any questions or for hints.</p>
+<p>There are two mini-projects for this tutorial, designed to give you practice with EDA and more advanced model selection.</p>
+<div id="exploratory-data-analysis" class="section level2">
+<h2>Exploratory Data Analysis</h2>
+<p>Exploratory Data Analysis (<strong>EDA</strong>) is the process of using summary data and data visualization to get a sense of the underlying structures within your data <em>before</em> analysis. It’s a fairly creative process, and like most creative processes, the best way to learn how to do EDA effectively is with practice. In this mini-project, you will explore either either the <code>diamonds</code> or the <code>mpg</code> dataset, noting any unusual relationships or outliers. For tips, review all the functions in <a href="r3.html"><code>r3</code></a>. Feel free to email <code>contact@arun.run</code> with any questions or for hints.</p>
+<div id="i." class="section level3">
+<h3>I.</h3>
+<p>Pick either <code>diamonds</code>, a dataset of over fifty-thousand diamonds, or <code>mpg</code>, a dataset of over two-hundred cars. Use <code>str</code>, <code>?</code> and <code>View</code> to look at them in tabular form. What does each column represent? What does each row represent?</p>
 </div>
-<div id="tidying-the-plant-ants-dataset" class="section level2">
-<h2>Tidying the <code>plant-ants</code> dataset</h2>
-<p>In some spreadsheet software, view <code>data/plant-ants.xls</code>. Read and clean this dataset. Additionally, put it into a <code>tidy</code> format. You will need to use heavily use <code>readxl</code>, <code>dplyr</code>, <code>tidyr</code>. For tips, review all the functions in <a href="r2.html"><code>r2</code></a>. Feel free to email <code>contact@arun.run</code> with any questions or for hints.</p>
+<div id="section" class="section level3">
+<h3>2.</h3>
+<p>Now that you’ve familiarized yourself with the dataset, make three graphs, each revealing some sort of pattern, trend, or relationship in the dataset. Consult the <a href="https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf">ggplot2 Cheatsheet</a> for ideas on what kinds of geoms you can use to visualize various aspects of the data.</p>
+</div>
+<div id="section-1" class="section level3">
+<h3>3.</h3>
+<p>For one of the trends you found in your data, use <code>geom_smooth</code>, <code>geom_smooth(method = &quot;lm&quot;)</code>, <code>lm</code>, and <code>summary</code> to interpret the trend. Write a couple of short sentences interpreting and offering plausible explanation for the trends.</p>
+</div>
+</div>
+<div id="validation-elastic-net-regression" class="section level2">
+<h2>Validation &amp; Elastic Net Regression</h2>
+<p>Now that you’re familiar with graphing with <code>ggplot2</code> and model selection with <code>broom</code>, try your skills at this fairly advanced graphing exercise with the <code>mpg</code> dataset. You will learn a new type of regression, <strong>elastic net regression</strong>, which has not one but two hyperparameters! You will use function definitions to <strong>grid search</strong> hyperparameters, construct a dataframe of various models for predicting the <code>mpg</code> of each car with <code>broom</code>, and finally graph your validation process with <code>ggplot2.</code> For tips, review all the functions in <a href="r3.html"><code>r3</code></a>. Feel free to email <code>contact@arun.run</code> with any questions or for hints.</p>
 </div>
 </div>
 
