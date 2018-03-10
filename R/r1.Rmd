@@ -102,9 +102,9 @@ print(`5 and a space`)
 
 An **atomic object** in R is an object or list of objects that are both **flat** (cannot be reduced or opened further) and of the same **type**. 
 
-There are three **types** in R - we will be going over their properties individually, before discussing **vectors**, which are collections of atomic objects. To check the type of an object, use the `class` function:
+There are three **types** in R - we will be going over their properties individually, before discussing **vectors**, which are collections of atomic objects. To check the type of an object, use the `mode` function:
 ```{r}
-class(1.23)
+mode(1.23)
 ```
 
 

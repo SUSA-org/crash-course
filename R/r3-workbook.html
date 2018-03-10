@@ -445,7 +445,7 @@ generate_poly_validation &lt;- function(degree) {
 <p>There are two mini-projects for this tutorial, designed to give you practice with EDA and more advanced model selection.</p>
 <div id="exploratory-data-analysis" class="section level2">
 <h2>Exploratory Data Analysis</h2>
-<p>Exploratory Data Analysis (<strong>EDA</strong>) is the process of using summary data and data visualization to get a sense of the underlying structures within your data <em>before</em> analysis. It’s a fairly creative process, and like most creative processes, the best way to learn how to do EDA effectively is with practice. In this mini-project, you will explore either either the <code>diamonds</code> or the <code>mpg</code> dataset, noting any unusual relationships or outliers. For tips, review all the functions in <a href="r3.html"><code>r3</code></a>. Feel free to email <code>contact@arun.run</code> with any questions or for hints.</p>
+<p>Exploratory Data Analysis (<strong>EDA</strong>) is the process of using summary data and data visualization to get a sense of the underlying structures within your data <em>before</em> analysis. It’s a fairly creative process, and like most creative processes, the best way to learn how to do EDA effectively is with practice. In this mini-project, you will explore either either the <code>diamonds</code> or the <code>mpg</code> dataset, noting any unusual relationships or outliers. For tips, review all the functions in <a href="r3.html"><code>r3</code></a>. Feel free to email <a href="mailto:contact@arun.run"><code>contact@arun.run</code></a> with any questions or for hints.</p>
 <div id="i." class="section level3">
 <h3>I.</h3>
 <p>Pick either <code>diamonds</code>, a dataset of over fifty-thousand diamonds, or <code>mpg</code>, a dataset of over two-hundred cars. Use <code>str</code>, <code>?</code> and <code>View</code> to look at them in tabular form. What does each column represent? What does each row represent?</p>
@@ -461,7 +461,27 @@ generate_poly_validation &lt;- function(degree) {
 </div>
 <div id="validation-elastic-net-regression" class="section level2">
 <h2>Validation &amp; Elastic Net Regression</h2>
-<p>Now that you’re familiar with graphing with <code>ggplot2</code> and model selection with <code>broom</code>, try your skills at this fairly advanced graphing exercise with the <code>mpg</code> dataset. You will learn a new type of regression, <strong>elastic net regression</strong>, which has not one but two hyperparameters! You will use function definitions to <strong>grid search</strong> hyperparameters, construct a dataframe of various models for predicting the <code>mpg</code> of each car with <code>broom</code>, and finally graph your validation process with <code>ggplot2.</code> For tips, review all the functions in <a href="r3.html"><code>r3</code></a>. Feel free to email <code>contact@arun.run</code> with any questions or for hints.</p>
+<p>Now that you’re familiar with graphing with <code>ggplot2</code> and model selection with <code>broom</code>, try your skills at this fairly advanced graphing exercise with the <code>mpg</code> dataset. You will learn a new type of regression, <strong>elastic net regression</strong>, which has a continuous hyperparameter for you to tune! You will use function definitions to <strong>grid search</strong> hyperparameters, construct a dataframe of various models for predicting the <code>hwy</code> of each car with <code>broom</code>, and finally graph your validation process with <code>ggplot2.</code> For tips, review all the functions in <a href="r3.html"><code>r3</code></a>. Feel free to email <a href="mailto:contact@arun.run"><code>contact@arun.run</code></a> with any questions or for hints.</p>
+<div id="section-2" class="section level3">
+<h3>1.</h3>
+<p>Review the <a href="r3.html#elastic-net-regression">Elastic Net Regression</a> section of <a href="r3.html"><code>r3</code></a>. Ensure you understand the code in the <a href="r3.html#polyomial-regression">Polynomial Regression</a> which generates rows of a dataframe displaying the <strong>validation accuracy</strong> of different models on the same <strong>training set</strong> and <strong>validation set</strong>, as well as the <strong>bias-variance tradeoff</strong> and how it pertains to model selection. Feel free to email <a href="mailto:contact@arun.run"><code>contact@arun.run</code></a> with any questions or for hints about the concepts or code.</p>
+</div>
+<div id="section-3" class="section level3">
+<h3>2.</h3>
+<p>Write a code chunk that first splits the <code>mpg</code> dataset into a <strong>training set</strong> (randomly selected <span class="math inline">\(70\%\)</span> of your data) and <strong>validation set</strong> (the other <span class="math inline">\(30\%\)</span>.)</p>
+</div>
+<div id="section-4" class="section level3">
+<h3>3.</h3>
+<p>Make a function called <code>generate_elastic_model(alpha)</code>, which generates an elastic net model trained on the training set, for some alpha. The output of the function should a <code>cv.glmnet</code> model. The response variable is <code>hwy</code>, and you can use any number of the remaining 10 variables as predictors.</p>
+</div>
+<div id="section-5" class="section level3">
+<h3>4.</h3>
+<p>Make a function called <code>validate_elastic_model(model)</code>, which returns the RSS (residual sum of squares) for a given <code>cv.glmnet</code> model of some alpha.</p>
+</div>
+<div id="section-6" class="section level3">
+<h3>5.</h3>
+<p>Using <code>purrr</code> and other <code>tidyverse</code> libraries, create a ggplot with <code>alpha</code> on the x-axis and <code>RSS</code> on the y-axis. What is the optimal alpha for using an elastic net model to predict <code>hwy</code> given your predictors?</p>
+</div>
 </div>
 </div>
 

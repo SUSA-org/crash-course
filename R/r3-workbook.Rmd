@@ -235,7 +235,7 @@ There are two mini-projects for this tutorial, designed to give you practice wit
 
 ## Exploratory Data Analysis
 
-Exploratory Data Analysis (**EDA**) is the process of using summary data and data visualization to get a sense of the underlying structures within your data *before* analysis. It's a fairly creative process, and like most creative processes, the best way to learn how to do EDA effectively is with practice. In this mini-project, you will explore either either the `diamonds` or the `mpg` dataset, noting any unusual relationships or outliers. For tips, review all the functions in [`r3`](r3.html). Feel free to email `contact@arun.run` with any questions or for hints.
+Exploratory Data Analysis (**EDA**) is the process of using summary data and data visualization to get a sense of the underlying structures within your data *before* analysis. It's a fairly creative process, and like most creative processes, the best way to learn how to do EDA effectively is with practice. In this mini-project, you will explore either either the `diamonds` or the `mpg` dataset, noting any unusual relationships or outliers. For tips, review all the functions in [`r3`](r3.html). Feel free to email [`contact@arun.run`](mailto:contact@arun.run) with any questions or for hints.
 
 ### I.
 
@@ -251,4 +251,25 @@ For one of the trends you found in your data, use `geom_smooth`, `geom_smooth(me
 
 ## Validation & Elastic Net Regression
 
-Now that you're familiar with graphing with `ggplot2` and model selection with `broom`, try your skills at this fairly advanced graphing exercise with the `mpg` dataset. You will learn a new type of regression, **elastic net regression**, which has not one but two hyperparameters! You will use function definitions to **grid search** hyperparameters, construct a dataframe of various models for predicting the `mpg` of each car with `broom`, and finally graph your validation process with `ggplot2.` For tips, review all the functions in [`r3`](r3.html). Feel free to email `contact@arun.run` with any questions or for hints.
+Now that you're familiar with graphing with `ggplot2` and model selection with `broom`, try your skills at this fairly advanced graphing exercise with the `mpg` dataset. You will learn a new type of regression, **elastic net regression**, which has a continuous hyperparameter for you to tune! You will use function definitions to **grid search** hyperparameters, construct a dataframe of various models for predicting the `hwy` of each car with `broom`, and finally graph your validation process with `ggplot2.` For tips, review all the functions in [`r3`](r3.html). Feel free to email [`contact@arun.run`](mailto:contact@arun.run) with any questions or for hints.
+
+### 1.
+
+Review the [Elastic Net Regression](r3.html#elastic-net-regression) section of [`r3`](r3.html). Ensure you understand the code in the [Polynomial Regression](r3.html#polyomial-regression) which generates rows of a dataframe displaying the **validation accuracy** of different models on the same **training set** and **validation set**, as well as the **bias-variance tradeoff** and how it pertains to model selection. Feel free to email [`contact@arun.run`](mailto:contact@arun.run) with any questions or for hints about the concepts or code.
+
+### 2. 
+
+Write a code chunk that first splits the `mpg` dataset into a **training set** (randomly selected $70\%$ of your data) and **validation set** (the other $30\%$.)
+
+### 3.
+
+Make a function called `generate_elastic_model(alpha)`, which generates an elastic net model trained on the training set, for some alpha. The output of the function should a `cv.glmnet` model. The response variable is `hwy`, and you can use any number of the remaining 10 variables as predictors.
+
+### 4.
+
+Make a function called `validate_elastic_model(model)`, which returns the RSS (residual sum of squares) for a given `cv.glmnet` model of some alpha. 
+
+### 5.
+
+Using `purrr` and other `tidyverse` libraries, create a ggplot with `alpha` on the x-axis and `RSS` on the y-axis. What is the optimal alpha for using an elastic net model to predict `hwy` given your predictors?
+

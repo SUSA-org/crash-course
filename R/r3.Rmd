@@ -12,7 +12,7 @@ output:
 
 
 ```{r, echo = F, message = F, warning = F}
-library(tidyverse);library(magrittr);library(ggplot2);library(anytime);library(broom)
+library(tidyverse);library(magrittr);library(ggplot2);library(anytime);library(broom);library(glmnet);library(glmnetUtils)
 ```
 
 # Introduction
@@ -399,7 +399,7 @@ For now, let's quickly review **simple regression**, which the regression of a s
 
 But how do we determine the fit/accuracy of a given simple linear regression model on our data? We need some sort of **objective function** that rates how well accurate our model is. Usually, the objective function is some rating of the error in our model - minimizing this objective function will then yield the most optimal model.
 
-One naive approach is to minimize $z_0(a, b) = \sum e_i = \sum (y_i - \hat{y_i})$, or the sum of all the errors our model $y_i$ has with the true $y$ in the data. As it turns out, this is not an effective metric for a variety of reasons - in fact, for any linear regression that passes through the mean of our dataset, $(\bar{x}, \bar{y})$, $z_0(a,b) = 0$, regardless of $b$. Instead, we will use the $sum of squares$ method: $z(a,b) = \sum(e_i)^2 = \sum (y_i - \hat{y_i})^2 = \sum (y_i - a - bx)^2$
+One naive approach is to minimize $z_0(a, b) = \sum e_i = \sum (y_i - \hat{y_i})$, or the sum of all the **residuals** (errors) our model $y_i$ has with the true $y$ in the data. As it turns out, this is not an effective metric for a variety of reasons, and positive residuals may cancel out negative ones - in fact, for any linear regression that passes through the mean of our dataset, $(\bar{x}, \bar{y})$, $z_0(a,b) = 0$, regardless of $b$. Instead, we will use the **sum of squares** method: $z(a,b) = \sum(e_i)^2 = \sum (y_i - \hat{y_i})^2 = \sum (y_i - a - bx)^2$. This value is known as the **residual sum of squares** (RSS). 
 
 If you were to use a technique like the First Derivative Test to find the optimal values of $a^* = \hat{\alpha}$ and $b^* = \hat{\beta}$, you would find:
 $ \hat{\alpha} = \bar{y} - \hat{\beta} \bar{x} $
@@ -409,9 +409,9 @@ The value for $\hat{\alpha}$ necessarily forces the line to always pass through 
 
 ### Linear Regression in R
 
-Of course, although all of this math is important for understanding of the linear regression model, in practice, R will do it all for you! Simply use the base R function, `lm`. `lm` uses a **formula** syntax, where the reponse variable is on the left and the explanatory variable(s) are on the right: `Y ~ X1 + X2 + X3 ...`. The complete function sytax is `lm(data, formula)`.
+Of course, although all of this math is important for understanding the linear regression model, in practice, R will do it all for you! Simply use the base R function, `lm`. `lm` uses a **formula** syntax, where the reponse variable is on the left and the explanatory variable(s) are on the right: `Y ~ X1 + X2 + X3 ...`. Alternatively, you can simply request all the explanatory variables with `Y ~ .`, where `Y` is the response variable column in your dataframe.
 
-Let's use linear regression to understand the relationship between petal lengths and sepal lengths in the `iris` dataset:
+The complete function sytax is `lm(data, formula)`. Let's use linear regression to understand the relationship between petal lengths and sepal lengths in the `iris` dataset:
 ```{r}
 length_model <- lm(data = iris, formula = Sepal.Length ~ Petal.Length)
 print(length_model)
@@ -419,7 +419,7 @@ print(length_model)
 
 The output of the `lm` function can be read as follows: for every centimeter increase in `Petal.Length`, `Sepal.Lengths` increases by an average of 0.4089 centimeters. For a theoretical flower with a `Petal.Length` of zero, the `Sepal.Length` would hypothetically be 4.3066.
 
-To get even more information about the model you created, like its squared error `z`, or the $R^2$ (how much of the total variation in $Y$ is explained by our model $\hat{Y}$?), you can call `summary` on your model:
+To get even more information about the model you created, like its **residual standard error**, $\sigma = \sqrt{\frac{\textit{RSS}}{n-k-1}}$), or the $R^2$ (how much of the total variation in $Y$ is explained by our model $\hat{Y}$?), you can call `summary` on your model:
 ```{r}
 summary(length_model)
 ```
@@ -497,8 +497,8 @@ Now that we've gotten down the basics of linear regression, including how to use
 
 ## Polynomial Regression
 ```{r, echo = F}
-nonlinear_dataset <- data.frame(x = rep(seq(0, 10, .25), each = 5)) %>%
-  mutate(y = rnorm(205, (2*x^3- 6*x^2 - 2*x - 14), 20))
+nonlinear_dataset <- data.frame(x = rep(seq(-5, 10, .25), each = 5)) %>%
+  mutate(y = rnorm(305, (2*x^3- 6*x^2 - 2*x - 14)/10, 10))
 ```
 
 Obviously, the linearity assumption of linear regression is very strong, and not all relationships we find in real life will be as strong. For example, consider this illustrative dataset, with a clear nonlinear relationship:
@@ -516,9 +516,9 @@ linear_model %>% augment %>%
 
 The linearity assumption implies that the residual plot should have no discernable pattern - however, in this case, a clear curve is immediately evident. This is evidence of the strong bias linear regression has for non-linear data. 
 
-Of course, with our human eyes, we can clearly see that this is some sort of quadratic or cubic relationship. If only we could specify that we wanted to fit a quadratic, rather than linear model to our data...
+Of course, with our human eyes, we can clearly see that this is some sort of quadratic or cubic relationship. If only we could specify that we wanted to fit a polynomial, rather than linear model to our data...
 
-**Polynomial regression** is an immediate extension of linear regression to account for polynomial relationships. If you recall from your theoretical math classes, polynomials are useful because they can arbitrarily approximate most functions. So, with polynomial regression, our model becomes more complex, and therefore more suspectible to random **variations** in our data, but less rigid, therefore able to avoid **bias** a bit better. 
+**Polynomial regression** is an immediate extension of linear regression to account for polynomial relationships. If you recall from your theoretical math classes, polynomials are useful because they can approximate most functions arbitrarily well. So, with polynomial regression, our model becomes more complex, and therefore more suspectible to random **variations** in our data, but less rigid, therefore able to avoid **bias** a bit better. 
 
 This last point is worth repeating: although increasing model complexity *reduces bias*, it also makes the model more susceptible to *picking up random noise* as genuine structure in the data. Since our data is almost always a sample of our true population, we do not want to overly consider our sample, since what's true for the sample may not be true for the population in general. This phenomenon, the counterpart to bias, is called **variance** because it is a class of error that comes from the *sampling variablity* of the dataset we are training the model on.
 
@@ -545,7 +545,7 @@ map_dfr(list(linear_model, nonlinear_model), glance) %>%
   select(Model, everything())
 ```
 
-Our quadratic model performs better on every metric, with a higher $R^2$, and a much smaller $\sigma$ (**sigma** is another name for the residual standard error).
+Our quadratic model performs better on every metric, with a higher $R^2$, and a smaller $\sigma$ (**sigma** is another name for the residual standard error).
 
 Perhaps overzealous with our sucess with the quadratic model, let's try an even more general model, a tenth-degree polynomial.
 ```{r}
@@ -558,7 +558,7 @@ nonlinear_dataset %>% ggplot(aes(x, y)) +
 
 It still looks good! In fact, on paper, more complex models will always look better, in terms of $R^2$. 
 
-Let's make a simple function, `generate_poly_glance`, that generates a `glance` dataframe for an $n^{\textit{th}}$-degree polynomial regression model applied to the `nonlinear_dataset`. Then, we use `map_dfr` to bind together all the rows into a single dataframe, and then graph the sum of square errors ($\sigma^2$) and $R^2$ for each model as a function of model complexity:
+Let's make a simple function, `generate_poly_glance`, that generates a `glance` dataframe for an $n^{\textit{th}}$-degree polynomial regression model applied to the `nonlinear_dataset`. Then, we use `map_dfr` to bind together all the rows into a single dataframe, and then graph the $\textit{RSS}$ ($\sigma^2(n-k-1)$) and $R^2$ for each model as a function of model complexity:
 ```{r}
 generate_poly_glance <- function(degree) {
   lm(nonlinear_dataset, formula = y ~ poly(x,degree)) %>% glance
@@ -566,20 +566,20 @@ generate_poly_glance <- function(degree) {
 
 models<- map_dfr(1:20, generate_poly_glance, .id = "Model Degree") %>%
   mutate(`Model Degree` = as.numeric(`Model Degree`),
-         `Sum of Squared Errors` = sigma^2,
+         `Residual Sum of Squares` = sigma^2 * (nrow(nonlinear_dataset) - 2),
          `R-squared` = r.squared) 
 
-models %>% select(`Model Degree`, `R-squared`, `Sum of Squared Errors`) %>% head
+models %>% select(`Model Degree`, `R-squared`, `Residual Sum of Squares`) %>% head(10)
 ```
 ```{r}
   ggplot(models, aes(`Model Degree`, `R-squared`)) +
-  geom_point(size = 2) + geom_line(size = 2)
+  geom_point(size = 2) + geom_line(size = 2) 
 
-  ggplot(models, aes(`Model Degree`, `Sum of Squared Errors`)) +
-  geom_point(size = 2) + geom_line(size = 2)
+  ggplot(models, aes(`Model Degree`, `Residual Sum of Squares`)) +
+  geom_point(size = 2) + geom_line(size = 2) + scale_y_log10()
 ```
 
-Hmm... the `R^2` value seems to just get better and better. In fact, it is a statistical theorem that $R^2$ will always increase with model complexity - one of the reasons $R^2$ is not an effective metric for model fit for complex or high-dimensional data.
+Hmm... the `R^2` value seems to just get better and better. In fact, it is a statistical theorem that $R^2$ will always increase with model complexity - one of the reasons $R^2$ is not an effective metric for model fit for complex or high-dimensional data. In fact, a metric called *Adjusted* $R^2$ was developed to adjust the $R^2$ to resist arbitrary inflation from adding more and more variables.
 
 
 ## Model Selection with `broom`
@@ -593,7 +593,7 @@ Especially near the ends of our data, we see these perturbations in our model, t
 
 We need a method that trains a model on only a sample of the data (called the **test set**), and then validates that model on a different sample of the data (the **validation set**). That way, when we evaluate our models, we are seeking to minimize the **validation error**, which is not directly affected by the optimization of the model as it trains on the **training data**. Put another way, polynomial and linear regression will always minimize their error on the **training data**, and then we look to the **validation error** to see how the model performs on new data. After all, **Objective III** concerns *additional data*, so better and better performance on the same training data can very easily transform into *overfitting*, when the model performs really well on *training data* but not so well on new *validation data*.
 
-At the heart of machine learning is **model selection**. Essentially, you try to **tune** a hyperparameter (e.g. the degree of our polynomial regression) by training the data on part of the data, then validating its performance on a different part of the data. 
+At the heart of machine learning is **model selection**. Essentially, you try to **tune** a hyperparameter (e.g. the degree of our polynomial regression) by training the data on part of the data, then validating its performance on a different part of the data. A **hyperparameter** is simply a paramater (like $\alpha$ or $\beta$), but it determines which *family* of model you're using - in this case, which degree polynomial our model is.
 
 Let's make a function that trains a model on some of the data in `nonlinear_dataset`, then tests it on other data in `nonlinear_data` to make an entry to dataframe of model errors. We will then graph the sum of square validation error of these models to see which degree we should pick.
 ```{r}
@@ -603,34 +603,37 @@ validation_set = setdiff(nonlinear_dataset, training_set)
 generate_poly_validation <- function(degree) {
   lm(training_set, formula = y ~ poly(x,degree)) %>% 
     augment(newdata = validation_set) %>%
-    summarise(`Sum of Squared Errors (Validation Set)` = sum((y - .fitted)^2)) %>%
+    summarise(`Residual Sum of Squares (Validation Set)` = sum((y - .fitted)^2)) %>%
     mutate(`Model Degree` = degree)
 }
 ```
 
 Now let's use `mapdfr` again to graph the validation errors of each model:
 ```{r}
-model_validations <- map_dfr(1:10, generate_poly_validation)
-ggplot(model_validations, aes(`Model Degree`, `Sum of Squared Errors (Validation Set)`)) +
+model_validations <- map_dfr(1:20, generate_poly_validation)
+ggplot(model_validations, aes(`Model Degree`, `Residual Sum of Squares (Validation Set)`)) +
   geom_point(size = 2) + geom_line(size = 2)
+head(model_validations, 10)
 ```
 
-The one-degree and two-degree (linear and quadratic, respectively) cases have too much error, diminishing the visibility of the other models. Let's "zoom-in" on just the `degree > 2` models by filtering `model_validations` before graphing it:
+The one-degree and two-degree (linear and quadratic, respectively) models have too much error, diminishing the visibility of the other models. This is due to their **bias**, or strong rigidity, that prevents them from effectively capturing the underlying structure of the data.
+
+Let's "zoom-in" on just the `degree > 2` models by filtering `model_validations` before graphing it:
 ```{r}
 model_validations %>% filter(`Model Degree` > 2) %>% 
-  ggplot(aes(`Model Degree`, `Sum of Squared Errors (Validation Set)`)) +
-  geom_point(size = 2) + geom_line(size = 2)
+  ggplot(aes(`Model Degree`, `Residual Sum of Squares (Validation Set)`)) +
+  geom_point(size = 2) + geom_line(size = 2) + scale_x_continuous(minor_breaks = 3:20)
 ```
 
 Interestingly, even though one-degree and two-degree polynomial regression performs poorly, using a cubic (`degree = 3`) polynomial model works better than more complex models. So, our validation tells us that the best fit for new data is a third-degree polynomial model, which achieves the best balance between the model bias (**underfitting**) of  simple models and the model variance (**overfitting**) of complex models. This makes sense, since this data secretly arises from a cubic polynomial originally anyway. The tradeoff between simple and complex models is infamously known as the **bias-variance tradeoff** and its role in **model selection** is an essential concept in machine learning.
 
-In more advanced courses, you will learn a more effective method for validation called **cross-validation**. Essentially, cross-validation will conduct a similar validation process to that outlined above, but several times, and then average the results. That way, we get rid of sampling variance in our validation set.
+In more advanced courses, you will learn a more effective method for validation called **cross-validation**. Essentially, cross-validation will conduct a similar validation process to that outlined above, but several times, and then average the results. That way, we get rid of even the sampling variance in our validation set.
 
-For now though, we've gone through a lot! We've covered the objectives of data science, effective data visualization with `ggplot2`, and R's built-in function for linear and polynomial regression, `lm`, as well as how the `broom` package can be used to turn models into dataframes, and therefore graphs. We've also touched upon some of the essentials of machine learning, like the bias-variance tradeoff, how to do conduct validation, and sum of square errors. 
+For now though, we've gone through a lot! We've covered the objectives of data science, effective data visualization with `ggplot2`, and R's built-in function for linear and polynomial regression, `lm`, as well as how the `broom` package can be used to turn models into dataframes, and therefore graphs. We've also touched upon some of the essentials of machine learning, like the bias-variance tradeoff, how to do conduct validation, and the sum of square errors metric. 
 
 # Mini-projects
 
-There are two mini-projects for this tutorial, designed to give you practice with EDA and more advanced model selection. Find the full project specifications in the [mini-project section of the r3-workbook](r3-workbook.Rmd#mini-project).
+There are two mini-projects for this tutorial, designed to give you practice with EDA and more advanced model selection. Find the full project specifications in the [mini-project section of the r3-workbook](r3-workbook.Rmd#mini-projects).
 
 ## Exploratory Data Analysis
 
@@ -638,11 +641,67 @@ Exploratory Data Analysis (**EDA**) is the process of using summary data and dat
 
 ## Validation & Elastic Net Regression
 
-Now that you're familiar with graphing with `ggplot2` and model selection with `broom`, try your skills at this fairly advanced graphing exercise with the `mpg` dataset. You will learn a new type of regression, **elastic net regression**, which has not one but two hyperparameters! You will use function definitions to **grid search** hyperparameters, construct a dataframe of various models for predicting the `hwy` of each car with `broom`, and finally graph your validation process with `ggplot2.`
+Now that you're familiar with graphing with `ggplot2` and model selection with `broom`, try your skills at this fairly advanced graphing exercise with the `mpg` dataset. You will learn a new type of regression, **elastic net regression**, which has a continuous hyperparameter for you to tune! You will use function definitions to **grid search** hyperparameters, construct a dataframe of various models for predicting the `hwy` of each car with `broom`, and finally graph your validation process with `ggplot2.`
+
+### Elastic Net Regression
+
+Especially in this age of "Big Data" buzz and the now ubiquitous nature of information, you will from time to time come across datasets with a very, very large number of explanatory variables (also called **features** or **predictors**). The challenge in making a model to capture the effects of these predictors on some response variable is we might grow unsure of which features are actually important to the underlying structure of the response variable. This is especially harmful because too many useless predictors can decrease your confidence in the structure of the data, especially if they fail to reveal any new information about the response. How can you select which predictors to include or exclude from your analysis when you have hundreds of potential variables? 
+
+One problem with multivariate linear regression is that our error metric, the sum of squared errors (aka the **residual sum of squares**, $RSS$), is fairly simple. We could easily add a few more terms to it to penalize things like, the total "length" of our predicted slope parameters, $\sum |\hat{\beta_i}|^2$, or a "selection" penality, $\sum |\hat{\beta_i}|$. If we add these new penalties, along with **regularization hyperparameters** $\lambda_1$ and $\lambda_2$ to weight them, the matrix form of our objective function for elastic net regression is:
+
+$$z_{\lambda_1,\lambda_2}(B) = \sum|y - XB|^2 + \lambda_1\sum|\hat{\beta_i}| + \lambda_2\sum|\hat{\beta_i}|^2$$
+
+If we write $\lambda_1 = \alpha \lambda$ and $\lambda_2 = \frac{(1-\alpha)}{2} \lambda$, we arrive at our final parameterization of the objective function for elastic net regression:
+
+$$z_{\alpha, \lambda}(B) = \sum|y - XB|^2 + \lambda\left(\alpha\sum|\hat{\beta_i}| + \sum|\hat{\beta_i}|^2\right)$$
+
+Now, the trick is to pick various $\alpha_i$ and $\lambda_i$, train our $B$ on the training test, and then compute the $z_{(\alpha_i, \lambda_i)}$ for each $(\alpha_i,\lambda_i)$  for comparison. We will then choose the $\alpha^*$ and $\lambda^*$ that minimize our **validation error**, $z_{(\alpha, \lambda)}$. While this seems like a lot of work at first, the package we'll learn in R to do this actually finds the optimal $B$ and $\lambda$ for you. It's your job to find the best $\alpha$ between $0$ and $1$. 
+
+To use elastic net regression in R, install the `glmnet` and `glmnetUtils` packages. The `cv.glmnet(formula, data, alpha)` function will find the model with the best $\lambda$ and $\beta$ for a given $\alpha$. Once you have such a model with `cv.glmnet`, use `predict(model, newdata, s = "lambda.min")` to find the predicted values for the response variable.
+
+As a quick example, suppose we wanted to fit an ($\alpha = 0$) elastic net to predict the `price` of a diamond given its `carat`, `depth`, and `table`, and then wanted to graphically compare the predicted values with the actual diamond prices as well as the predicted values from a linear model. Note that in this example, we don't manually split our data into training and validation sets - you'll have to do that in your project. The following code is fairly advanced, but you should be able to understand all of it with a few read-overs. Feel free to email [`contact@arun.run`](mailto:contact@arun.run) with any questions about the code and its output.
+```{r}
+## Making elastic and linear models
+diamond_model_elastic <- cv.glmnet(formula = price ~ carat + depth + table, data = diamonds, alpha = 1)
+diamond_model_linear <- lm(formula = price ~ carat + depth + table, data = diamonds)
+
+## Notice that the best lambda is 403.5063, called "lambda.min"
+print(diamond_model_elastic)
+glance(diamond_model_elastic)
+
+## Comparing predictions with actual prices
+diamond_predictions_elastic <- diamond_model_elastic %>% predict(newdata = diamonds, s = "lambda.min") %>% as.numeric
+diamond_predictions_linear <- diamond_model_linear %>% predict(newdata = diamonds)
+diamond_actual <- diamonds %>% pull(price)
+
+## Create a dataframe of model outputs for each diamond
+diamonds_diagnostic <- 
+  data.frame(`Actual` = diamond_actual, `Predicted (lm)` = diamond_predictions_linear, `Predicted (glmnet)` = diamond_predictions_elastic, check.names = F) 
+
+## Plot Model Outputs
+diamonds_diagnostic %>% gather(Model, Prediction, - Actual) %>%
+  ggplot(aes(Actual)) + 
+  geom_line(aes(y = Prediction, col = Model), alpha = .4) +
+  geom_line(aes(y = Actual), col = "black", linetype = "dashed") + facet_wrap(~ Model) +
+  labs(x = "Diamond Price (Actual)", y = "Diamond Price (Predicted)", title = "Elastic Net vs Linear Model for Diamond Price Prediction") +
+  theme(legend.position = "bottom")
+
+## Plot Model Performances
+diamonds_performance <- diamonds_diagnostic %>% 
+  summarise(`RSS (lm)` = sum((`Predicted (lm)` - `Actual`)^2), `RSS (glmnet)` = sum((`Predicted (glmnet)` - `Actual`)^2)) %>%
+  gather(Model, RSS) %>% mutate(Model = str_extract(Model, pattern = "\\(.*\\)") %>% str_sub(2, -2))
+print(diamonds_performance)
+```
+
+Interestingly, both the elastic net model and the linear regression model seem to overvalue cheap diamonds and undervalue expensive diamonds, and the linear model actually performs slightly better. There are two reasons why this could have occured - linear regression might be better suited to this prediction task (*"better" algorithms aren't always better!*), or we could have chosen the wrong $\alpha$ (*note that we haven't used validation to select the optimal* $\alpha$!). 
+
+This ends our brief introduction into elastic net regression. For more information on how to use `glmnet`, read the [official Quick Start guide](https://web.stanford.edu/~hastie/glmnet/glmnet_alpha.html). 
+
+In the [mini-project for Elastic Net Regression](r3-workbook.Rmd#mini-projects), you will be guided through a few steps that will help you preform a similar model selection process to what we went through above for polynomial regression. As always, please email [`contact@arun.run`](mailto:contact@arun.run) with any questions or for hints whatsoever. Happy machine learning!
 
 # Conclusion
 
-This ends our textbook-style tutorial on data visualization with `ggplot2` and an introduction into the first of our machine learning algorithms, linear regression with `lm` and `broom`. For more practice, check out [the mini-project](r3-workbook.Rmd#mini-project) section of `r3-workbook`.
+This ends our textbook-style tutorial on data visualization with `ggplot2` and an introduction into the first of our machine learning algorithms, linear regression with `lm` and `broom`. For more practice, check out [the mini-project](r3-workbook.Rmd#mini-projects) section of `r3-workbook`.
 
 ## Sneakpeek at `advr1`
 This marks the end of our introductory series into R programming! Congratulations on making it this far. By now, you should be able to begin your own foray into data cleaning, data visualization, and data analysis. Stay tuned in two weeks for `advr1`, the SUSA crash course introduction to neural nets in R!
