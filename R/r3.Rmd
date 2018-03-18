@@ -23,7 +23,7 @@ In this last of SUSA's crash courses on introductory R programming, we will roun
 ### Prerequisites
 The immediate prerequisite this tutorial is [r2](r2.html), which covers several `tidyverse` packages used for data cleaning. You will also need to install both R and RStudio to use the [r3-workbook](r3-workbook.Rmd) associated workbook. Visit [r0](r0.html) for general information on the philosophy and functionality of R and RStudio, as well as installation guides for both.
 
-### r2
+### r3
 This document contains textbook-style information on R programming. It will cover the essentials of data visualization with `ggplot2` and an introduction to statistical analysis and inference with an overview of linear regression in R.
 
 Throughout this tutorial, you will be working with three distinct datasets, to give you familiarity and practice with the `tidyverse`. These datasets are as follows:

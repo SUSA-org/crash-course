@@ -1,0 +1,71 @@
+---
+title: Advanced Data Science in Python & R
+subtitle: "Part 1: Deep Learning with Keras" 
+author: "Hosted by and maintained by the [Statistics Undergraduate Students Association (SUSA)](https://susa.berkeley.edu). Originally authored by [Arun Ramamurthy](mailto:contact@arun.run) & [Patrick Chao](mailto:prc@berkeley.edu)."
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
+---
+
+
+```{r, echo = F, message = F, warning = F}
+library(tidyverse);library(magrittr);library(ggplot2);library(anytime);library(broom);library(keras);
+```
+
+# Introduction
+
+Welcome to the first of SUSA's crash courses on advanced data science in Python and R! In this tutorial, you will be learning about one of the most popular and versatile machine learning algorithms, **neural nets**, by using a package called **`Keras`** to implement a neural net model to recognize handwritten digits. We will be guiding you through an entire machine learning workflow, including exploratory data analysis (*EDA*), data cleaning, and the three components of modeling: **model training**, **model selection**, and **model evaluation**. We will even teach you a couple of neat tricks on how to visualize your models to understand their behavior and performance.
+
+## About this Document
+### Prerequisites
+This workshop prerequires either experience in Python or R, to the degree covered by the previous [SUSA crash courses](http://github.com/SUSA-org/crash-course) - we recommend the completion of the introductory workbook series in both. This is partly to ensure you have the prior data wrangling and programming experience to understand the `Keras` code chunks at the end of this tutorial, but also to ensure you are caught up on the basics of machine learning practices covered incrementally in each workbook. At minimum, you should understand the purposes of **training** and **validation**, the difference between **classification** and **regression**, and the concept of the **bias-variance tradeoff**. You must have RStudio, Python, and R installed to run this notebook. Visit [py0]() for our crash course installation guide for Python. Visit [r0](r0.html) for general information on the philosophy and functionality of R and RStudio, as well as installation guides for both.
+
+### adv-pyr1
+
+This document contains textbook-style information on R and Python programming as applied to deep learning models. It will cover the entirety of a `Keras` implementation of a neural net to classify handwritten digits. 
+
+Throughout this tutorial, you will be working with the [**MNIST dataset**](https://en.wikipedia.org/wiki/MNIST_database), a dataset of sixty-thousand images of handwritten digits. You will be using this dataset to train a model to recognize the written digit given a vector representing the image. More information on this dataset and its structure will be provided early in this tutorial.
+
+Unlike some of the previous crash courses, this workbook will contain discussion and programming exercises throughout each section. These exercises are aimed at facilitating collaborative learning with your committee, and target the core concepts and extensions of the techniques covered in this tutorial.
+
+# Understanding the MNIST Dataset
+
+## Aquiring the MNIST Dataset
+
+## The Structure of the MNIST Dataset
+
+## Exploratory Data Analysis
+
+## Data Cleaning
+
+# Concepts in Deep Learning
+
+## Handwritten Digit Recgonition
+
+## A Brief Review of Linear Algebra
+
+## Neural Nets
+
+## An Introduction to Activation Functions
+
+# `Keras` in Python
+
+# `Keras` in R
+
+# Conclusion
+
+This ends our textbook-style tutorial on data visualization with `ggplot2` and an introduction into the first of our machine learning algorithms, linear regression with `lm` and `broom`. For more practice, check out [the mini-project](r3-workbook.Rmd#mini-projects) section of `r3-workbook`.
+
+In the [mini-project for Elastic Net Regression](r3-workbook.Rmd#mini-projects), you will be guided through a few steps that will help you preform a similar model selection process to what we went through above for polynomial regression. As always, please email [`contact@arun.run`](mailto:contact@arun.run) with any questions or for hints whatsoever. Happy machine learning!
+
+## Sneakpeek at ___
+
+# Additional Reading
+* For an interactive guide to learning R and Python, visit [DataCamp](https://www.datacamp.com/) a paid tutorial website for learning data computing.
+* This workshop was based on the introductory example for [Keras in R](https://blog.rstudio.com/2017/09/05/keras-for-r/). For more information on the R `keras` package, visit the following websites:   
+    - The official RStudio website for [Keras](https://keras.rstudio.com) contains a shortened version of the MNIST illustrative example, a textbook reference, and more  
+    - For a few examples on how to implement sequential neural networks like the one used in this tutorial, visit the [Keras guide to sequential models in R](https://keras.rstudio.com/articles/sequential_model.html)  
+    - The official [FAQ for Keras in R](https://keras.rstudio.com/articles/faq.html) contains tons of useful information, like the differences between a **sample**, **batch**, and **epoch** as well as useful and easy one-liners to improve or validate your models
