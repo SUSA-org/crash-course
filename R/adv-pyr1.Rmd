@@ -198,7 +198,8 @@ The beauty of neural networks is that they automatically determine the values of
 
 ### How do Neural Networks work?
 <center>
-![Image from cs231n](images/NeuronModel.jpeg "Neural Network Visualization")
+![](images/NeuronModel.jpeg "Neural Network Visualization")
+Images from CS231n Stanford.
 </center>
 Above is an image of a zoomed in an individual neuron. In this case, we have a single neuron, with multiple inputs. The general idea is to take all the inputs to the neuron from various dendrites, sum them, and perform some function on the sum. We also have a certain weight to each dendrite, so it is a linear combination of the inputs. There are many valid possible functions to perform at the end, known as *activation functions*. We will go into these in the next section.
 
@@ -247,7 +248,7 @@ The $y_i$ represent the distribution of the current image. If the current image 
 
 The key thing to notice about the cross-entropy loss is that the loss drastically increases as the probability for the correct label approaches zero. If we output a very low probability for the correct class, the logarithm approaches very large negative values, resulting in a large loss. On the other hand, if we output a very high probability close to $1$ for the correct class, the loss is almost zero since $\log 1 = 0$.
 
-
+These images are from CS231n Stanford.
 ### Back Propagation
 
 Back propagation is the key to training neural networks. To explain back propagation, we may begin with an analogy. Consider that today after eating, you get a bad stomach ache and suspect that you got food poisoning. A logical step would be to assign blame to the most recent foods you ate, placing more blame on the more suspect foods such as raw fish, raw meats, etc. We intuitively place the blame on the more recent things, then consider the causes farther back such as the leftover salad you left in the fridge for a week or the spoiled milk from that boba place you knew you shouldn't have gone to. 
