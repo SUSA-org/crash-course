@@ -12,8 +12,11 @@ output:
 
 
 ```{r, echo = F, message = F, warning = F}
+#Maybe have the install statement for keras?
+#install.packages("keras")
 library(tidyverse);library(magrittr);library(ggplot2);library(anytime);library(broom);library(keras);
 ```
+
 
 # Introduction
 
@@ -21,19 +24,19 @@ Welcome to the first of SUSA's crash courses on advanced data science in Python 
 
 ## About this Document
 ### Prerequisites
-This workshop prerequires either experience in Python or R, to the degree covered by the previous [SUSA crash courses](http://github.com/SUSA-org/crash-course) - we recommend the completion of the introductory workbook series in both. This is partly to ensure you have the prior data wrangling and programming experience to understand the `Keras` code chunks at the end of this tutorial, but also to ensure you are caught up on the basics of machine learning practices covered incrementally in each workbook. At minimum, you should understand the purposes of **training** and **validation**, the difference between **classification** and **regression**, and the concept of the **bias-variance tradeoff**. You must have RStudio, Python, and R installed to run this notebook. Visit [py0]() for our crash course installation guide for Python. Visit [r0](r0.html) for general information on the philosophy and functionality of R and RStudio, as well as installation guides for both.
+This workshop prerequires either experience in Python or R, to the degree covered by the previous [SUSA crash courses](http://github.com/SUSA-org/crash-course) - we recommend the completion of the introductory workbook series in both. This is partly to ensure you have the prior data wrangling and programming experience to understand the `Keras` code chunks at the end of this tutorial, but also to ensure you are caught up on the basics of machine learning practices covered incrementally in each workbook. At minimum, you should understand the purposes of **training** and **validation**, the difference between **classification** and **regression**, and the **bias-variance tradeoff**. You must have RStudio, Python, and R installed to run this notebook. Visit [py0]() for our crash course installation guide for Python. Visit [r0](r0.html) for general information on the philosophy and functionality of R and RStudio, as well as installation guides for both.
 
 ### adv-pyr1
 
 This document contains textbook-style information on R and Python programming as applied to deep learning models. It will cover the entirety of a `Keras` implementation of a neural net to classify handwritten digits. 
 
-Throughout this tutorial, you will be working with the [**MNIST dataset**](https://en.wikipedia.org/wiki/MNIST_database), a dataset of sixty-thousand images of handwritten digits. You will be using this dataset to train a model to recognize the written digit given a vector representing the image. More information on this dataset and its structure will be provided early in this tutorial.
+Throughout this tutorial, you will be working with the [**MNIST dataset**](https://en.wikipedia.org/wiki/MNIST_database), a dataset of seventy-thousand images of handwritten digits. You will be using this dataset to train a model to recognize the written digit given a vector representing the image. More information on this dataset and its structure will be provided early in this tutorial.
 
 Unlike some of the previous crash courses, this workbook will contain discussion and programming exercises throughout each section. These exercises are aimed at facilitating collaborative learning with your committee, and target the core concepts and extensions of the techniques covered in this tutorial.
 
 # Understanding the MNIST Dataset
 
-## Aquiring the MNIST Dataset
+## Acquiring the MNIST Dataset
 
 ## The Structure of the MNIST Dataset
 
@@ -43,15 +46,45 @@ Unlike some of the previous crash courses, this workbook will contain discussion
 
 # Concepts in Deep Learning
 
-## Handwritten Digit Recgonition
+## Handwritten Digit Recognition
 
 ## A Brief Review of Linear Algebra
 
 ## Neural Nets
 
+If we consider all the methods in machine learning, **neural networks** are perhaps the most celebrated, overhyped, and least understood. Neural networks became famous (or infamous) due to their unprecedented performance combined with their mysterious nature. They achieve spectacular results but under the hood we cannot really explain what they are doing. We understand how to create them, train them, optimize them, and even visualize them in some cases, but we do not actually understand them. Because of this, many people immediately jump to the conclusion of "ahhh terminator!", but actually, neural networks have been known of since the $1940$s. The key algorithm in training neural networks, **back propagation** has been known since the $1990$s. We would argue that neural networks only exploded in the past few decades. So why are neural networks so popular now?
+
+### Why Neural Networks now?
+![Google Trends Neural Network vs Deep Learning](images/NNvsDeep.png "Google Trends Neural Network vs Deep Learning")
+Above is a graph of google trends for neural networks and deep learning. Can you guess which color is which? Interestly, neural networks is the blue line, and red is deep learning! Neural networks have been around for a while, and they have only recently become more popular due to new advances.
+
+There are three main differences in machine learning now compared to $30$ years ago. 
+
+1. More Data
+2. GPUs (more computing power)
+3. Better Algorithms
+
+With time, we have been getting more and more data in all areas. The internet provides more images, text, audio than ever before. Now the issue is that we have more data than we know how to deal with. These huge data sets allow us train deeper models.
+With GPUs and more computing power, we have the ability to process more data and manage previously infeasible models. We can now train those deeper models.
+With better algorithms, our models are more efficient and effective. 
+
+Interestingly, many people agree that the second difference is the most crucial to our recent developments in machine learning. We are now capable to parsing through gigabytes, terabytes, even petabytes of data for training models hundreds of layers deep. This simply was not possible $30$ years ago. Recent improvements in GPUs has allowed models to train and perform computations in parallel, greatly speeding up training process. 
+
+### What are Neural Networks?
+Neural networks derive their name from the neural network we have in our head, our brain. On a highly simplified model, our brain is a collection of *neurons* that communicate with electrical signals via *axons*. Neural networks attempt to model this by having artificial layers neurons that perform minor tasks, then communicate from layer to layer.
+
+![](images/NN.jpg "Neural Network Visualization")
+
+The circles represent nodes, and the arrows represent the communication between nodes. These are **feed forward** since the information propogates from the input on the leftside through intermediate calculations to a final output layer. Our goal in machine learning is to take some $x$ input to approximate some function $f^*(x)$. We are given $x,y$ pairs where $y\approx f^*(x)$, a rough approximation. These feed forward models attempt to model $f^*(x)$ by composing multiple functions together, such as $f^*(x)=f^{(2)}(f^{(1)}(x))$ in the neural network above. Notice that $f^{(1)}(x)$ is the middle layer in the model, but it is never used except in intermediate states, thus it is known as a **hidden layer**.
+
+The beauty of neural networks is that they automatically determine the values of these intermediate functions and chain them together to approximate the function without any *a priori* knowledge. The neural networks for images, the early layers work with simple shapes like colors and edges, and work towards more complex textures, patterns, and finally to full objects. This stacking effect takes advantage of the numerous hidden layers and creates complex features from combinations of simple ones.
+
+
+
 ## An Introduction to Activation Functions
 
 # `Keras` in Python
+
 
 # `Keras` in R
 
