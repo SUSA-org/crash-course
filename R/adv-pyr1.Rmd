@@ -12,7 +12,7 @@ output:
 
 
 ```{r, echo = F, message = F, warning = F}
-library(tidyverse);library(magrittr);library(ggplot2);library(anytime);library(broom);
+library(tidyverse);library(magrittr);library(ggplot2);library(anytime);library(broom);library(stringr)
 ```
 
 
@@ -79,7 +79,7 @@ We've loaded `MNIST` into our environment, so let's take a look at its structure
 str(MNIST)
 ```
 
-As we can see from the output of `str`, `MNIST` is a list of two datasets, `train` and `test`. We can verify that the data entries `x` of `train` consist of $60,000$ images of $28\times28$ pixels in size. These entries come with matching labels `y`, one for each `x`. A similar setup can be seen for the $10,000$ entries in `train`.
+As we can see from the output of `str`, `MNIST` is a list of two datasets, `train` and `test`. We can verify that the data entries `x` of `train` consist of $60,000$ images of $28\times28$ pixels in size. These entries come with matching labels `y`, one for each `x`. A similar setup can be seen for the $10,000$ entries in `train`. Each image is represented by a two-dimensional array of grayscale intensities ranging from $[0,255]$ to indicate the darkness of the ink at each pixel.
 
 Let's split up our dataset into `training_set_*` and `test_set_*` variables for use in training and testing our model later.
 ```{r}
@@ -94,13 +94,38 @@ test_set_y <- MNIST$test$y
 
 This dataset is very clean, so there's not much to do in regards to EDA. However, it might help to visualize a few actual entries in our dataset, just so that we get a sense of its contents.
 
-We can use `ggplot2`'s `geom_raster` to plot a random image from our dataset like so:
-```{r}
+The initial structure of these images are two-dimensional arrays. However, with some transformation into a tidy form, we can use `ggplot2`'s `geom_raster` to plot a random image from our dataset like so:
+```{r, echo = -1, warning = F}
+set.seed(802)
 random_image_id <- training_set_x %>% nrow %>% sample.int(size = 1)
-training_set_x %>% extract(random_image_id, , ) %>% data.frame()
+random_image <- training_set_x %>% extract(random_image_id, , ) ## Extract all columns and rows of random image
+knitr::kable(random_image, align = "c", caption = "Can you guess what number this is?")  
+random_image_df <- random_image %>% data.frame %>% ## Cast as dataframe,
+  mutate(Y = 28:1) %>% gather(X, `Grayscale Intensity`, - Y) %>% ## Add column for Y index
+  mutate(X = str_replace(X, pattern = "X", replacement = "") %>% as.integer, ## Add column for X index
+         `Grayscale Intensity` = `Grayscale Intensity` / 255) %>% ## Want our values to range [0,1] rather than [0,255]
+  arrange(X, Y) 
+str(random_image_df) ## Our dataframe of a single image is now tidy
+random_image_df %>% ggplot(aes(X, Y, fill = grey(1 - `Grayscale Intensity`))) + geom_raster(interpolate = T) + 
+  scale_fill_identity() + coord_fixed() + theme_minimal()
+print(training_set_y %>% extract(random_image_id)) ## And sure enough, it's an 8
 ```
 
+A human would immediately recognize this image as an $8$, but it's missing a lot of the features we would usually associate with $8$'s in general. Fortunately, our dataset contains hundreds of examples covering most writing behaviors and idiosyncracies - we hope that our model would be robust enough to recognize $8$'s and other numbers whether or not they follow the most conventional standards for handwriting.
+
 ## Data Cleaning
+
+Since `keras` uses Python data structures, we cannot use the standard `dplyr` methods to clean our dataframe into a form more palettable for our `keras` model. Fortunately, the steps in data cleaning for the MNIST dataset are very brief. For our `x` datasets, all we have to do is flatten our two-dimensional $28\times28$ matricies into one-dimensional $28\times28=784$ vectors, and then change the units of the grayscale values to vary from $[0,1]$ rather than $[0,255]$ (*the reason for this [will be explained later](#an-introduction-to-activation-functions)*). For our `y` label vectors, we use `to_categorical` to *[one-hot-encode](https://www.quora.com/What-is-one-hot-encoding-and-when-is-it-used-in-data-science)* our labels - this command transform our scalars $y_i \in [0,9]$ into binary class matricies $y'_i$. 
+
+```{r}
+training_set_x %<>% array_reshape(dim = c(nrow(training_set_x), 784)) %>% divide_by(255)
+test_set_x %<>% array_reshape(dim = c(nrow(test_set_x), 784)) %>% divide_by(255)
+
+training_set_y %<>% to_categorical(num_classes = 10)
+test_set_y %<>% to_categorical(num_classes = 10)
+```
+
+We're now all set to create a `keras` deep learning model to recognize handwritten digits! But first, let's cover some of the conceptual elements behind deep learning.
 
 # Concepts in Deep Learning
 
@@ -216,14 +241,34 @@ Tanh has many advantages over sigmoid since the activation function is centered 
 The general idea in machine learning is given a model and dataset, we would like to minimize the loss or error on the model. The general idea is to tweak the weights of the neural network as we train on data to predict the misclassified numbers better. This leads us to two major questions, what is the **loss function** of our model, and how do we update the weights of our model?
 
 ### Loss Function for Classification
-We could have the loss be $0$ for correctly classifying the number, and $1$ for incorrect classification. However, this is a bit naive because we lose a lot of information on what the correct answer is. A better loss function for classification is **cross entropy loss**. The formula is a bit complex, but the formula is:
-$$-\sum_i y_i \log \hat y_i$$
+We could have the loss be $0$ for correctly classifying the number, and $1$ for incorrect classification. However, this is a bit naive because we lose a lot of information on what the correct answer is. A better loss function for classification is **cross entropy loss**. The formula may look a bit complex but the idea is simple:
+$$-\sum_i y_i \log {\hat {y}}_i$$
+The $y_i$ represent the distribution for the current image. If the current image is a $3$, then $y_3=1$ and $y_i=0$ for all $i\neq 3$. The $\hat y_i$ represent the probability distribution outputs from our model. We may classify the image with $20%$ for $1$, $30%$ for $2$, $50%$ for $3$, and $0%$ for the rest. The error would be $-\log(.5)$.
 
+The key thing to notice about the cross entropy loss is that the loss drastically increases as probability for the correct label approaches zero. If we output a very low probability for the correct class, the logarithm approaches very large negative values, resulting in a large loss. On the other hand if we output a very high probability close to $1$ for the correct class, the loss is almost zero since $\log 1 = 0$.
+
+
+### Back Propagation
+
+Back progagation is the key to training neural networks. To explain back propagation, we may begin with an analogy. Consider that today after eating, you get a bad stomach ache and suspect that you got food poisoning. A logical step would be to assign blame to the most recent foods you ate, placing more blame on the more suspect foods such as raw fish, raw meats, etc. We intuitively place the blame on the more recent things, then may consider the causes farther back such as the leftover salad you left in the fridge for a week or the spoiled milk from that boba place you knew you shouldn't have gone to. 
+
+Back propagation is similar, we distribute the loss through the model beginning with the layers closer to the output, and propage the loss back. The exact math is a bit complex as it involves a lot of derivatives, but the general idea is relatively simple. The more suspicious or the more the neuron contributed to the incorrect prediction, the more we penalize it to be correct. 
 
 # `Keras` in Python
 Please refer to the Python version of the notebook.
 
 # `Keras` in R
+
+```{r}
+model <- keras_model_sequential() 
+model %>% 
+  layer_dense(units = 256, activation = 'relu', input_shape = c(784)) %>% 
+  layer_dropout(rate = 0.4) %>% 
+  layer_dense(units = 128, activation = 'relu') %>%
+  layer_dropout(rate = 0.3) %>%
+  layer_dense(units = 10, activation = 'softmax')
+```
+
 
 # Conclusion
 
