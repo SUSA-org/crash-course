@@ -22,7 +22,7 @@ Welcome to the first of SUSA's crash courses on advanced data science in Python 
 
 ## About this Document
 ### Prerequisites
-This workshop prerequires either experience in Python or R, to the degree covered by the previous [SUSA crash courses](http://github.com/SUSA-org/crash-course) - we recommend the completion of the introductory workbook series in both. This is partly to ensure you have the prior data wrangling and programming experience to understand the `Keras` code chunks at the end of this tutorial, but also to ensure you are caught up on the basics of machine learning practices covered incrementally in each workbook. At minimum, you should understand the purposes of **training** and **validation**, the difference between **classification** and **regression**, and the **bias-variance tradeoff**. You must have RStudio, Python, and R installed to run this notebook. Visit [py0]() for our crash course installation guide for Python. Visit [r0](r0.html) for general information on the philosophy and functionality of R and RStudio, as well as installation guides for both.
+This workshop prerequires either experience in Python or R, to the degree covered by the previous [SUSA crash courses](http://github.com/SUSA-org/crash-course) - we recommend the completion of the introductory workbook series in both. This is partly to ensure you have the prior data wrangling and programming experience to understand the `Keras` code chunks at the end of this tutorial, but also to ensure you are caught up on the basics of machine learning practices covered incrementally in each workbook. At a minimum, you should understand the purposes of **training** and **validation**, the difference between **classification** and **regression**, and the **bias-variance tradeoff**. You must have RStudio, Python, and R installed to run this notebook. Visit [py0]() for our crash course installation guide for Python. Visit [r0](r0.html) for general information on the philosophy and functionality of R and RStudio, as well as installation guides for both.
 
 ### adv-pyr1
 
@@ -30,7 +30,7 @@ This document contains textbook-style information on R and Python programming as
 
 Throughout this tutorial, you will be working with the [**MNIST dataset**](https://en.wikipedia.org/wiki/MNIST_database), a dataset of seventy-thousand images of handwritten digits. You will be using this dataset to train a model to recognize the written digit given a vector representing the image. More information on this dataset and its structure will be provided early in this tutorial.
 
-Unlike some of the previous crash courses, this workbook will contain discussion and programming exercises throughout each section. These exercises are aimed at facilitating collaborative learning with your committee, and target the core concepts and extensions of the techniques covered in this tutorial.
+Unlike some of the previous crash courses, this workbook will contain discussion and programming exercises throughout each section. These exercises are aimed at facilitating collaborative learning with your committee and target the core concepts and extensions of the techniques covered in this tutorial.
 
 # Understanding the MNIST Dataset
 
@@ -38,13 +38,13 @@ Take a brief moment to read over the [MNIST Wikipedia article](https://en.wikipe
 
 ![A small sample from the MNIST dataset.](https://www.tensorflow.org/images/MNIST.png)
 
-The MNIST dataset consists of 70k images, 10k of which are considered the **test set**, with the remaining 60k for **training**. Each data entry in the MNIST dataset is a $28\times28$ pixel image of a single handwritten digit, and each is **labelled** with the associated digit between $0$ and $9$. Our goal is to design a model that can be trained on the 60k training images and their labels, and then perform well in predicting which digit is represented in each test image.
+The MNIST dataset consists of 70k images, 10k of which are considered the **test set**, with the remaining 60k for **training**. Each data entry in the MNIST dataset is a $28\times28$ pixel image of a single handwritten digit, and each is ** labeled** with the associated digit between $0$ and $9$. Our goal is to design a model that can be trained on the 60k training images and their labels and then perform well in predicting which digit is represented in each test image.
 
 #### Check for Understanding
 > 1. Why is the MNIST dataset split into a **training set** and **test set**? Why do we want to avoid training our model on the test set? 
 > 2. If we instead had 10k training images and 60k test images, how might that affect the performance of our model?
 > 3. How many different **classes** are there in the MNIST dataset? 
-> 4. Can you think of a particular pair of numbers that might be particularily difficult to differentiate, or prone to misclassification with each other? 
+> 4. Can you think of a particular pair of numbers that might be particularly difficult to differentiate, or prone to misclassification with each other? 
 
 ## Acquiring the MNIST Dataset
 
@@ -115,7 +115,7 @@ A human would immediately recognize this image as an $8$, but it's missing a lot
 
 ## Data Cleaning
 
-Since `keras` uses Python data structures, we cannot use the standard `dplyr` methods to clean our dataframe into a form more palettable for our `keras` model. Fortunately, the steps in data cleaning for the MNIST dataset are very brief. For our `x` datasets, all we have to do is flatten our two-dimensional $28\times28$ matricies into one-dimensional $28\times28=784$ vectors, and then change the units of the grayscale values to vary from $[0,1]$ rather than $[0,255]$ (*the reason for this [will be explained later](#an-introduction-to-activation-functions)*). For our `y` label vectors, we use `to_categorical` to *[one-hot-encode](https://www.quora.com/What-is-one-hot-encoding-and-when-is-it-used-in-data-science)* our labels - this command transform our scalars $y_i \in [0,9]$ into binary class matricies $y'_i$. 
+Since `keras` uses Python data structures, we cannot use the standard `dplyr` methods to clean our dataframe into a form more palatable for our `keras` model. Fortunately, the steps in data cleaning for the MNIST dataset are very brief. For our `x` datasets, all we have to do is flatten our two-dimensional $28\times28$ matrices into one-dimensional $28\times28=784$ vectors, and then change the units of the grayscale values to vary from $[0,1]$ rather than $[0,255]$ (*the reason for this [will be explained later](#an-introduction-to-activation-functions)*). For our `y` label vectors, we use `to_categorical` to *[one-hot-encode](https://www.quora.com/What-is-one-hot-encoding-and-when-is-it-used-in-data-science)* our labels - this command transform our scalars $y_i \in [0,9]$ into binary class matrices $y'_i$. 
 
 ```{r}
 training_set_x %<>% array_reshape(dim = c(nrow(training_set_x), 784)) %>% divide_by(255)
@@ -148,14 +148,14 @@ Even if you were able to make a successful ruleset to classify this particular i
 
 In the past, difficult problems like image classification were met by *domain experts* who persisted through the difficulty of making these rulesets to **pre-process** data like ours into a form more interpretable by computers. Although it can be time-consuming, this process of manual **feature engineering** still remains a major component of data processing today.
 
-Let's take our example of image classification. [In the $1950$s, two researchers recorded the responses of a cat as its retinas were stimulated by slides of large black dots.](https://www.youtube.com/watch?v=IOHayh06LJ4) However, they soon realized that it was actually the black edges of the slides that stimulated the cat's brain most, leading to evidence suggesting that our perception relies on **feature detection**, or the filtering of an image into lines (like the edge of a slide) and simple shapes, to make sense of visual input. Armed with this knowledge of human perception, we may collaborate with a linguist experienced in how humans write and perceive numbers to transform our dataset of images into a dataset of **features** better suited for a method like regression analysis. For example, we could **feature engineer** our images into vectors with values about where certain lines appear, or indicators of the precence of various shapes, before we attempt to fit a model to them. However, as our previous rule search proved, this task is quite difficult, and very complex problems resist manual feature engineering by humans. 
+Let's take our example of image classification. [In the $1950$s, two researchers recorded the responses of a cat as its retinas were stimulated by slides of large black dots.](https://www.youtube.com/watch?v=IOHayh06LJ4) However, they soon realized that it was actually the black edges of the slides that stimulated the cat's brain most, leading to evidence suggesting that our perception relies on **feature detection**, or the filtering of an image into lines (like the edge of a slide) and simple shapes, to make sense of visual input. Armed with this knowledge of human perception, we may collaborate with a linguist experienced in how humans write and perceive numbers to transform our dataset of images into a dataset of **features** better suited for a method like regression analysis. For example, we could **feature engineer** our images into vectors with values about where certain lines appear, or indicators of the presence of various shapes, before we attempt to fit a model to them. However, as our previous rule search proved, this task is quite difficult, and very complex problems resist manual feature engineering by humans. 
 
 > 3. What are some examples of features our eyes might detect in images of numbers? 
 > 4. Take a few minutes with a partner to fit your three rules into some sort of numeric representation (hint: a 3-dimensional vector of indicators or numeric encodings of features)
 
-Instead, we could take inspiration from how humans percieve visual input in how we construct our model. The initial input to our sensory neurons is simply a collection of varying light intensities, but we learn to detect features of simple and complex shapes before making sense of the image itself. The complex problem of image classification is solved by processing the data in layers, going from raw inputs to features that begin to summarize the information in the data until we finally arrive at **recognition**. 
+Instead, we could take inspiration from how humans perceive visual input in how we construct our model. The initial input to our sensory neurons is simply a collection of varying light intensities, but we learn to detect features of simple and complex shapes before making sense of the image itself. The complex problem of image classification is solved by processing the data in layers, going from raw inputs to features that begin to summarize the information in the data until we finally arrive at **recognition**. 
 
-Similarily, in deep learning, we aim to design a model that, rather than requiring preprocessing of its input, learns how to *engineer its own features*. Our model would begin with the large vector of raw grayscale intensities, and process the data in **layers**, summarizing the data in steps to ultimately arrive at recognition. Although our model would start without any awareness about our training data, by incrementally feeding all of our training data into a model, and it would slowly learn the characteristics of each category. Taking note of the problem at hand, we must also ensure our model is complex enough to capture all the nuances in the data and its labels. We must also make sure that our dataset is large and well-labelled - with enough representative examples, the performance of neural nets is statistically guaranteed to arbitrarily approximate any supervised task. 
+Similarily, in deep learning, we aim to design a model that, rather than requiring preprocessing of its input, learns how to *engineer its own features*. Our model would begin with the large vector of raw grayscale intensities, and process the data in **layers**, summarizing the data in steps to ultimately arrive at recognition. Although our model would start without any awareness about our training data, by incrementally feeding all of our training data into a model, and it would slowly learn the characteristics of each category. Taking note of the problem at hand, we must also ensure our model is complex enough to capture all the nuances of the data and its labels. We must also make sure that our dataset is large and well-labeled - with enough representative examples, the performance of neural nets is statistically guaranteed to arbitrarily approximate any supervised task. 
 
 In the next few sections, you will learn about neural nets in more mathematical detail, but the mathematic structure of neural nets follows the intuition of incrementally transforming raw inputs into more and more descriptive features about the data.
 
@@ -163,13 +163,13 @@ In the next few sections, you will learn about neural nets in more mathematical 
 
 ## Neural Nets
 
-If we consider all the methods in machine learning, **neural networks** are perhaps the most celebrated, overhyped, and least understood. Neural networks became famous (or infamous) due to their unprecedented performance combined with their mysterious nature. They achieve spectacular results but under the hood we cannot really explain what they are doing. We understand how to create them, train them, optimize them, and even visualize them in some cases, but we do not actually understand them. Because of this, many people immediately jump to the conclusion of "ahhh terminator!", but actually, neural networks have been known of since the $1940$s. The key algorithm in training neural networks, **back propagation** has been known since the $1990$s. We would argue that neural networks only exploded in the past few decades. So why are neural networks so popular now?
+If we consider all the methods in machine learning, **neural networks** are perhaps the most celebrated, overhyped, and least understood. Neural networks became famous (or infamous) due to their unprecedented performance combined with their mysterious nature. They achieve spectacular results but under the hood, we cannot really explain what they are doing. We understand how to create them, train them, optimize them, and even visualize them in some cases, but we do not actually understand them. Because of this, many people immediately jump to the conclusion of "ahhh terminator!", but actually, neural networks have been known of since the $1940$s. The key algorithm in training neural networks, **back propagation** has been known since the $1990$s. We would argue that neural networks only exploded in the past few decades. So why are neural networks so popular now?
 
 ### Why Neural Networks now?
 <center>
 ![Google Trends Neural Network vs Deep Learning](images/NNvsDeep.png "Google Trends Neural Network vs Deep Learning")
 </center>
-Above is a graph of google trends for neural networks and deep learning. Can you guess which color is which? Interestingly, neural networks is the blue line, and red is deep learning! Neural networks have been around for a while, and they have only recently become more popular due to new advances.
+Above is a graph of google trends for neural networks and deep learning. Can you guess which color is which? Interestingly, neural networks are the blue line, and red is deep learning! Neural networks have been around for a while, and they have only recently become more popular due to new advances.
 
 There are three main differences in machine learning now compared to $30$ years ago. 
 
@@ -177,14 +177,14 @@ There are three main differences in machine learning now compared to $30$ years 
 2. GPUs (more computing power)
 3. Better Algorithms
 
-With time, we have been getting more and more data in all areas. The internet provides more images, text, audio than ever before. Now the issue is that we have more data than we know how to deal with. These huge data sets allow us train deeper models.
+With time, we have been getting more and more data in all areas. The internet provides more images, text, audio than ever before. Now the issue is that we have more data than we know how to deal with. These huge datasets allow us to train deeper models.
 With GPUs and more computing power, we have the ability to process more data and manage previously infeasible models. We can now train those deeper models.
 With better algorithms, our models are more efficient and effective. 
 
-Interestingly, many people agree that the second difference is the most crucial to our recent developments in machine learning. We are now capable to parsing through gigabytes, terabytes, even petabytes of data for training models hundreds of layers deep. This simply was not possible $30$ years ago. Recent improvements in GPUs has allowed models to train and perform computations in parallel, greatly speeding up training process. 
+Interestingly, many people agree that the second difference is the most crucial to our recent developments in machine learning. We are now capable of parsing through gigabytes, terabytes, even petabytes of data for training models hundreds of layers deep. This simply was not possible $30$ years ago. Recent improvements in GPUs has allowed models to train and perform computations in parallel, greatly speeding up the training process. 
 
 ### What are Neural Networks?
-Neural networks derive their name from the neural network we have in our head, our brain. On a highly simplified model, our brain is a collection of *neurons* that receive electrical input signals from *dentrites*, output electrical signals via a single *axon*. Each neuron sends signals along a single axon and connects with other dentrites. Neural networks attempt to model this by having artificial layers neurons that perform minor tasks, then communicate from layer to layer.
+Neural networks derive their name from the neural network we have in our head, our brain. On a highly simplified model, our brain is a collection of *neurons* that receive electrical input signals from *dendrites*, output electrical signals via a single *axon*. Each neuron sends signals along a single axon and connects with other dendrites. Neural networks attempt to model this by having artificial layers neurons that perform minor tasks, then communicate from layer to layer.
 <center>
 ![Image from cs231n](images/Neuron.png "Biological Inspiration")
 </center>
@@ -192,21 +192,21 @@ Above is an image of the neurons and axons.
 <center>
 ![](images/NN.jpg "Neural Network Visualization")
 </center>
-The circles represent nodes, and the arrows represent the communication between nodes. These are **feed forward** since the information propogates from the input on the leftside through intermediate calculations to a final output layer. Our goal in machine learning is to take some $x$ input to approximate some function $f^*(x)$. We are given $x,y$ pairs where $y\approx f^*(x)$, a rough approximation. These feed forward models attempt to model $f^*(x)$ by composing multiple functions together, such as $f^*(x)=f^{(2)}(f^{(1)}(x))$ in the neural network above. Notice that $f^{(1)}(x)$ is the middle layer in the model, but it is never used except in intermediate states, thus it is known as a **hidden layer**.
+The circles represent nodes, and the arrows represent the communication between nodes. These are **feed forward** since the information propagates from the input on the left side through intermediate calculations to a final output layer. Our goal in machine learning is to take some $x$ input to approximate some function $f^*(x)$. We are given $x,y$ pairs where $y\approx f^*(x)$, a rough approximation. These feed-forward models attempt to model $f^*(x)$ by composing multiple functions together, such as $f^*(x)=f^{(2)}(f^{(1)}(x))$ in the neural network above. Notice that $f^{(1)}(x)$ is the middle layer in the model, but it is never used except in intermediate states, thus it is known as a **hidden layer**.
 
-The beauty of neural networks is that they automatically determine the values of these intermediate functions and chain them together to approximate the function without any *a priori* knowledge. The neural networks for images, the early layers work with simple shapes like colors and edges, and work towards more complex textures, patterns, and finally to full objects. This stacking effect takes advantage of the numerous hidden layers and creates complex features from combinations of simple ones.
+The beauty of neural networks is that they automatically determine the values of these intermediate functions and chain them together to approximate the function without any *a priori* knowledge. In neural networks of images, the early layers work with simple shapes like colors and edges and work towards more complex textures, patterns, and finally to full objects. This stacking effect takes advantage of the numerous hidden layers and creates complex features from combinations of simple ones.
 
 ### How do Neural Networks work?
 <center>
 ![Image from cs231n](images/NeuronModel.jpeg "Neural Network Visualization")
 </center>
-Above is an image of a zoomed in individual neuron. In this case, we have a single neuron, with multiple inputs. The general idea is to take all the inputs to the neuron from various dentrites, sum them, and perform some function on the sum. We also have a certain weight to each dentrite, so it is a linear combination of the inputs. There are many valid possible functions to perform at the end, known as *activation functions*. We will go into these in the next section.
+Above is an image of a zoomed in an individual neuron. In this case, we have a single neuron, with multiple inputs. The general idea is to take all the inputs to the neuron from various dendrites, sum them, and perform some function on the sum. We also have a certain weight to each dendrite, so it is a linear combination of the inputs. There are many valid possible functions to perform at the end, known as *activation functions*. We will go into these in the next section.
 
-To delve more into the math, each neuron outputs a specific value, denoted as $x_i$. This neuron then has separate weights for each further neuron it connects to, and multiplies each weight to $x_i$ to serve as the input to a new neuron deeper in the model. In the image above, we have three inputs $x_0,x_1,x_2$ from three neurons. Each individual arrow from neuron to neuron has a unique weight, and each weight gets multiplied by the output axon value from the neuron. To determine the output of the blue neuron, we take the sum of the $x_iw_i$, then apply some activation function $f$. This gives us $f\left(\sum_i w_ix_i + b\right)$. The added $b$ term is not too important, essentially we also include a bias term, a constant value we add. 
+To delve more into the math, each neuron outputs a specific value, denoted as $x_i$. This neuron then has separate weights for each further neuron it connects to and multiplies each weight to $x_i$ to serve as the input to a new neuron deeper in the model. In the image above, we have three inputs $x_0,x_1,x_2$ from three neurons. Each individual arrow from neuron to neuron has a unique weight, and each weight gets multiplied by the output axon value from the neuron. To determine the output of the blue neuron, we take the sum of the $x_iw_i$, then apply some activation function $f$. This gives us $f\left(\sum_i w_ix_i + b\right)$. The added $b$ term is not too important, essentially we also include a bias term, a constant value we add. 
 
 #### Check for Understanding
 
-> 1. How many weights are in the three layer neural network image above (not counting biases)?
+> 1. How many weights are in the three-layer neural network image above (not counting biases)?
 > 2. What happens if we use a linear activation (such as $ax+b$)?
 
 ## An Introduction to Activation Functions
@@ -241,18 +241,18 @@ Tanh has many advantages over sigmoid since the activation function is centered 
 The general idea in machine learning is given a model and dataset, we would like to minimize the loss or error on the model. The general idea is to tweak the weights of the neural network as we train on data to predict the misclassified numbers better. This leads us to two major questions, what is the **loss function** of our model, and how do we update the weights of our model?
 
 ### Loss Function for Classification
-We could have the loss be $0$ for correctly classifying the number, and $1$ for incorrect classification. However, this is a bit naive because we lose a lot of information on what the correct answer is. A better loss function for classification is **cross entropy loss**. The formula may look a bit complex but the idea is simple:
+We could have the loss be $0$ for correctly classifying the number and $1$ for incorrect classification. However, this is a bit naive because we lose a lot of information on what the correct answer is. A better loss function for classification is **cross entropy loss**. The formula may look a bit complex but the idea is simple:
 $$-\sum_i y_i \log {\hat {y}}_i$$
-The $y_i$ represent the distribution for the current image. If the current image is a $3$, then $y_3=1$ and $y_i=0$ for all $i\neq 3$. The $\hat y_i$ represent the probability distribution outputs from our model. We may classify the image with $20%$ for $1$, $30%$ for $2$, $50%$ for $3$, and $0%$ for the rest. The error would be $-\log(.5)$.
+The $y_i$ represent the distribution of the current image. If the current image is a $3$, then $y_3=1$ and $y_i=0$ for all $i\neq 3$. The $\hat y_i$ represent the probability distribution outputs from our model. We may classify the image with $20%$ for $1$, $30%$ for $2$, $50%$ for $3$, and $0%$ for the rest. The error would be $-\log(0.5)$.
 
-The key thing to notice about the cross entropy loss is that the loss drastically increases as probability for the correct label approaches zero. If we output a very low probability for the correct class, the logarithm approaches very large negative values, resulting in a large loss. On the other hand if we output a very high probability close to $1$ for the correct class, the loss is almost zero since $\log 1 = 0$.
+The key thing to notice about the cross-entropy loss is that the loss drastically increases as the probability for the correct label approaches zero. If we output a very low probability for the correct class, the logarithm approaches very large negative values, resulting in a large loss. On the other hand, if we output a very high probability close to $1$ for the correct class, the loss is almost zero since $\log 1 = 0$.
 
 
 ### Back Propagation
 
-Back progagation is the key to training neural networks. To explain back propagation, we may begin with an analogy. Consider that today after eating, you get a bad stomach ache and suspect that you got food poisoning. A logical step would be to assign blame to the most recent foods you ate, placing more blame on the more suspect foods such as raw fish, raw meats, etc. We intuitively place the blame on the more recent things, then may consider the causes farther back such as the leftover salad you left in the fridge for a week or the spoiled milk from that boba place you knew you shouldn't have gone to. 
+Back propagation is the key to training neural networks. To explain back propagation, we may begin with an analogy. Consider that today after eating, you get a bad stomach ache and suspect that you got food poisoning. A logical step would be to assign blame to the most recent foods you ate, placing more blame on the more suspect foods such as raw fish, raw meats, etc. We intuitively place the blame on the more recent things, then consider the causes farther back such as the leftover salad you left in the fridge for a week or the spoiled milk from that boba place you knew you shouldn't have gone to. 
 
-Back propagation is similar, we distribute the loss through the model beginning with the layers closer to the output, and propage the loss back. The exact math is a bit complex as it involves a lot of derivatives, but the general idea is relatively simple. The more suspicious or the more the neuron contributed to the incorrect prediction, the more we penalize it to be correct. 
+Back propagation is similar, we distribute the loss through the model beginning with the layers closer to the output, and propagate the loss back. The exact math is a bit complex as it involves a lot of derivatives, but the general idea is relatively simple. The more suspicious or the more the neuron contributed to the incorrect prediction, the more we penalize it to be correct. 
 
 # `Keras` in Python
 Please refer to the Python version of the notebook.
@@ -272,11 +272,11 @@ model %>%
 
 # Conclusion
 
-This ends our textbook-style primer into deep learning with Keras. While this was just an introduction in nueral nets, we hope that you can now see some of the workflow patterns associated with machine learning. Feel free to play around with the code above to get a better feel for the hyperparameters of the neural net model. As always, please email [`contact@arun.run`](mailto:contact@arun.run) or [`prc@berkeley.edu`](mailto:prc@berkeley.edu) with any questions or concerns whatsoever. Happy machine learning!
+This ends our textbook-style primer into deep learning with Keras. While this was just an introduction to neural nets, we hope that you can now see some of the workflow patterns associated with machine learning. Feel free to play around with the code above to get a better feel for the hyperparameters of the neural net model. As always, please email [`contact@arun.run`](mailto:contact@arun.run) or [`prc@berkeley.edu`](mailto:prc@berkeley.edu) with any questions or concerns whatsoever. Happy machine learning!
 
-## Sneakpeek at SUSA Kaggle Compeition
+## Sneakpeek at SUSA Kaggle Competition
 
-After Spring Break, we will be guiding you through a four-week collaborative Kaggle competition with your peers in Career Exploration! We want to give you the experience of working with real data, using real machine learning algorithms, in an educational setting. You will have to choose either Python or R, and dive into reading kernels on the Kaggle website, use visualization and feature engineering to improve your score, and maybe even pick up a few advanced deep learning models along the way. If this sounds a bit intimidating right now, do not fret! Your SUSA Mentors will be there to mentor you through the whole thing. So rest up during Spring Break, and come back ready to tackle on your biggest data challenge yet!
+After Spring Break, we will be guiding you through a four-week collaborative Kaggle competition with your peers in Career Exploration! We want to give you the experience of working with real data, using real machine learning algorithms, in an educational setting. You will have to choose either Python or R, and dive into reading kernels on the Kaggle website, use visualization and feature engineering to improve your score, and maybe even pick up a few advanced deep learning models along the way. If this sounds a bit intimidating right now, do not fret! Your SUSA Mentors will be there to mentor you through the whole thing. So rest up during Spring Break, and come back ready to tackle your biggest data challenge yet!
 
 # Additional Reading
 * This workshop was based on the introductory example for [Keras in R](https://blog.rstudio.com/2017/09/05/keras-for-r/). For more information on the R `keras` package, visit the following websites:   
