@@ -58,17 +58,18 @@ First, you have to install the R package, `keras`, with the `install.packages` c
 
 An example code chunk that installs `keras`, its dependancies, and then stores the MNIST dataset as `MNIST` is shown below:
 
-```{r, eval=-c(1,66)}
+```{r, eval=-c(1,5),message=F}
 install.packages(c("keras", "reticulate")) ## NOT RUN on knit
 library(keras);library(reticulate)
 py_discover_config() ## Use this to discover your installation locations for conda and python
-keras::use_python("/home/arun/.conda/bin/python") ## As seen in the last line of the preceding output
-install_keras(method = "conda")
+keras::use_python("/usr/local/bin/python3") ## As seen in the last line of the preceding output
+install_keras()
 MNIST <- dataset_mnist()
 ```
 
 ## Installing `keras` in Python
 
+Please refer to the Python version of the notebook.
 
 
 ## The Structure of the MNIST Dataset
@@ -181,8 +182,10 @@ To delve more into the math, each neuron outputs a specific value, denoted as $x
 
 ## An Introduction to Activation Functions
 
-# `Keras` in Python
 
+
+# `Keras` in Python
+Please refer to the Python version of the notebook.
 
 # `Keras` in R
 
