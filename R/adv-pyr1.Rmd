@@ -108,15 +108,15 @@ Now that you've gotten a sense for the MNIST dataset, let's learn how to actuall
 
 ## Handwritten Digit Recognition
 
-To reiterate the structure of this particular machine learning problem, we have a **training set** of 60k images, each represented by a $28 \times 28 = 784$-dimensional vector of numeric grayscale values. Each entry *x_i* in our training set also comes with a label, $y_i \in [0, 9]$, in one of ten categories. We want to craft a model that will use the vectors to guess the labels $\hat{y}_i$ accurately, such that our error metric (**root mean-squared error**) is not just low in the **training set** but also in the **test set** - we want to ensure our model doesn't **overfit** to the training set, which may not be representative of all digits. The task boils down to designing a model or algorithm that preforms robustly on classifying images of digits, by learning a ruleset from 60k examples.
+To reiterate the structure of this particular machine learning problem, we have a **training set** of 60k images, each represented by a $28 \times 28 = 784$-dimensional vector of numeric grayscale values. Each entry $x_i$ in our training set also comes with a label, $y_i \in [0, 9]$, in one of ten categories. We want to craft a model that will use the vectors to guess the labels $\hat y_i$ accurately, such that our error metric (**root mean-squared error**) is not just low in the **training set** but also in the **test set** - we want to ensure our model doesn't **overfit** to the training set, which may not be representative of all digits. The task boils down to designing a model or algorithm that preforms robustly on classifying images of digits, by learning a ruleset from 60k examples.
 
 #### Check for Understanding
 > 1. Why is our model's accuracy with the training set an insufficient metric to judge our model by? What are the implications of not evaluating your model on the test set - which is separate from the data it was trained on?
 
 Let's take a step back for a moment. If you had to devise a collection of rules to describe to someone why the following image is a $5$, what kinds of rules would you make? Which parts of the image make it apparent to you that it's a $5$ and not some other digit?
-
+<center>
 ![](http://neuralnetworksanddeeplearning.com/images/mnist_first_digit.png)   
-
+</center>
 > 2. Take a few minutes with a partner to devise three rules completely describing why this image is a 5. What differentiates this image from an image of a 3, or a 7?
 
 Even if you were able to make a successful ruleset to classify this particular image of a $5$, not all $5$'s are alike. Especially for numbers like $7$, which may have a cross through them or not, or $2$, which may have a looped tail or not, the rules quickly spiral out of reasonable specificity as we try to include more and more special cases to characterize how humans draw numeric digits.
@@ -141,8 +141,10 @@ In the next few sections, you will learn about neural nets in more mathematical 
 If we consider all the methods in machine learning, **neural networks** are perhaps the most celebrated, overhyped, and least understood. Neural networks became famous (or infamous) due to their unprecedented performance combined with their mysterious nature. They achieve spectacular results but under the hood we cannot really explain what they are doing. We understand how to create them, train them, optimize them, and even visualize them in some cases, but we do not actually understand them. Because of this, many people immediately jump to the conclusion of "ahhh terminator!", but actually, neural networks have been known of since the $1940$s. The key algorithm in training neural networks, **back propagation** has been known since the $1990$s. We would argue that neural networks only exploded in the past few decades. So why are neural networks so popular now?
 
 ### Why Neural Networks now?
+<center>
 ![Google Trends Neural Network vs Deep Learning](images/NNvsDeep.png "Google Trends Neural Network vs Deep Learning")
-Above is a graph of google trends for neural networks and deep learning. Can you guess which color is which? Interestly, neural networks is the blue line, and red is deep learning! Neural networks have been around for a while, and they have only recently become more popular due to new advances.
+</center>
+Above is a graph of google trends for neural networks and deep learning. Can you guess which color is which? Interestingly, neural networks is the blue line, and red is deep learning! Neural networks have been around for a while, and they have only recently become more popular due to new advances.
 
 There are three main differences in machine learning now compared to $30$ years ago. 
 
@@ -158,19 +160,21 @@ Interestingly, many people agree that the second difference is the most crucial 
 
 ### What are Neural Networks?
 Neural networks derive their name from the neural network we have in our head, our brain. On a highly simplified model, our brain is a collection of *neurons* that receive electrical input signals from *dentrites*, output electrical signals via a single *axon*. Each neuron sends signals along a single axon and connects with other dentrites. Neural networks attempt to model this by having artificial layers neurons that perform minor tasks, then communicate from layer to layer.
-
+<center>
 ![Image from cs231n](images/Neuron.png "Biological Inspiration")
+</center>
 Above is an image of the neurons and axons.
+<center>
 ![](images/NN.jpg "Neural Network Visualization")
-
+</center>
 The circles represent nodes, and the arrows represent the communication between nodes. These are **feed forward** since the information propogates from the input on the leftside through intermediate calculations to a final output layer. Our goal in machine learning is to take some $x$ input to approximate some function $f^*(x)$. We are given $x,y$ pairs where $y\approx f^*(x)$, a rough approximation. These feed forward models attempt to model $f^*(x)$ by composing multiple functions together, such as $f^*(x)=f^{(2)}(f^{(1)}(x))$ in the neural network above. Notice that $f^{(1)}(x)$ is the middle layer in the model, but it is never used except in intermediate states, thus it is known as a **hidden layer**.
 
 The beauty of neural networks is that they automatically determine the values of these intermediate functions and chain them together to approximate the function without any *a priori* knowledge. The neural networks for images, the early layers work with simple shapes like colors and edges, and work towards more complex textures, patterns, and finally to full objects. This stacking effect takes advantage of the numerous hidden layers and creates complex features from combinations of simple ones.
 
 ### How do Neural Networks work?
-
+<center>
 ![Image from cs231n](images/NeuronModel.jpeg "Neural Network Visualization")
-
+</center>
 Above is an image of a zoomed in individual neuron. In this case, we have a single neuron, with multiple inputs. The general idea is to take all the inputs to the neuron from various dentrites, sum them, and perform some function on the sum. We also have a certain weight to each dentrite, so it is a linear combination of the inputs. There are many valid possible functions to perform at the end, known as *activation functions*. We will go into these in the next section.
 
 To delve more into the math, each neuron outputs a specific value, denoted as $x_i$. This neuron then has separate weights for each further neuron it connects to, and multiplies each weight to $x_i$ to serve as the input to a new neuron deeper in the model. In the image above, we have three inputs $x_0,x_1,x_2$ from three neurons. Each individual arrow from neuron to neuron has a unique weight, and each weight gets multiplied by the output axon value from the neuron. To determine the output of the blue neuron, we take the sum of the $x_iw_i$, then apply some activation function $f$. This gives us $f\left(\sum_i w_ix_i + b\right)$. The added $b$ term is not too important, essentially we also include a bias term, a constant value we add. 
@@ -181,7 +185,39 @@ To delve more into the math, each neuron outputs a specific value, denoted as $x
 > 2. What happens if we use a linear activation (such as $ax+b$)?
 
 ## An Introduction to Activation Functions
+To answer the second question above, consider each activation function in the neural network to be linear of the form$f^{(i)}(x)=a_ix+b_i$. Then if we compose many of these linear functions together, we would get some $f(x)=f^{(n)}(f^{(n-1)}(\ldots f^{(1)}(x)\ldots ))=ax+b$ for some $a,b$. Since the composition of linear functions is a linear function, then we essentially will conduct linear regression. Without nonlinearities, our model can only do as well as linear regression. So what activation functions can we use instead of linear functions?
 
+There are many common activation functions. 
+<center>
+![](images/Relu.jpeg "Relu")
+
+ Rectified Linear Units (ReLU) $\max(0,x)$
+</center>
+
+Rectified Linear Units (ReLU) is one of the most common activation functions used. It is simply the function $\max(0,x)$, essentially thresholding at zero. 
+<center>
+![](images/Sigmoid.jpeg "Sigmoid")
+
+Sigmoid $1/(1+e^{-x})$
+</center>
+
+Sigmoid is also very commonly used as an activation function. It has the unique property of approaching $0$ as $x$ approaches $-\infty$, approaching $1$ as $x$ approaches $\infty$, and $1/2$ at $0$. This gives an inherent probability mapping from $(-\infty,infty)$, where the larger the value of $x$ the higher the probability.
+
+<center>
+![](images/Tanh.jpeg "Tanh")
+
+ Hyperbolic Tangent (Tanh) 
+</center>
+
+Tanh has many advantages over sigmoid since the activation function is centered at zero, and can output negative numbers. In practice, tanh is preferred over sigmoid. 
+
+## How Neural Networks Learn
+
+The general idea in machine learning is given a model and dataset, we would like to minimize the loss or error on the model. The general idea is to tweak the weights of the neural network as we train on data to predict the misclassified numbers better. This leads us to two major questions, what is the **loss function** of our model, and how do we update the weights of our model?
+
+### Loss Function for Classification
+We could have the loss be $0$ for correctly classifying the number, and $1$ for incorrect classification. However, this is a bit naive because we lose a lot of information on what the correct answer is. A better loss function for classification is **cross entropy loss**. The formula is a bit complex, but the formula is:
+$$-\sum_i y_i \log \hat y_i$$
 
 
 # `Keras` in Python
