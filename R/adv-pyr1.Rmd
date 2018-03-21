@@ -58,14 +58,12 @@ First, you have to install the R package, `keras`, with the `install.packages` c
 
 An example code chunk that installs `keras`, its dependancies, and then stores the MNIST dataset as `MNIST` is shown below:
 
-```{r, eval=-1}
-install.packages(c("keras", "reticulate"))
+```{r, eval=-c(1,66)}
+install.packages(c("keras", "reticulate")) ## NOT RUN on knit
 library(keras);library(reticulate)
 py_discover_config() ## Use this to discover your installation locations for conda and python
 keras::use_python("/home/arun/.conda/bin/python") ## As seen in the last line of the preceding output
-keras::use_condaenv("base", conda = "/home/arun/.conda/bin/conda")
-#conda_remove("r-tensorflow", conda = "/home/arun/.conda/bin/conda")
-install_keras(method = "auto")
+install_keras(method = "conda")
 MNIST <- dataset_mnist()
 ```
 
@@ -75,7 +73,31 @@ MNIST <- dataset_mnist()
 
 ## The Structure of the MNIST Dataset
 
+We've loaded `MNIST` into our environment, so let's take a look at its structure.
+```{r}
+str(MNIST)
+```
+
+As we can see from the output of `str`, `MNIST` is a list of two datasets, `train` and `test`. We can verify that the data entries `x` of `train` consist of $60,000$ images of $28\times28$ pixels in size. These entries come with matching labels `y`, one for each `x`. A similar setup can be seen for the $10,000$ entries in `train`.
+
+Let's split up our dataset into `training_set_*` and `test_set_*` variables for use in training and testing our model later.
+```{r}
+training_set_x <- MNIST$train$x
+training_set_y <- MNIST$train$y
+
+test_set_x <- MNIST$test$x
+test_set_y <- MNIST$test$y
+```
+
 ## Exploratory Data Analysis
+
+This dataset is very clean, so there's not much to do in regards to EDA. However, it might help to visualize a few actual entries in our dataset, just so that we get a sense of its contents.
+
+We can use `ggplot2`'s `geom_raster` to plot a random image from our dataset like so:
+```{r}
+random_image_id <- training_set_x %>% nrow %>% sample.int(size = 1)
+training_set_x %>% extract(random_image_id, , ) %>% data.frame()
+```
 
 ## Data Cleaning
 
