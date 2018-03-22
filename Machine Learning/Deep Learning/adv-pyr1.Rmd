@@ -103,12 +103,36 @@ test_set_y <- MNIST$test$y
 
 ## Exploratory Data Analysis
 
+```{r, echo = F}
+tidy_image <- function(image) {
+  image %>% data.frame %>% ## Cast as dataframe
+    mutate(Y = 28:1) %>% gather(X, `Grayscale Intensity`, - Y) %>% ## Add column for Y index
+    mutate(X = str_replace(X, pattern = "X", replacement = "") %>% as.integer, ## Add column for X index
+           `Grayscale Intensity` = `Grayscale Intensity` / 255) %>% ## Want our values to range [0,1] rather than [0,255]
+    arrange(X, Y) 
+}
+
+sample_random_image <- function(data = MNIST$train$x) {
+  random_image_id <- data %>% nrow %>% sample.int(size = 1);print(random_image_id)
+  data %>% extract(random_image_id, , ) ## Extract all columns and rows of random image, represented as a 28x28 matrix of grayscale intensities
+}
+
+get_image <- function(data = MNIST$test$x, id) {
+  data %>% extract(id, , )
+}
+
+plot_image <- function(image_tidy) {
+  image_tidy %>% ggplot(aes(X, Y, fill = grey(1 - `Grayscale Intensity`))) + geom_raster(interpolate = T) + 
+    scale_fill_identity() + coord_fixed() + theme_minimal() + labs(x = "Pixel (Column)", y = "Pixel (Row)") + 
+    scale_x_continuous(breaks = 1:28) + scale_y_continuous(breaks = 1:28) 
+}
+```
+
 This dataset is very clean, so there's not much to do in regards to EDA. However, it might help to visualize an actual entry in our dataset, just so that we get a sense of its contents.
 
-```{r, echo = -c(1,5), eval = -4, warning = F, comment=""}
+```{r, echo = -c(1,4), eval = -3, warning = F, comment=""}
 set.seed(802)
-random_image_id <- training_set_x %>% nrow %>% sample.int(size = 1) ## Analyzing image 38835 of the 60000 in our dataset
-random_image <- training_set_x %>% extract(random_image_id, , ) ## Extract all columns and rows of random image, represented as a 28x28 matrix of grayscale intensities
+random_image <- sample_random_image()
 print(random_image)
 knitr::kable(random_image, align = "c", caption = "Can you guess what number this is?")
 ```
@@ -116,15 +140,10 @@ knitr::kable(random_image, align = "c", caption = "Can you guess what number thi
 The initial structure of these images are two-dimensional arrays. They are not yet in a form easily interpreted by either `keras` or `ggplot`. However, with some transformation into a *tidy form*, we can use `ggplot2`'s `geom_raster` to plot a random image from our dataset like so:
 
 ```{r, warning = F}
-random_image_df <- random_image %>% data.frame %>% ## Cast as dataframe,
-  mutate(Y = 28:1) %>% gather(X, `Grayscale Intensity`, - Y) %>% ## Add column for Y index
-  mutate(X = str_replace(X, pattern = "X", replacement = "") %>% as.integer, ## Add column for X index
-         `Grayscale Intensity` = `Grayscale Intensity` / 255) %>% ## Want our values to range [0,1] rather than [0,255]
-  arrange(X, Y) 
+random_image_df <- tidy_image(random_image)
 str(random_image_df) ## Our dataframe of a single image is now tidy
-random_image_df %>% ggplot(aes(X, Y, fill = grey(1 - `Grayscale Intensity`))) + geom_raster(interpolate = T) + 
-  scale_fill_identity() + coord_fixed() + theme_minimal()
-print(training_set_y %>% extract(random_image_id)) ## And sure enough, it's an 8
+plot_image(random_image_df)
+print(training_set_y %>% extract(38835)) ## And sure enough, our randomly selected entry (38835 / 60000) is an 8
 ```
 
 A human would immediately recognize this image as an $8$, but it's missing a lot of the features we would usually associate with $8$'s in general. Fortunately, our dataset contains hundreds of examples covering most writing behaviors and idiosyncracies - we hope that our model would be robust enough to recognize $8$'s and other numbers whether or not they follow the most conventional standards for handwriting.
@@ -318,17 +337,42 @@ Our next step is to `compile` our model by specifying that we will be using a cr
 ```{r}
 mnist_model %>% compile(
   loss = 'categorical_crossentropy',
-  optimizer = optimizer_sgd(lr = .1),
+  optimizer = optimizer_sgd(lr = 0.1),
   metrics = c('accuracy')
 )
 ```
 
-Now that our model is completely designed and specified, we're at the fun part - training! We use the `fit` function to train our model on the images in `training_set_x` using their labels `training_set_y`. We also specify that we will be making $30$ full passes, or **epochs** through our training set. For computational speed, we don't train our model on a single image at a time but in batches of $100$ images each update. The full training code chunk is shown below:
+Now that our model is completely designed and specified, we're at the fun part - training! We use the `fit` function to train our model on the images in `training_set_x` using their labels `training_set_y`. We also specify that we will be making $5$ full passes, or **epochs**, through our training set. For computational speed, we don't train our model on a single image at a time but in batches of $100$ images each update. The full training code chunk is shown below, and `keras` will even automatically graph your loss and accuracy for you as it trains your model.
 
-```{r, eval = F}
-mnist_model %>% fit(x = training_set_x, y = training_set_y,
-                    epochs = 5, batch_size = 100)
+```{r}
+mnist_model %>% 
+  fit(x = training_set_x, y = training_set_y,
+      epochs = 10, batch_size = 100, validation_split = 0.2)
 ```
+
+The final step of our model is to evaluate it on the test set. Remember that a low training loss is *not* the best measure of a model's performance - we *must* try it on data it was not trained on to verify our model is robust, and didn't just overfit to the training set.
+
+```{r}
+mnist_model %>% evaluate(x = test_set_x, y = test_set_y)
+```
+
+Neat! Our relatively simple deep learning model has over $95\%$ accuracy on our test set, so we are reasonably confident it will perform well in recognizing digits "in real life". Just to see what kinds of 
+
+```{r}
+predictions <- mnist_model %>% predict_classes(test_set_x)
+incorrect_predictions_ids <- which(predictions != MNIST$test$y) %>% head
+
+verify_prediction <- function(id) {
+  print(paste("ID: ", id, "Actual: ", MNIST$test$y[id], "Predicted: ", predictions[id]))
+  get_image(id = id) %>% tidy_image %>% plot_image %>% print
+}
+
+walk(incorrect_predictions_ids, verify_prediction)
+```
+
+#### Check for Understanding
+> 1. Discuss the above incorrect outputs with your classmates. Why do you think our model performed badly on these inputs?
+> 2. How would you improve our model to better classify inputs like the ones shown here?
 
 # Conclusion
 
