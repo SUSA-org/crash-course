@@ -37,8 +37,8 @@ Unlike some of the previous crash courses, this workbook will contain discussion
 Take a brief moment to read over the [MNIST Wikipedia article](https://en.wikipedia.org/wiki/MNIST_database).
 
 <center>
-
 ![](https://www.tensorflow.org/images/MNIST.png "MNIST")
+
 A small sample of the MNIST dataset.
 </center>
 
