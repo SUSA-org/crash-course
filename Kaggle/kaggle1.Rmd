@@ -53,33 +53,9 @@ Unlike some of the previous crash courses, this workbook will contain discussion
 
 ```{r}
 training_set <- read_csv("Kaggle/DATA/house-prices/train.csv") 
-```
-
-
-```{r}
-training_set %>% summarise_all(funs(sum(is.na(.))/nrow(training_set))) %>% gather(Column, Count) %>% arrange(desc(Count)) %>% head(10)
+#training_set %>% summarise_all(funs(sum(is.na(.))/nrow(training_set))) %>% gather(Column, Count) %>% arrange(desc(Count)) %>% head(10)
 eda_set <- training_set %>% drop_na(-c(PoolQC, MiscFeature, Alley, Fence, FireplaceQu, LotFrontage)) 
-nrow(eda_set)/nrow(training_set)
-```
-
-```{r}
-pairs_plot <- function(df){
-  df_x <- rename_all(df, function(str){paste(str, "x", sep = ".")})
-  df_y <- rename_all(df, function(str){paste(str, "y", sep = ".")})
-  cbind(df_x,df_y) %>%
-    gather(xVar, xVal, ends_with("x")) %>% gather(yVar, yVal, ends_with("y")) %>% 
-    mutate_at(vars(xVar, yVar), function(str){str_sub(str, 1, nchar(str) - 2)}) %>%
-    ggplot(aes(xVal, yVal, col = xVar)) + geom_point() + facet_grid(yVar ~ xVar, scales = "free") + 
-    labs(x = "X Variable", y = "Y Variable")
-}
-pairs_plot(eda_set %>% select_if(is.numeric))
-eda_set %>% `names<-`(make.names(names(.))) %>% 
-  select_if(is.numeric) %>% mutate(BinaryQuality = if_else(OverallQual >= 7, 1, -1) %>% as.factor) %>% 
-  select(find_high_corr(select(., - BinaryQuality)), BinaryQuality) %>% `[`(1:3) %>%
-  ggpairs(lower = list(continuous = "smooth_loess"), 
-          axisLabels = "none", switch = "both", labeller = label_wrap_gen(), 
-          aes(col = BinaryQuality, alpha = .2))
-printer("pairs")
+#nrow(eda_set)/nrow(training_set)
 ```
 
 ```{r}
@@ -90,23 +66,53 @@ corr_plot <- function(df) {
 }
 find_high_corr <- function(df, corr = .6) {
   cor_df <- df %>% cor %>% as.data.frame %>% gather(xVar, Corr) %>% mutate(yVar = rep(names(df), times = length(df))) %>%
-    filter(! Corr %in% c(1, -1), Corr >= corr) %>% arrange(desc(Corr)) 
+    filter(Corr >= corr | Corr <= -corr, Corr != 1) %>% arrange(desc(Corr)) 
   return(c(cor_df$xVar, cor_df$yVar) %>% unique)
 }
-find_high_corr(eda_set %>% select_if(is.numeric)) 
-corr_plot(eda_set %>% select_if(is.numeric))
-pairs_plot(eda_set %>% select(TotalBsmtSF, `1stFlrSF`))
-```
-
-```{r}
+pairs_plot <- function(df){
+  df_x <- rename_all(df, function(str){paste(str, "x", sep = ".")})
+  df_y <- rename_all(df, function(str){paste(str, "y", sep = ".")})
+  cbind(df_x,df_y) %>%
+    gather(xVar, xVal, ends_with("x")) %>% gather(yVar, yVal, ends_with("y")) %>% 
+    mutate_at(vars(xVar, yVar), function(str){str_sub(str, 1, nchar(str) - 2)}) %>%
+    ggplot(aes(xVal, yVal, col = xVar)) + geom_point() + facet_grid(yVar ~ xVar, scales = "free") + 
+    labs(x = "X Variable", y = "Y Variable")
+}
 density_plots <- function(df) {
   df %>% gather(Variable, Value) %>% 
     ggplot(aes(Value, fill = Variable, col = Variable)) + geom_density() + facet_wrap(~ Variable, scales = "free") + 
     theme(legend.position = "none") + labs(x = "", y = "")
 }
+```
+
+```{r}
+find_high_corr(eda_set %>% select_if(is.numeric)) 
+corr_plot(eda_set %>% select_if(is.numeric))
+
+pairs_plot(eda_set %>% select(TotalBsmtSF, `1stFlrSF`))
+```
+
+```{r}
 density_plots(eda_set %>% select_if(is.numeric))
 ```
 
+# Final Visualizations
+```{r}
+outdir = "~/Desktop/WORKSHOP/C/SUSA/susa-repos/crash-course/Kaggle/GRAPHICS/"
+printer = function(filename, w = 16, h = 9) {ggsave(paste0(filename, ".png"), path = outdir, units='in', width = w, height = h, dpi=600, limitsize = F)}
+
+eda_set %>% `names<-`(make.names(names(.))) %>% 
+  select_if(is.numeric) %>% mutate(BinaryQuality = if_else(OverallQual >= 7, 1, -1) %>% as.factor) %>% 
+  select(find_high_corr(select(., - BinaryQuality)), BinaryQuality) %>% `[`(1:3) %>%
+  ggpairs(lower = list(continuous = "smooth_loess"), 
+          axisLabels = "none", switch = "both", labeller = label_wrap_gen(), 
+          aes(col = BinaryQuality, alpha = .2))
+printer("pairs")
+
+corr_plot(eda_set %>% select(find_high_corr(eda_set %>% select_if(is.numeric), corr = .1))) + 
+  theme(legend.position = "bottom") + labs(title = "Correlation Plot of Near-Colinear Features", x ="", y = "")
+printer("corr_features")
+```
 
 ```{r}
 pca_plot <- function(df, scale = F) {
@@ -122,47 +128,4 @@ eda_pca %>% extract(c("sdev", "center")) %>% as.data.frame %>% mutate(Feature = 
   slice(1:20) %>% 
   pull(Feature) -> important_features
 print(important_features)
-  
 ```
-
-# Feature Selection
-
-# A First Approach to Machine Learning: Linear Regression
-
-```{r}
-simple_model <- lm(data = training_set, formula = SalePrice ~ LotArea)
-simple_model %>% augment %>% select(`SalePrice (Actual)` = SalePrice, `SalePrice (Predicted)` = .fitted, LotArea) %>%
-  gather(Value, SalePrice, - LotArea) %>%
-  ggplot(aes(LotArea, SalePrice, col = Value, linetype = Value)) + geom_point()
-
-initial_model <- lm(data = training_set, formula = SalePrice ~ LotArea + GrLivArea)
-initial_model %>% augment %>% select(`SalePrice (Actual)` = SalePrice, `SalePrice (Predicted)` = .fitted, LotArea, GrLivArea) %>%
-  gather(Value, SalePrice, - c(LotArea, GrLivArea)) %>%
-  ggplot(aes(LotArea, SalePrice, col = Value, linetype = Value)) + geom_point()
-initial_model %>% augment %>% 
-  ggplot(aes(LotArea, .resid)) + geom_point() + 
-  geom_hline(yintercept = 0, col = "black", linetype = "dashed") +
-  labs(x = "Lot Area (Square Ft.)", y = "Residual", title = "Residual Plot of Iniital Linear Model") 
-
-model <- lm(data = training_set, 
-            formula = as.formula(paste("SalePrice ~ ", paste(important_features %>% paste0("`", ., "`"), collapse= " + "))))
-model %>% augment %>% 
-  ggplot(aes(SalePrice, .resid)) + geom_point() + 
-  geom_hline(yintercept = 0, col = "black", linetype = "dashed") +
-  labs(x = "Sales Price", y = "Residual", title = "Residual Plot of 'Important Features' Linear Model") 
-```
-
-
-# Extensions to Linear Regression
-
-# Conclusion
-
-This ends our textbook-style primer into deep learning with Keras. While this was just an introduction to neural nets, we hope that you can now see some of the workflow patterns associated with machine learning. Feel free to play around with the code above to get a better feel for the hyperparameters of the neural net model. As always, please email [`contact@arun.run`](mailto:contact@arun.run) or [`prc@berkeley.edu`](mailto:prc@berkeley.edu) with any questions or concerns whatsoever. Happy machine learning!
-
-## Sneakpeek at SUSA Kaggle Competition II
-
-After Spring Break, we will be guiding you through a four-week collaborative Kaggle competition with your peers in Career Exploration! We want to give you the experience of working with real data, using real machine learning algorithms, in an educational setting. You will have to choose either Python or R, and dive into reading kernels on the Kaggle website, use visualization and feature engineering to improve your score, and maybe even pick up a few advanced deep learning models along the way. If this sounds a bit intimidating right now, do not fret! Your SUSA Mentors will be there to mentor you through the whole thing. So rest up during Spring Break, and come back ready to tackle your biggest data challenge yet!
-
-# Additional Reading
-* For more information on the Kaggle API, a command-line program used to download and manage Kaggle datasets, visit the [Kaggle API Github page](https://github.com/Kaggle/kaggle-api)  
-* For an interactive guide to learning R and Python, visit [DataCamp](https://www.datacamp.com/) a paid tutorial website for learning data computing.
