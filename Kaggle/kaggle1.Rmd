@@ -101,17 +101,24 @@ density_plots(eda_set %>% select_if(is.numeric))
 outdir = "~/Desktop/WORKSHOP/C/SUSA/susa-repos/crash-course/Kaggle/GRAPHICS/"
 printer = function(filename, w = 16, h = 9) {ggsave(paste0(filename, ".png"), path = outdir, units='in', width = w, height = h, dpi=600, limitsize = F)}
 
-eda_set %>% `names<-`(make.names(names(.))) %>% 
-  select_if(is.numeric) %>% mutate(BinaryQuality = if_else(OverallQual >= 7, 1, -1) %>% as.factor) %>% 
-  select(find_high_corr(select(., - BinaryQuality)), BinaryQuality) %>% `[`(1:3) %>%
+eda_set %>% select(OverallQual, find_high_corr(eda_set %>% select_if(is.numeric) %>% select(- SalePrice), corr = .7)) %>%
+  `names<-`(make.names(names(.))) %>% 
+  mutate(BinaryQuality = if_else(OverallQual >= 7, 1, -1) %>% as.factor) %>% 
+  select(- OverallQual) %>%
   ggpairs(lower = list(continuous = "smooth_loess"), 
           axisLabels = "none", switch = "both", labeller = label_wrap_gen(), 
           aes(col = BinaryQuality, alpha = .2))
-printer("pairs")
+printer("corr_pairs")
 
-corr_plot(eda_set %>% select(find_high_corr(eda_set %>% select_if(is.numeric), corr = .1))) + 
+corr_plot(eda_set %>% select(find_high_corr(eda_set %>% select_if(is.numeric) %>% select(- SalePrice), corr = .7))) + 
   theme(legend.position = "bottom") + labs(title = "Correlation Plot of Near-Colinear Features", x ="", y = "")
 printer("corr_features")
+
+eda_set %>% select_if(is.numeric) %>% gather(Feature, Value, - SalePrice, - Id) %>%
+  ggplot(aes(Value, SalePrice, col = Feature)) + geom_jitter(alpha = .2, col = "black") + geom_smooth(method = "lm", size = 2) + 
+  facet_wrap(~ Feature, scales = "free_x") + theme_bw() + theme(legend.position = "none") +
+  labs(title = "Relationships between Individual Features and Response Variable", x = "") 
+printer("y_pairs")
 ```
 
 ```{r}
