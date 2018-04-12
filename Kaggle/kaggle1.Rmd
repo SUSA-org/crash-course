@@ -116,9 +116,11 @@ data.frame(x = seq(1, 10, .009) %>% extract(1:1000)) %>% mutate(y = x^2 + rnorm(
   ggplot(aes(x, y, col = Function)) + geom_point(col = "black", alpha = .5, size = .1) + geom_smooth(method = "lm", se = F, size = 2) +
   facet_wrap(~ Function, ncol = 2, nrow = 3, scales = "free_x")
 # printer...
-data.frame(x = seq(1, 10, .009) %>% extract(1:1000)) %>% mutate(y = x^2 + rnorm(1000, 0, 0.5)) %>%
-  mutate(`x^2` = x^2) %>% gather(Variable, Value, - y) %>% ggplot(aes(Value, y, col = Variable)) + geom_point() + geom_smooth(method = "lm")
-  facet_wrap(~ Variable, ncol = 1)  + labs(x = "", title = "Using x' = x^2 fixes our linear model.") + theme(legend.position = F)
+data.frame(x = seq(1, 10, .009) %>% extract(1:1000)) %>% mutate(y = x^2 + rnorm(1000, 0, 5)) %>%
+  mutate(`x^2` = x^2) %>% gather(Variable, Value, - y) %>% ggplot(aes(Value, y, col = Variable)) + 
+  geom_point() + geom_smooth(col = "black", method = "lm") + 
+  facet_wrap(~ Variable, nrow = 1, scales = "free_x")  + labs(x = "", title = "Using x' = x^2 fixes our linear model.") + theme(legend.position = "none")
+printer("engineering")
 
 eda_set %>% mutate(`log(PoolArea)` = log(PoolArea)) %>% 
   select(MoSold, PoolArea, `log(PoolArea)`) %>% gather(Variable, Value) %>% 
