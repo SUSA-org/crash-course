@@ -19,40 +19,8 @@ printer = function(filename, w = 16, h = 9) {ggsave(paste0(filename, ".png"), pa
 ```
 
 
-# Introduction
-
-Welcome to the first of SUSA's crash courses on advanced data science in Python and R! In this tutorial, you will be learning about one of the most popular and versatile machine learning algorithms, **neural nets**, by using a package called **`Keras`** to implement a neural net model to recognize handwritten digits. We will be guiding you through an entire machine learning workflow, including exploratory data analysis (*EDA*), data cleaning, and the three components of modeling: **model training**, **model selection**, and **model evaluation**. We will even teach you a couple of neat tricks on how to visualize your models to understand their behavior and performance.
-
-## About this Document
-### Prerequisites
-This workshop prerequires either experience in Python or R, to the degree covered by the previous [SUSA crash courses](http://github.com/SUSA-org/crash-course) - we recommend the completion of the introductory workbook series in both. This is partly to ensure you have the prior data wrangling and programming experience to understand the `Keras` code chunks at the end of this tutorial, but also to ensure you are caught up on the basics of machine learning practices covered incrementally in each workbook. At a minimum, you should understand the purposes of **training** and **validation**, the difference between **classification** and **regression**, and the **bias-variance tradeoff**. You must have RStudio, Python, and R installed to run this notebook. Visit [py0](https://raw.githubusercontent.com/SUSA-org/crash-course/master/Python/py0.html) for our crash course installation guide for Python. Visit [r0](r0.html) for general information on the philosophy and functionality of R and RStudio, as well as installation guides for both.
-
-### adv-pyr1
-
-This document contains textbook-style information on deep learning, as well as R programming as applied to deep learning models. It will cover the entirety of a `Keras` implementation of a neural net to classify handwritten digits. The Python implementation can be viewed in the [adv-pyr1.ipynb](adv-pyr1.ipynb) notebook. The non-programmatic portions of these two documents are identical.
-
-Throughout this tutorial, you will be working with the [**MNIST dataset**](https://en.wikipedia.org/wiki/MNIST_database), a dataset of seventy-thousand images of handwritten digits. You will be using this dataset to train a model to recognize the written digit given by a vector representing the image. More information on this dataset and its structure will be provided early in this tutorial.
-
-Unlike some of the previous crash courses, this workbook will contain discussion and programming exercises throughout each section. These exercises are aimed at facilitating collaborative learning with your committee and target the core concepts and extensions of the techniques covered in this tutorial.
-
-# Kaggle
-
-## What is Kaggle?
-
-## Machine Learning
-
-## Accessing the `House Prices` Dataset
-
-`crash-course/Kaggle/DATA/house-prices/train.csv`
-
-# Exploratory Data Analysis
-
-## The Data Science Workflow
-
-## EDA
-
 ```{r}
-training_set <- read_csv("Kaggle/DATA/house-prices/train.csv") 
+training_set <- read_csv("~/Desktop/WORKSHOP/C/SUSA/susa-repos/crash-course/Kaggle/DATA/house-prices/train.csv") 
 #training_set %>% summarise_all(funs(sum(is.na(.))/nrow(training_set))) %>% gather(Column, Count) %>% arrange(desc(Count)) %>% head(10)
 eda_set <- training_set %>% drop_na(-c(PoolQC, MiscFeature, Alley, Fence, FireplaceQu, LotFrontage)) 
 #nrow(eda_set)/nrow(training_set)
@@ -136,3 +104,30 @@ eda_pca %>% extract(c("sdev", "center")) %>% as.data.frame %>% mutate(Feature = 
   pull(Feature) -> important_features
 print(important_features)
 ```
+
+# Kaggle 2
+
+## Featuring Engineering
+```{r}
+set.seed(101)
+data.frame(x = seq(1, 10, .009) %>% extract(1:1000)) %>% mutate(y = x^2 + rnorm(1000, 0, 0.5)) %>% 
+  mutate(x^2, x, sqrt(x), log(x),  x^-1, x^-2) %>% gather(Function, x, - y) %>% 
+  mutate(Function = factor(Function, levels = c("x^2", "x", "sqrt(x)", "log(x)", "x^-1", "x^-2"))) %>% 
+  ggplot(aes(x, y, col = Function)) + geom_point(col = "black", alpha = .5, size = .1) + geom_smooth(method = "lm", se = F, size = 2) +
+  facet_wrap(~ Function, ncol = 2, nrow = 3, scales = "free_x")
+# printer...
+data.frame(x = seq(1, 10, .009) %>% extract(1:1000)) %>% mutate(y = x^2 + rnorm(1000, 0, 5)) %>%
+  mutate(`x^2` = x^2) %>% gather(Variable, Value, - y) %>% ggplot(aes(Value, y, col = Variable)) + 
+  geom_point() + geom_smooth(col = "black", method = "lm") + 
+  facet_wrap(~ Variable, nrow = 1, scales = "free_x")  + labs(x = "", title = "Using x' = x^2 fixes our linear model.") + theme(legend.position = "none")
+printer("engineering")
+
+eda_set %>% mutate(`log(PoolArea)` = log(PoolArea)) %>% 
+  select(MoSold, PoolArea, `log(PoolArea)`) %>% gather(Variable, Value) %>% 
+  mutate(Variable = factor(Variable, levels = c("MoSold", "PoolArea", "log(PoolArea)"))) %>% 
+  ggplot(aes(Value, fill = Variable, col = Variable)) + geom_density() + facet_wrap(~ Variable, scales = "free", ncol = 1) + 
+  theme(legend.position = "none") + labs(x = "", y = "Density") + 
+  labs(title = "Inspecting these density plots, MoSold is a fairly well-spread feature. However, PoolArea is not, and suffers from outliers. We can fix it with log!")
+printer("spread")
+```
+
