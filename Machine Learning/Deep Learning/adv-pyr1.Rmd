@@ -42,7 +42,7 @@ Take a brief moment to read over the [MNIST Wikipedia article](https://en.wikipe
 A small sample of the MNIST dataset.
 </center>
 
-The MNIST dataset consists of 70k images, 10k of which are considered the **test set**, with the remaining 60k for **training**. Each data entry $X_i$ in the MNIST dataset is a $28\times28$ pixel image of a single handwritten digit, and each is **labeled** with the associated digit between $0$ and $9$, denoted as $y_i$. Our goal is to design a model that learns a classification scheme from the 60k training images $\{X_i\}$ and their labels $\{y_i\}$, and then perform well in predicting which digit is represented in each test image.
+The MNIST dataset consists of 70k images, 60k of which are considered the **training set**, with the remaining 10k for **test**. Each data entry $X_i$ in the MNIST dataset is a $28\times28$ pixel image of a single handwritten digit, and each is **labeled** with the associated digit between $0$ and $9$, denoted as $y_i$. Our goal is to design a model that learns a classification scheme from the 60k training images $\{X_i\}$ and their labels $\{y_i\}$, and then perform well in predicting which digit is represented in each test image.
 
 #### Check for Understanding
 > 1. Why is the MNIST dataset split into a training set and test set? Why do we want to avoid training our model on the test set? 
@@ -240,7 +240,8 @@ The beauty of neural networks is that they automatically determine the values of
 
 ### How do Neural Networks work?
 <center>
-![Image from cs231n](images/NeuronModel.jpeg "Neural Network Visualization")
+![](images/NeuronModel.jpeg "Neural Network Visualization")
+Images from CS231n Stanford.
 </center>
 Above is an image of a zoomed in an individual neuron. In this case, we have a single neuron, with multiple inputs. The general idea is to take all the inputs to the neuron from various dendrites, sum them, and perform some function on the sum. We also have a certain weight to each dendrite, so it is a linear combination of the inputs. There are many valid possible functions to perform at the end, known as *activation functions*. We will go into these in the next section.
 
@@ -291,6 +292,9 @@ For example, if the current image is actually a $3$, then $y_3=1$ and $y_i=0$ fo
 
 The key thing to notice about the cross-entropy loss is that the loss drastically increases as the probability for the correct label approaches zero. If we output a very low probability for the correct class, the logarithm approaches very large negative values, resulting in a large loss. On the other hand, if we output a very high probability close to $1$ for the correct class, the loss is almost zero since $\log 1 = 0$.
 
+
+These images are from CS231n Stanford.
+
 #### Check for Understanding
 > 1. Compute the log loss for a $7$ that was predicted to be $\hat y_7 = 90\%$ and $\hat y_1 = 10\%$. How does this match with your intuition for how cross-entropy operates?
 
@@ -310,7 +314,7 @@ Now that you understand the basics behind how neural nets are constructed and le
 
 # `Keras` in Python
 
-Please refer to the Python version of the notebook.
+Please refer to the [Python version of the notebook](adv-pyr1.ipynb).
 
 # `Keras` in R
 
