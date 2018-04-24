@@ -360,11 +360,11 @@ The final step of our model is to evaluate it on the test set. Remember that a l
 mnist_model %>% evaluate(x = test_set_x, y = test_set_y)
 ```
 
-Neat! Our relatively simple deep learning model has over $95\%$ accuracy on our test set, so we are reasonably confident it will perform well in recognizing digits "in real life". Just to see what kinds of 
+Neat! Our relatively simple deep learning model has over $95\%$ accuracy on our test set, so we are reasonably confident it will perform well in recognizing digits "in real life". Just to see what kinds of mistakes our machine-made model made with the MNIST dataset (there is that last $\sim 4\%$ after all!), let's plot the first ten mistakes made, along with their true label.
 
 ```{r}
 predictions <- mnist_model %>% predict_classes(test_set_x)
-incorrect_predictions_ids <- which(predictions != MNIST$test$y) %>% head
+incorrect_predictions_ids <- which(predictions != MNIST$test$y) %>% head(10)
 
 verify_prediction <- function(id) {
   print(paste("ID: ", id, "Actual: ", MNIST$test$y[id], "Predicted: ", predictions[id]))
