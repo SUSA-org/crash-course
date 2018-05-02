@@ -1,4 +1,9 @@
-library(ggplot2); library(dplyr)
+library(ggplot2); library(dplyr): library(readr)
+
+# read in the data
+
+clean <- read_r('train_cleaned.csv')
+
 
 num_featrs <- c('LotFrontage', 'LotArea' ,'YearBuilt', 'YearRemodAdd',
                 'MasVnrArea','BsmtFinSF1','BsmtUnfSF', 'TotalBsmtSF','1stFlrSF',
