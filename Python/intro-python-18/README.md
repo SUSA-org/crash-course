@@ -9,8 +9,9 @@ Click on `New` on the right, and select `Terminal`
 
 Run the following commands:
 
-```
-wget -O python.zip https://tinyurl.com/python-cx-18
+mkdir python-cx-18``
+wget -O python-cx-18/python.zip https://tinyurl.com/python-cx-18
+cd python-cx-18
 unzip python.zip
 ```
 
